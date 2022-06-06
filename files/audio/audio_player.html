@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>mp3 player</title>
+<link rel="stylesheet" type="text/css" href="http://res.yimios.com:9050/html/audio/css/audio.css">
+<style>
+
+</style>
+</head>
+<body style="height: 300px">
+	<div class="audio-box">
+		<div class="audio-container">
+			<div class="audio-view">
+				<div class="audio-body">
+					<h3 class="audio-title" id="audio_name">未知歌曲</h3>
+					<div class="audio-backs">
+						<div class="audio-this-time">00:00</div>
+						<div class="audio-count-time">00:00</div>
+						<div class="audio-setbacks">
+							<i class="audio-this-setbacks">
+								<span class="audio-backs-btn"></span>
+							</i>
+							<span class="audio-cache-setbacks">
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="audio-btn">
+					<div class="audio-select">
+						<!--<div class="audio-prev"></div>-->
+						<div class="audio-play"></div>
+						<!--<div class="audio-next"></div>
+						<div class="audio-menu"></div>
+						<div class="audio-volume"></div>-->
+					</div>
+					<!--<div class="audio-set-volume">
+						<div class="volume-box">
+							<i><span></span></i>
+						</div>
+					</div>-->
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript" src="http://res.yimios.com:9050/html/audio/js/jquery.min.js"></script>
+<script type="text/javascript" src="http://res.yimios.com:9050/html/audio/js/audio.js"></script>
+<script type="text/javascript">
+
+
+
+	/**
+	 *
+	 * 添加外部music
+	 * 
+	 */
+	function addMusic(title,url){
+
+		var audioFn = audioPlay({
+			song : [
+				{'cover':'','src':url,'title':title}
+			],
+			autoPlay : false  //是否立即播放第一首，autoPlay为true且song为空，会alert文本提示并退出
+		});
+
+		var element = document.getElementById("audio_name");
+		element.innerHtml = title;
+		console.log("title:"+title+" url:"+url);
+	}
+
+	//addMusic("song190","http://res.yimios.com:9050/videos/music/song190.mp3")
+
+$(function(){
+	/*var audioFn = audioPlay({
+		song : song,
+		autoPlay : true  //是否立即播放第一首，autoPlay为true且song为空，会alert文本提示并退出
+	});*/
+
+	/* 向歌单中添加新曲目，第二个参数true为新增后立即播放该曲目，false则不播放 */
+	/*audioFn.newSong({
+		'cover' : 'images/cover5.jpg',
+		'src' : 'https://amazingaudioplayer.com/wp-content/uploads/amazingaudioplayer/5/audios/Soaring%20Spirit.mp3',
+		'title' : 'B.A.A.B'
+	},false);*/
+
+	/* 暂停播放 */
+	//audioFn.stopAudio();
+
+	/* 开启播放 */
+	//audioFn.playAudio();
+
+	/* 选择歌单中索引为3的曲目(索引是从0开始的)，第二个参数true立即播放该曲目，false则不播放 */
+	//audioFn.selectMenu(3,true);
+
+	/* 查看歌单中的曲目 */
+	//console.log(audioFn.song);
+
+	/* 当前播放曲目的对象 */
+	//console.log(audioFn.audio);
+});
+/*var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?ecbff70bd46d40393c105bbc42edfcad";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();*/
+</script>
+</html>

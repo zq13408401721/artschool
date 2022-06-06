@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>h5播放器测试</title>
+</head>
+<body>
+<div id="playerContainer" style="width: 100%; overflow-y:hidden;overflow-x:hidden;">
+    <!--<script src="https://p.bokecc.com/player?vid=C3B080223AB3880DF3342D97BB1D6DF8&siteid=A478E06B5AA1107B&autoStart=true&width=100%&height=490&playerid=A92CF5EBD279AF74&playertype=1" type="text/javascript"></script></div> -->
+
+    <script type="text/javascript">
+
+        var currentVid;
+        var videoElement;
+        var playerContent;
+        var isCreate=false; //是否正在创建
+
+        function onCCH5PlayerLoaded(){
+            console.log("播放器加载完成");
+        }
+
+        function on_CCH5player_ready(){
+            console.log("播放器准备就绪");
+        }
+
+        function on_CCH5player_ready(obj){
+           videoElement = obj.container;
+           isCreate = false;
+        }
+
+        //添加视频播放器
+        function addPlayer(content){
+            if(isCreate){
+                console.log("播放器正在创建 ");
+                return 1;
+            }else{
+                isCreate = true;
+                console.log("创建播放器");
+                playerContent = content;
+                var box = document.getElementById("playerContainer");
+                if(videoElement){
+                    console.log("删除播放器");
+                    box.removeChild(videoElement);
+                    videoElement = undefined;
+                }
+                var newScript = document.createElement('script');
+                newScript.type="text/javascript";
+                newScript.src=content;
+                box.appendChild(newScript);
+                return 1;
+            }
+        }
+
+        function updatePlayer(vid){
+            if(playerContent){
+                var start = playerContent.indexOf("vid=");
+                var end = playerContent.indexOf("&siteid");
+                var str1 = playerContent.substring(0,start+4);
+                var str2 = playerContent.substring(end,playerContent.length);
+                var content = str1+vid+str2;
+                return addPlayer(content);
+            }else{
+                return 0;
+            }
+        }
+
+    </script>
+</div>
+<div>播放器是否显示</div>
+</body>
+</html>

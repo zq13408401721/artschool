@@ -1,0 +1,48 @@
+{
+  "video_title": "视频栏目",
+  "video":[
+    {
+      "name":"艺画视频课程是什么?",
+      "url":"https://support.qq.com/products/326279/faqs/94704"
+    },
+    {
+      "name":"艺画视频课程有哪些形式？",
+      "url":"https://support.qq.com/products/326279/faqs/94705"
+    },
+    {
+      "name":"如何在艺画中学习视频课程？",
+      "url":"https://support.qq.com/products/326279/faqs/94706"
+    },
+    {
+      "name":"艺画视频课程有范画吗，在哪儿看？",
+      "url":"https://support.qq.com/products/326279/faqs/94730"
+    },
+    {
+      "name":"如何收藏视频课程？",
+      "url":"https://support.qq.com/products/326279/faqs/94851"
+    },
+    {
+      "name":"如何将视频课程推送到课堂？",
+      "url":"https://support.qq.com/products/326279/faqs/109462"
+    }
+  ],
+  "course_title": "课堂栏目",
+  "course":[
+    {
+      "name":"什么是图文课堂、双师课堂？",
+      "url":"https://support.qq.com/products/326279/faqs/94711"
+    },
+    {
+      "name":"如何在图文课堂中添加图片资料？",
+      "url":"https://support.qq.com/products/326279/faqs/94715"
+    },
+    {
+      "name":"如何在课堂中添加视频课程？",
+      "url": "https://support.qq.com/products/326279/faqs/94717"
+    },
+    {
+      "name":"如何在双师课堂中排课？",
+      "url": "https://support.qq.com/products/326279/faqs/94728"
+    }
+  ]
+}

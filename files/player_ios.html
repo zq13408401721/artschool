@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>艺画</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <script src="https://p.bokecc.com/player?siteid=A478E06B5AA1107B&newversion=true"></script>
+    <!--<script type="type/javascript" src="video.js"></script>-->
+    <!--<script type="text/javascript" src="https://p.bokecc.com/js/player/v20200701.js"></script>-->
+    <!--<script type="text/javascript" src="https://p.bokecc.com/js/newplayer/h5player-2.5.11.js"></script>-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        html,body{
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+
+            -webkit-touch-callout:none; /*系统默认菜单被禁用*/
+            -webkit-user-select:none; /*webkit浏览器*/
+            -khtml-user-select:none; /*早期浏览器*/
+            -moz-user-select:none;/*火狐*/
+            -ms-user-select:none; /*IE10*/
+            user-select:none; 
+
+        }
+        #test {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        @media screen and (min-width: 500px) {
+            #test {
+                padding-left: 20px;
+            }
+        }
+
+        .info{
+            height: 70px;
+            width: 100%;
+            background-color: ghostwhite;
+            border-bottom: 1px solid gainsboro;
+            line-height: 70px;
+        }
+        .info .playName{
+            float: left;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        .info .push{
+            float: right;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .m-tab{
+            height: 70px;
+            display: flex;
+        }
+        .m-tab .children{
+            flex: 1;
+            text-align: center;
+            line-height: 70px;
+        }
+        .m-tab .children.active{border-bottom: 2px solid blue;}
+        .m-tab a {
+            text-decoration: none;
+            color: #2C2C2C;
+        }
+
+        .viewgroup{
+            padding-left: 10px;
+            padding-right: 10px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .player-state{
+            height: 20px;
+            color: "#000000";
+            border: 1px solid #000000;
+            border-radius: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            text-align: center;
+            line-height: 20px;
+            margin-right: 10px;
+        }
+
+        .player-state.active{
+            color: blue;
+            border: 1px solid blue;
+            justify-content: flex-end;
+        }
+
+        .item{
+            height: 30px;
+            line-height: 30px;
+            width: 100%;
+            display: flex;
+            flex-grow: row nowrap;
+            justify-content: space-between;
+            background-color: white;
+            padding: 5px;
+        }
+
+        .loading {
+            height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+        }
+
+        .loading img{
+            height: 350px;
+        }
+    
+
+    </style>
+</head>
+<body onload="complete()">
+
+<!--<input type="button" value="播放" onclick="onPlayer()">-->
+
+
+<div id="container">
+    <div class="loading"><img src="./loading.jpeg"></div>
+</div>
+    
+    <!--章节提示-->
+    <div class="info">
+        <div id="curname" class="playName"></div>
+        <div class="push">推送</div>
+    </div>
+    <div class="m-tab">
+        <div class="children" id="m-group"><a href="javascript:void(0);" onclick="clickTab(1)">目录</a></div>
+        <div class="children" id="m-info"><a href="javascript:void(0);" onclick="clickTab(2)">详情</a></div>
+        <div class="children" id="m-discuess"><a href="javascript:void(0);" onclick="clickTab(3)">评论</a></div>
+        <div class="m-division"></div>  
+    </div>  
+    <div id="view-group" class="viewgroup">
+        <ul id="videolist">
+        </ul>
+    </div>
+    <div id="view-info" style="display: none;"> 
+        
+    </div>
+    <div id="view-discuess" style="display:none;">
+        
+    </div>
+
+<script>
+
+    var initComplete=false;
+    var curVid;
+    var height=350;
+    var screen_w;
+    var screen_h;
+
+    var platform="ios"; //当前的平台是 android 或 ios
+
+    var mgroup = $('#m-group');
+    var minfo = $('#m-info');
+    var mdiscuess = $('#m-discuess');
+    var viewgroup = $('#view-group');
+    var viewinfo = $('#view-info');
+    var viewdiscuess = $('#view-discuess');
+
+    //页面加载完成
+    function complete(){
+        initComplete = true;
+        //curVid = '048C8657949DE4DF63835A29B2A11961';
+        window.cc_js_Player.showPlayer();
+        //setTimeout("onPlayer()",4000);
+        //onPlayer();
+        clickTab(1);
+
+    }
+
+    function onPlayer(){
+        platform = "android";
+        var str = {data:[{ccid: 'CEA47E52C78B8BC863835A29B2A11961', url: 'null', name: '2正方体光影01'}, {ccid: 'CEA47E52C78B8BC8753C612EB38A8D5A', url: 'null', name: '2正方体光影02'}, {ccid: 'A24C1B5F0283B84DB463AB73BD4C026B', url: 'null', name: '2正方体光影03'}, {ccid: 'CEA47E52C78B8BC82BBA984E86119800', url: 'null', name: '2正方体光影04'}, {ccid: 'A24C1B5F0283B84DFC9558351D509E7C', url: 'null', name: '2正方体光影05'}, {ccid: 'A24C1B5F0283B84D13358DE27D943A99', url: 'null', name: '2正方体光影06'}]};
+        addPhoneList(str,200);
+    }
+
+    //js 交互
+    function showTips(data){
+        //var tips = document.getElementById('tips');
+        //tips.innerHTML = "当前播放视频："+data;
+    }
+
+
+    //android端添加数据
+    function addAndroidPhoneList(data,hg,pf,w,h){
+        this.platform = pf;
+        this.screen_w = w;
+        this.screen_h = h;
+        addPhoneList(data,hg);
+    }
+
+
+    //添加手机端的列表数据
+    function addPhoneList(data,hg){
+        height = hg;
+        $(".loading").height(hg);
+        $(".loading img").height(hg);
+        addList(data);
+    }
+
+    //添加视频列表
+    function addList(data){
+        //var tips = document.getElementById('tips');
+        //tips.innerHTML = "当前播放视频："+data.data;
+        var items = "";
+        for(var i=0; i<data.data.length; i++){
+            items += "<li><div class='item' onclick='clickItem(\""+data.data[i].ccid+"\",\""+data.data[i].name+"\")'><span>"+data.data[i].name+"</span><span class='player-state'>播放</span></div></li>";
+       }
+       $('#videolist').append(items);
+    }
+
+    //播放条目点击
+    function clickItem(ccid,name){
+        //var tips = document.getElementById('tips');
+        //tips.innerHTML = "当前播放视频："+ccid;
+        $('span').removeClass('active');
+        $(event.currentTarget.lastChild).addClass('active');
+        $('#curname').html(name);
+        addPlayer(ccid,height);
+    }
+
+
+    //播放器加载完成
+    function onCCH5PlayerLoaded() {
+        initComplete = true;
+        if(curVid){
+            addPlayer(curVid,height);
+        }
+    }
+
+    //全屏切换 model 0 退出全屏 1变成全屏 vid 播放视频的id 只在android平台处理对应的业务逻辑
+    function on_player_fullscreen(model,vid){
+        if(platform == "android"){
+            if(window.cc_js_Player.isFullScreen()){
+                FClient.postMessage("vertical");
+            }else{
+                FClient.postMessage("horizontal");
+            }
+        }
+    }
+
+    //下一个视频
+    function updatePlayer(vid,h) {
+        if(initComplete){
+            window.cc_js_Player.destroy();
+            return addPlayer(vid,h);
+        }else{
+            return 0;
+        }
+    }
+
+    //创建视频
+    function addPlayer(vid,h) {
+        if(initComplete){
+            if(platform == "android"){
+                window.createCCH5Player({
+                    'vid': vid,
+                    'siteid': 'A478E06B5AA1107B',
+                    'mediatype':1,
+                    'autoStart': true,
+                    'width': screen_h-20,
+                    'height': screen_w-50,
+                    'isShare':'false',
+                    'parentNode': document.getElementById('container')
+                });
+            }else{
+               window.createCCH5Player({
+                    'vid': vid,
+                    'siteid': 'A478E06B5AA1107B',
+                    'mediatype':1,
+                    'autoStart': true,
+                    'width': "100%",
+                    'height': height,
+                    'isShare':'false',
+                    'parentNode': document.getElementById('container')
+                }); 
+            }
+            
+            return 1;
+        }else{
+            this.curVid = vid;
+            return 0;
+        }
+    }
+
+    function on_CCH5player_ready(obj) {
+        console.log('CCH5player_ready', obj);
+
+        if(platform == "android"){
+            FClient.postMessage("horizontal");
+            window.cc_js_Player.fullScreen();
+        }
+        /* 调用播放器api样例_设置音量*/
+        window.cc_js_Player.setVolume(0.5);
+    }
+
+    /* 回调样例_监听音量改变*/
+    function on_player_volumechange(volume, vid) {
+        console.log('音量改变回调: ', volume, vid)
+    }
+
+    //tab切换
+    function clickTab(index){
+        if(index == 1){
+            mgroup.addClass('active');
+            minfo.removeClass('active');
+            mdiscuess.removeClass('active');
+            viewgroup.show();
+            viewinfo.hide();
+            viewdiscuess.hide();
+
+        }else if(index == 2){
+            mgroup.removeClass('active');
+            minfo.addClass('active');
+            mdiscuess.removeClass('active');
+            viewgroup.hide();
+            viewinfo.show();
+            viewdiscuess.hide();
+        }else if(index == 3){
+            mgroup.removeClass('active');
+            minfo.removeClass('active');
+            mdiscuess.addClass('active');
+            viewgroup.hide();
+            viewinfo.hide();
+            viewdiscuess.show();
+        }
+    }
+
+</script>
+
+</body>
+</html>

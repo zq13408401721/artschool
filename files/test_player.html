@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>艺画</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!--<script src="https://p.bokecc.com/player?siteid=A478E06B5AA1107B&newversion=true"></script> -->
+    <!--<script type="type/javascript" src="video.js"></script>-->
+    <!--<script type="text/javascript" src="https://p.bokecc.com/js/player/v20200701.js"></script>-->
+    <script type="text/javascript" src="https://p.bokecc.com/js/newplayer/h5player-2.5.11.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #test {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        @media screen and (min-width: 500px) {
+            #test {
+                padding-left: 20px;
+            }
+        }
+    </style>
+</head>
+<body onload="complete()">
+
+<input type="button" value="播放" onclick="onPlayer()">
+
+<div id="container">
+</div>
+
+<script>
+
+    var initComplete = true;
+    var curVid;
+    var height;
+
+    //页面加载完成
+    function complete(){
+        //MyChannel.postMessage("H5 load complete");
+        //var tips = document.getElementById('tips');
+        //tips.innerHTML = "h5 load complete";
+
+        curVid = '048C8657949DE4DF63835A29B2A11961';
+        window.cc_js_Player.showPlayer();
+        //setTimeout("onPlayer()",4000);
+        onPlayer();
+    }
+
+    function onPlayer(){
+        addPlayer(curVid,600);
+    }
+
+    //播放器加载完成
+    function onCCH5PlayerLoaded() {
+        initComplete = true;
+        if(curVid){
+            addPlayer(curVid,height);
+        }
+    }
+
+    //下一个视频
+    function updatePlayer(vid,h) {
+        if(initComplete){
+            window.cc_js_Player.destroy();
+            return addPlayer(vid,h);
+        }else{
+            return 0;
+        }
+    }
+
+    //创建视频
+    function addPlayer(vid,h) {
+        height = h;
+        if(initComplete){
+            window.createCCH5Player({
+                'vid': vid,
+                'siteid': 'A478E06B5AA1107B',
+                'mediatype':1,
+                'autoStart': true,
+                'width': "100%",
+                'height': height,
+                'isShare':'false',
+                'parentNode': document.getElementById('container')
+            });
+            return 1;
+        }else{
+            this.curVid = vid;
+            return 0;
+        }
+    }
+
+    function on_CCH5player_ready(obj) {
+        console.log('CCH5player_ready', obj);
+
+        /* 调用播放器api样例_设置音量*/
+        window.cc_js_Player.setVolume(0.5);
+    }
+
+    /* 回调样例_监听音量改变*/
+    function on_player_volumechange(volume, vid) {
+        console.log('音量改变回调: ', volume, vid)
+    }
+</script>
+
+</body>
+</html>

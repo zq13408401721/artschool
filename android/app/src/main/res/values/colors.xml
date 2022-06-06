@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="transparent" tools:ignore="MissingDefaultResource">#00000000</color>
+    <color name="black" tools:ignore="MissingDefaultResource">#000000</color>
+    <color name="exeTitle" tools:ignore="MissingDefaultResource">#333333</color>
+    <color name="dialogBac" tools:ignore="MissingDefaultResource">#B3000000</color>
+    <color name="white" tools:ignore="MissingDefaultResource">#ffffffff</color>
+    <color name="more_setting_color" tools:ignore="MissingDefaultResource">#B3ffffff</color>
+    <color name="orange" tools:ignore="MissingDefaultResource">#FF920A</color>
+    <color name="gray" tools:ignore="MissingDefaultResource">#999999</color>
+    <color name="lightgray" tools:ignore="MissingDefaultResource">#F3F4F5</color>
+    <color name="rightAnswer" tools:ignore="MissingDefaultResource">#8BC04B</color>
+    <color name="errorAnswer" tools:ignore="MissingDefaultResource">#E44F5A</color>
+    <color name="ad_color" tools:ignore="MissingDefaultResource">#66000000</color>
+    <color name="confirm_color" tools:ignore="MissingDefaultResource">#666666</color>
+    <color name="play_ope_bac_color" tools:ignore="MissingDefaultResource">#B3000000</color>
+    <color name="rb_text_check" tools:ignore="MissingDefaultResource">#ff5200</color>
+    <color name="visitor_info" tools:ignore="MissingDefaultResource">#55B1FF</color>
+    <color name="portrait_visitor_info_bac" tools:ignore="MissingDefaultResource">#40000000</color>
+    <color name="half_black" tools:ignore="MissingDefaultResource">#50000000</color>
+    <color name="questionAnalysis" tools:ignore="MissingDefaultResource">#666666</color>
+    <color name="rightOrErrorRateBac" tools:ignore="MissingDefaultResource">#1E1F21</color>
+    <color name="explainInfoBac" tools:ignore="MissingDefaultResource">#F6F6F7</color>
+    <color name="editDanmuBac" tools:ignore="MissingDefaultResource">#33999999</color>
+    <color name="inputDanmuLayoutBac" tools:ignore="MissingDefaultResource">#27282A</color>
+    <color name="landscapeDanmuColorBac" tools:ignore="MissingDefaultResource">#3D3D3F</color>
+    <color name="danmuControlBac" tools:ignore="MissingDefaultResource">#DDDDDD</color>
+    <color name="layoutBac" tools:ignore="MissingDefaultResource">#ffffff</color>
+    <color name="videoTitle" tools:ignore="MissingDefaultResource">#000000</color>
+    <color name="closePauseVideoAdBac" tools:ignore="MissingDefaultResource">#979797</color>
+</resources>
