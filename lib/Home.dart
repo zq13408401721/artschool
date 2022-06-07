@@ -203,82 +203,84 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
     return  ScreenUtilInit(
       designSize: Constant.isPad ? Size(Constant.PAD_SCREEN_WIDTH,Constant.PAD_SCREEN_HEIGHT) : Size(Constant.PHONE_SCREEN_WIDTH,Constant.PHONE_SCREEN_HEIGHT),
       //designSize: Size(1080,1920),
-      builder: (_) => WillPopScope(
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.white,
-            body:  Stack(
-              children: [
-                SafeArea(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: IndexedStack(
-                          index: this.index,
-                          children: this.pages,
+      builder: (_context,_){
+        return WillPopScope(
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: Colors.white,
+              body:  Stack(
+                children: [
+                  SafeArea(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: IndexedStack(
+                            index: this.index,
+                            children: this.pages,
+                          ),
                         ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border(
-                                top: BorderSide(width: 1.0,color: Colors.grey[100])
-                            )
-                        ),
-                        padding: EdgeInsets.only(
-                            top:ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-                            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            BarItem(label: barTitles[0], icon_select: barIcons[0][1],icon_normal: barIcons[0][0],
-                                width: ScreenUtil().setWidth(SizeUtil.getWidth(50)), height: ScreenUtil().setHeight(SizeUtil.getHeight(50)),select: barIndex == 0, click: (){
-                                  _selectBar(0);
-                                }),
-                            BarItem(label: barTitles[1], icon_select: barIcons[1][1],icon_normal: barIcons[1][0],
-                                width: ScreenUtil().setWidth(SizeUtil.getWidth(50)), height: ScreenUtil().setHeight(SizeUtil.getHeight(50)),select: barIndex == 1, click: (){
-                                  _selectBar(1);
-                                }),
-                            BarItem(label: barTitles[2], icon_select: barIcons[2][1],icon_normal: barIcons[2][0],
-                                width: barIndex == 2 ? ScreenUtil().setWidth(SizeUtil.getWidth(90)) : ScreenUtil().setWidth(SizeUtil.getWidth(50)),
-                                height: barIndex == 2 ? ScreenUtil().setHeight(SizeUtil.getHeight(90)) : ScreenUtil().setHeight(SizeUtil.getHeight(50)),
-                                select: barIndex == 2, click: (){
-                                  _selectBar(2);
-                                }),
-                            BarItem(label: barTitles[3], icon_select: barIcons[3][1],icon_normal: barIcons[3][0],
-                                width: ScreenUtil().setWidth(SizeUtil.getWidth(50)), height: ScreenUtil().setHeight(SizeUtil.getHeight(50)),select: barIndex == 3, click: (){
-                                  _selectBar(3);
-                                }),
-                            BarItem(label: barTitles[4], icon_select: barIcons[4][1],icon_normal: barIcons[4][0],
-                                width: ScreenUtil().setWidth(SizeUtil.getWidth(50)), height: ScreenUtil().setHeight(SizeUtil.getHeight(50)),select: barIndex == 4, click: (){
-                                  _selectBar(4);
-                                })
-                          ],
-                        ),
-                      )
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border(
+                                  top: BorderSide(width: 1.0,color: Colors.grey[100])
+                              )
+                          ),
+                          padding: EdgeInsets.only(
+                              top:ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+                              bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              BarItem(label: barTitles[0], icon_select: barIcons[0][1],icon_normal: barIcons[0][0],
+                                  width: ScreenUtil().setWidth(SizeUtil.getWidth(50)), height: ScreenUtil().setHeight(SizeUtil.getHeight(50)),select: barIndex == 0, click: (){
+                                    _selectBar(0);
+                                  }),
+                              BarItem(label: barTitles[1], icon_select: barIcons[1][1],icon_normal: barIcons[1][0],
+                                  width: ScreenUtil().setWidth(SizeUtil.getWidth(50)), height: ScreenUtil().setHeight(SizeUtil.getHeight(50)),select: barIndex == 1, click: (){
+                                    _selectBar(1);
+                                  }),
+                              BarItem(label: barTitles[2], icon_select: barIcons[2][1],icon_normal: barIcons[2][0],
+                                  width: barIndex == 2 ? ScreenUtil().setWidth(SizeUtil.getWidth(90)) : ScreenUtil().setWidth(SizeUtil.getWidth(50)),
+                                  height: barIndex == 2 ? ScreenUtil().setHeight(SizeUtil.getHeight(90)) : ScreenUtil().setHeight(SizeUtil.getHeight(50)),
+                                  select: barIndex == 2, click: (){
+                                    _selectBar(2);
+                                  }),
+                              BarItem(label: barTitles[3], icon_select: barIcons[3][1],icon_normal: barIcons[3][0],
+                                  width: ScreenUtil().setWidth(SizeUtil.getWidth(50)), height: ScreenUtil().setHeight(SizeUtil.getHeight(50)),select: barIndex == 3, click: (){
+                                    _selectBar(3);
+                                  }),
+                              BarItem(label: barTitles[4], icon_select: barIcons[4][1],icon_normal: barIcons[4][0],
+                                  width: ScreenUtil().setWidth(SizeUtil.getWidth(50)), height: ScreenUtil().setHeight(SizeUtil.getHeight(50)),select: barIndex == 4, click: (){
+                                    _selectBar(4);
+                                  })
+                            ],
+                          ),
+                        )
 
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                //启动页面
-                loadover ? SizedBox() :
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: Colors.white,
-                  child: Center(
-                      child: Image.asset("image/start.png",width: ScreenUtil().setWidth(463),height: ScreenUtil().setHeight(565),)
-                    //isinit ? VideoPlayer(_videoPlayerController) : SizedBox(),
-                  ),
-                )
+                  //启动页面
+                  loadover ? SizedBox() :
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.white,
+                    child: Center(
+                        child: Image.asset("image/start.png",width: ScreenUtil().setWidth(463),height: ScreenUtil().setHeight(565),)
+                      //isinit ? VideoPlayer(_videoPlayerController) : SizedBox(),
+                    ),
+                  )
 
-              ],
+                ],
+              ),
             ),
-          ),
-          onWillPop: (){
-            exit(0);
-          }),
+            onWillPop: (){
+              exit(0);
+            });
+      },
     );
 
   }

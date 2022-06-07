@@ -23,8 +23,8 @@ if (flutterVersionName == null) {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-/*apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'*/
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 
@@ -59,7 +59,7 @@ android {
             //资源压缩 开启打包混淆
             minifyEnabled true
             //代码压缩
-            useProguard true
+            //useProguard true
             //读取混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

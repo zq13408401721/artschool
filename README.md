@@ -14,3 +14,8 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+# 6/7 plugin update
+# flutter_absolute_path android  ext.kotlin_version = '1.3.40'
+# android->build.gradle   ext.kotlin_version = '1.5.0'  classpath 'com.android.tools.build:gradle:7.1.2'

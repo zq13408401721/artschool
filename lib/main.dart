@@ -149,10 +149,12 @@ class StartPageState extends BaseState{
       body: SafeArea(
         child: ScreenUtilInit(
             designSize: Constant.isPad ? Size(1536, 2056) : Size(750,1334),
-            builder: (_)=>Container(
-              alignment: Alignment(0,1),
-              child: Image.asset("image/ic_logo.png",width: ScreenUtil().setWidth(300),height: ScreenUtil().setHeight(500),),
-            )
+            builder: (_context,_){
+              return Container(
+                alignment: Alignment(0,1),
+                child: Image.asset("image/ic_logo.png",width: ScreenUtil().setWidth(300),height: ScreenUtil().setHeight(500),),
+              );
+            }
         ),
       ),
     );
@@ -190,10 +192,12 @@ class PageState extends BaseState{
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: Constant.isPad ? Size(1536, 2056) : Size(750,1334),
-      builder: (_)=>Container(
-        alignment: Alignment(0,1),
-        child: Image.asset("image/ic_logo.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(300)),height: ScreenUtil().setHeight(SizeUtil.getHeight(500)),),
-      )
+      builder: (_context,_){
+        return Container(
+          alignment: Alignment(0,1),
+          child: Image.asset("image/ic_logo.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(300)),height: ScreenUtil().setHeight(SizeUtil.getHeight(500)),),
+        );
+      }
     );
   }
 }
