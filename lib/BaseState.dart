@@ -469,20 +469,15 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
    */
   Future<bool> savePolicy() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _bool = await prefs.setBool("policy",true);
-    /*DBUtils db = await DBUtils.dbUtils;
-    bool _bool = await db.insertPolicy("policy", "true");*/
+    bool _bool = await prefs.setInt("policy",1);
     return _bool;
   }
 
-  Future<bool> getPolicy() async{
+  Future<int> getPolicy() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _bool = prefs.containsKey("policy");
-    print("policy :"+_bool.toString());
-    return _bool;
-    /*DBUtils db = await DBUtils.dbUtils;
-    String result = await db.queryPolicy("policy");
-    return (result != null && result == "true") ? true : false;*/
+    int policy = await prefs.getInt("policy");
+    print("policy :"+policy.toString());
+    return policy;
   }
 
   /**

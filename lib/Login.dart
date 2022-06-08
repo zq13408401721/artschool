@@ -35,7 +35,7 @@ class LoginState extends BaseState<Login>{
 
   VideoPlayerController _videoPlayerController;
 
-  var _username,_password;
+  var _username="",_password="";
 
   var isinit = false;
 
@@ -45,7 +45,7 @@ class LoginState extends BaseState<Login>{
   void initState() {
     super.initState();
     Constant.isLogin = true;
-    clearCache();
+    //clearCache();
     print("state:${Constant.isPad}");
     _videoPlayerController = VideoPlayerController.asset(Constant.logn_bg(this.isAndroid));
     _videoPlayerController.addListener(() {
@@ -58,6 +58,16 @@ class LoginState extends BaseState<Login>{
       });
     });
     _videoPlayerController.play();
+    initUser();
+  }
+
+  void initUser() async{
+    _username = await getString("username");
+    _password = await getString("password");
+    if(_username != null && _password != null){
+      setState(() {
+      });
+    }
   }
 
   void _textFiledUserName(String um){
@@ -136,7 +146,8 @@ class LoginState extends BaseState<Login>{
   void showDialog(){
     if(Platform.isAndroid){
       getPolicy().then((value){
-        if(value == null || !value){
+        print("policy:${value}");
+        if(value == null || value == 0){
           isShowDialog = true;
           Future.delayed(Duration(milliseconds: 300)).then((value) => showPolicyDialog(context));
         }
@@ -193,6 +204,7 @@ class LoginState extends BaseState<Login>{
                       maxLines: 1,
                       maxLength: 18,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      controller: TextEditingController(text: _username),
                       decoration: InputDecoration(
                         hintText: "账号 / 请找机构老师索取账号",
                         hintStyle: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(36)),color: Colors.black26),
@@ -236,6 +248,7 @@ class LoginState extends BaseState<Login>{
                       maxLength: 20,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       obscureText: true,
+                      controller: TextEditingController(text: _password),
                       decoration: InputDecoration(
                         hintText: "密码",
                         counterText: "",
@@ -288,6 +301,8 @@ class LoginState extends BaseState<Login>{
                               var pw = dataTomd5(this._password);
                               httpUtil.post(DataUtils.api_login,data:{"username":this._username,"password":pw}).then((value) {
                                 _hideloading();
+                                setData("username",this._username);
+                                setData("password", this._password);
                                 this.loginReturn(context,new LoginBean.fromJson(json.decode(value)));
                               }).catchError((err)=>{
                                 _hideloading(),

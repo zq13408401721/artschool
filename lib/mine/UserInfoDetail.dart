@@ -56,7 +56,13 @@ class UserInfoDetailState extends BaseDialogState{
    */
   Future<int> loginOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String username = await prefs.getString("username");
+    String pw = await prefs.getString("password");
+    int policy = await prefs.getInt("policy");
     prefs.clear();
+    prefs.setInt("policy", policy);
+    prefs.setString("username", username);
+    prefs.setString("password", pw);
     return 1;
   }
 

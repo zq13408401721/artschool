@@ -29,6 +29,16 @@ class ActiveCodePageState extends BaseState<ActiveCodePage>{
   @override
   void initState() {
     super.initState();
+    initUser();
+  }
+
+  void initUser() async{
+    _username = await getString("username");
+    _password = await getString("password");
+    if(_username != null && _password != null){
+      setState(() {
+      });
+    }
   }
 
   void _textFiledUserName(String um){
@@ -73,6 +83,8 @@ class ActiveCodePageState extends BaseState<ActiveCodePage>{
       Constant.isLogin = false;
       LoginBean loginBean = LoginBean.fromJson(json.decode(value));
       if(loginBean.errno == 0){
+        setData("username",this._username);
+        setData("password", this._password);
         saveToken(loginBean.data.userinfo.token);
         String classes = '';
         if(loginBean.data.classes != null && loginBean.data.classes.length > 0){
@@ -263,8 +275,11 @@ class ActiveCodePageState extends BaseState<ActiveCodePage>{
                   ),
                   child: InkWell(
                     onTap: (){
+                      FocusScope.of(context).unfocus();
                       //激活账号
-                      _submitCode();
+                      Future.delayed(Duration(milliseconds: 300),(){
+                        _submitCode();
+                      });
                     },
                     child: Container(
                       decoration: BoxDecoration(
