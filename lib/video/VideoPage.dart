@@ -114,8 +114,8 @@ class VideoPageState extends VersionState{
   //视频广告
   AdvertVideoBean _advertVideoBean;
 
-  VideoPlayerController _videoPlayerController;
-  bool videoInit=false;
+  //VideoPlayerController _videoPlayerController;
+  //bool videoInit=false;
 
   @override
   void initState() {
@@ -131,13 +131,13 @@ class VideoPageState extends VersionState{
       });
     });
 
-    _videoPlayerController = VideoPlayerController.network("http://res.yimios.com:9050/videos/advert.mp4");
+   /* _videoPlayerController = VideoPlayerController.network("http://res.yimios.com:9050/videos/advert.mp4");
     _videoPlayerController.initialize().then((value){
       setState(() {
         videoInit = true;
       });
     });
-    _videoPlayerController.play();
+    _videoPlayerController.play();*/
 
     getTabs();
     getChoiceList();
@@ -536,6 +536,21 @@ class VideoPageState extends VersionState{
     }
   }
 
+  /**
+   * 网盘griditem
+   */
+  Widget getPanItem(){
+    return Container(
+      child: Column(
+        children: [
+          CachedNetworkImage(imageUrl: ""),
+          Text("name"),
+          Text("actor")
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -758,6 +773,55 @@ class VideoPageState extends VersionState{
                               itemCount: brochureList.length,scrollDirection: Axis.horizontal,)*/
                           ],
                         ),
+                      ),
+                    ),
+                    //精选每日更新
+                    Container(
+                      child: Column(
+                        children: [
+                          //标题
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("最新网盘资料"),
+                              InkWell(
+                                onTap: (){
+                                  //切换到网盘
+                                },
+                              )
+                            ],
+                          ),
+                          //更新信息
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(ScreenUtil().setWidth(5))))
+                            ),
+                            child: Text("今日更新了5个网盘，共计100个文件"),
+                          ),
+                          //专题列表
+                          GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: choiceList.length,
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
+                                  mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
+                                  crossAxisCount: 3,
+                                  childAspectRatio: Constant.isPad ? 0.79 : 0.66
+                              ),
+                              itemBuilder: (context,index){
+                                return InkWell(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
+
+                                    ));
+                                  },
+                                  child: getPanItem()
+                                );
+                              }
+                          ),
+                        ],
                       ),
                     ),
                     //滚动广告
