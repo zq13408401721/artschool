@@ -83,7 +83,7 @@ class ColumnGalleryTile extends StatelessWidget{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(author,style: Constant.titleTextStyleNormal,maxLines: 1,),
-                    Text("专栏《${_getColumnName()}》",style: Constant.smallTitleTextStyle,maxLines: 1,)
+                    Text("网盘《${_getColumnName()}》",style: Constant.smallTitleTextStyle,maxLines: 1,)
                   ],
                 ),
               ],

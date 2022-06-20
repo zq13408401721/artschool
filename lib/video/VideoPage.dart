@@ -34,6 +34,8 @@ import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:video_player/video_player.dart';
 import '../VideoWeb.dart';
 import '../WebStage.dart';
+import '../bean/column_list_bean.dart' as COLUMN;
+import '../column/ColumnDetail.dart';
 import 'VideoAITile.dart';
 
 
@@ -110,6 +112,11 @@ class VideoPageState extends VersionState{
   List<M.Data> brochureList=[];
   String schoolname = "";
 
+  //最新的专栏数据
+  List<COLUMN.Data> columnList = [];
+  int columnNum = 0;
+
+
   LiveRoomBean _liveRoomBean;
   //视频广告
   AdvertVideoBean _advertVideoBean;
@@ -138,13 +145,14 @@ class VideoPageState extends VersionState{
       });
     });
     _videoPlayerController.play();*/
-
+    columnGalleryList();
     getTabs();
     getChoiceList();
     //getAIVideo();
     getSchoolBrochure();
     getUserGroup();
     getLiveRoom();
+
     //checkAdvert();
   }
 
@@ -537,17 +545,79 @@ class VideoPageState extends VersionState{
   }
 
   /**
+   * 最新专栏数据
+   */
+  void columnGalleryList(){
+    var option = {
+      "page":1,
+      "size":6,
+    };
+    httpUtil.post(DataUtils.api_columnlist,data: option).then((value){
+      String result = checkLoginExpire(value);
+      if(result.isNotEmpty) {
+        COLUMN.ColumnListBean bean = COLUMN.ColumnListBean.fromJson(json.decode(result));
+        if(bean.errno == 0){
+          if(bean.data.length > 0){
+            for(COLUMN.Data item in bean.data){
+              columnNum += item.count;
+            }
+            setState(() {
+              columnList.addAll(bean.data);
+            });
+          }
+        }else{
+          //showToast(bean.errmsg);
+        }
+      }
+    });
+  }
+
+  /**
    * 网盘griditem
    */
-  Widget getPanItem(){
-    return Container(
-      child: Column(
-        children: [
-          CachedNetworkImage(imageUrl: ""),
-          Text("name"),
-          Text("actor")
-        ],
+  Widget getPanItem(COLUMN.Data item){
+    print(item.url);
+    return InkWell(
+      child: Container(
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                CachedNetworkImage(imageUrl: Constant.parseNewColumnListIconString(item.url,item.width,item.height),fit: BoxFit.fitWidth,),
+                Positioned(
+                  child: Text("${item.count}张图片"),
+                  top: 5,
+                  right: 5,
+                )
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
+                  right: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
+                  top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+                  bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
+              ),
+              child: Text(item.name,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),maxLines: 1,),
+            ),
+            Text(item.nickname == null ? item.nickname : item.username)
+          ],
+        ),
       ),
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>ColumnDetail(
+          columnname: item.name,
+          columnid: item.id,
+          author: item.nickname == null ? item.username : item.nickname,
+          uid: item.uid,
+          count: item.count,
+          avater: item.avater,
+          issubscrible: item.subscrible > 0 ? true : false,
+          cb: (id,subscrible){
+
+          },
+        )));
+      },
     );
   }
 
@@ -775,54 +845,55 @@ class VideoPageState extends VersionState{
                         ),
                       ),
                     ),
-                    //精选每日更新
+                    //网盘每日更新
+                    //标题
                     Container(
-                      child: Column(
+                      margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
+                      child: Text("最新网盘资料",style: Constant.titleTextStyle,),
+                    ),
+                    //更新信息
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(ScreenUtil().setWidth(5))))
+                      ),
+                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20),vertical: ScreenUtil().setHeight(20)),
+                      padding: EdgeInsets.symmetric(horizontal:ScreenUtil().setWidth(20),vertical: ScreenUtil().setHeight(20)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          //标题
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("最新网盘资料"),
-                              InkWell(
-                                onTap: (){
-                                  //切换到网盘
-                                },
-                              )
-                            ],
-                          ),
-                          //更新信息
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(ScreenUtil().setWidth(5))))
-                            ),
-                            child: Text("今日更新了5个网盘，共计100个文件"),
-                          ),
-                          //专题列表
-                          GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: choiceList.length,
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-                                  mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-                                  crossAxisCount: 3,
-                                  childAspectRatio: Constant.isPad ? 0.79 : 0.66
-                              ),
-                              itemBuilder: (context,index){
-                                return InkWell(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
-
-                                    ));
-                                  },
-                                  child: getPanItem()
-                                );
-                              }
-                          ),
+                          Text("今日更新了6个网盘，共计$columnNum个文件"),
+                          InkWell(
+                              onTap: (){
+                                //切换到网盘
+                              },
+                              child: Icon(Icons.more_horiz)
+                          )
                         ],
                       ),
+                    ),
+                    //专题列表
+                    GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: columnList.length,
+                        padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: ScreenUtil().setWidth(Constant.PADDING_GALLERY_CROSS),
+                            crossAxisSpacing: Constant.GARRERY_GRID_CROSSAXISSPACING,
+                            childAspectRatio: Constant.isPad ? .87 : .78
+                        ),
+                        itemBuilder: (context,index){
+                          return InkWell(
+                              onTap: (){
+                                // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                //
+                                // ));
+                              },
+                              child: getPanItem(columnList[index])
+                          );
+                        }
                     ),
                     //滚动广告
                     Offstage(

@@ -80,7 +80,7 @@ class MineState extends BaseDialogState{
   List<dynamic> _studentToolsData = [
     //{"id":1,"name":"我的老师","icon":"image/ic_myteacher.png"},
     {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
-    {"id":4,"name":"我的专栏","icon":"image/ic_column.png"},
+    {"id":4,"name":"我的网盘","icon":"image/ic_column.png"},
     {"id":5,"name":"我的作业","icon":"image/ic_mywork.png"},
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
@@ -90,7 +90,7 @@ class MineState extends BaseDialogState{
   List<dynamic> _teacherToolsData = [
     {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
     {"id":3,"name":"我的课件","icon":"image/ic_mycourse.png"},
-    {"id":4,"name":"我的专栏","icon":"image/ic_column.png"},
+    {"id":4,"name":"我的网盘","icon":"image/ic_column.png"},
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
     //{"id":6,"name":"看MV","icon":"image/ic_mv.png"},

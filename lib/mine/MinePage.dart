@@ -30,7 +30,7 @@ class MinePage extends StatefulWidget{
 class MinePageState extends BaseDialogState{
 
   List _data = [
-    {"label":"我的专栏","img":"image/ic_mine_subject.png","type":IconType.SUBJECT},
+    {"label":"我的网盘","img":"image/ic_mine_subject.png","type":IconType.SUBJECT},
     {"label":"我的收藏","img":"image/ic_mine_collect.png","type":IconType.COLLECT},
     {"label":"我的课堂资料","img":"image/ic_mine_material.png","type":IconType.MATERIAL},
     {"label":"联系","img":"image/ic_mine_phone.png","type":IconType.PHONE},

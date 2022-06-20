@@ -28,7 +28,7 @@ class ColumnMineTileAdd extends StatelessWidget{
             children: [
               Text("+",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(70))),),
               SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(20)),),
-              Text("新建专栏",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),fontWeight: FontWeight.bold),),
+              Text("新建文件夹",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),fontWeight: FontWeight.bold),),
               SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(150)),),
               Text("500G超大高速空间",style: Constant.smallTitleTextStyle,maxLines: 1,)
             ],

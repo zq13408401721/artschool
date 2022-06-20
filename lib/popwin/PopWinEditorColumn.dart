@@ -80,7 +80,7 @@ class PopWinEditorColumnState extends BaseState<PopWinEditorColumn>{
                       Expanded(
                         child: Container(
                           margin:EdgeInsets.only(left: ScreenUtil().setWidth(20),top: ScreenUtil().setHeight(60)),
-                          child: Text("编辑专栏",style: TextStyle(fontSize: ScreenUtil().setSp(40)),textAlign: TextAlign.center,),
+                          child: Text("编辑网盘",style: TextStyle(fontSize: ScreenUtil().setSp(40)),textAlign: TextAlign.center,),
                         ),
                       ),
                     ],

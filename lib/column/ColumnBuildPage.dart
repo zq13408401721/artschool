@@ -53,7 +53,7 @@ class ColumnBuildPageState extends BaseState{
   void _submit(){
 
     if(selectItem == null){ return showToast("请选择分类");}
-    if(columnname ==  null || columnname.length == 0) {return showToast("请输入专栏名称");}
+    if(columnname ==  null || columnname.length == 0) {return showToast("请输入文件夹名称");}
     var option = {
       "type":selectItem.id,
       "name":columnname,
@@ -104,7 +104,7 @@ class ColumnBuildPageState extends BaseState{
                 BackButtonWidget(cb: (){
                   unfocus(context);
                   Navigator.pop(context);
-                }, title: "新建专栏"),
+                }, title: "新建文件夹"),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
@@ -116,7 +116,7 @@ class ColumnBuildPageState extends BaseState{
                       Expanded(
                         child: TextField(
                           decoration: InputDecoration(
-                              hintText: "专栏名称",
+                              hintText: "文件夹名称",
                               contentPadding: EdgeInsets.all( ScreenUtil().setHeight(SizeUtil.getHeight(20))),
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black12)

@@ -152,7 +152,7 @@ class ColumnPageState extends BaseState{
                       _changeType(0);
                     });
                   },),*/
-                  M.TextButton(key:columnAllKey,label:"全部专栏",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),defaultSelect:true,cb: (){
+                  M.TextButton(key:columnAllKey,label:"全部网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),defaultSelect:true,cb: (){
                     print("全部专栏");
                     _changeColumnTab(0);
                     setState(() {
@@ -171,7 +171,7 @@ class ColumnPageState extends BaseState{
                       _changeType(0);
                     });
                   },),
-                  M.TextButton(key:columnMyKey,label:"我的专栏",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
+                  M.TextButton(key:columnMyKey,label:"我的网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
                     print("我的专栏");
                     _changeColumnTab(2);
                     setState(() {
