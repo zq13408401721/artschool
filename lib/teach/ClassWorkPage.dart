@@ -46,6 +46,7 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
   void initState() {
     super.initState();
     _controller = initScrollController();
+    isrefreshing = true;
   }
 
   @override

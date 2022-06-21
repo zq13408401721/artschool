@@ -122,6 +122,7 @@ class Works {
   String _correct_uid;
   String _correct_time;
   String _correct_name;
+  int _score;
 
   WorkScoreBean _workScoreBean;
   WorkScoreBean get workScoreBean => _workScoreBean;
@@ -160,6 +161,7 @@ class Works {
   set correct_name(value){
     _correct_name = value;
   }
+  int get score => _score;
 
   Works({
       int id, 
@@ -177,7 +179,8 @@ class Works {
       int maxheight,
       String correct_uid,
       String correct_time,
-      String correct_name}){
+      String correct_name,
+      int score}){
     _id = id;
     _uid = uid;
     _createtime = createtime;
@@ -194,6 +197,7 @@ class Works {
     _correct_uid = correct_uid;
     _correct_time = correct_time;
     _correct_name = correct_name;
+    _score = score;
   }
 
   Works.fromJson(dynamic json) {
@@ -213,6 +217,7 @@ class Works {
     _correct_uid = json['correct_uid'];
     _correct_time = json['correct_time'];
     _correct_name = json['correct_name'];
+    _score = json['score'];
   }
 
   Map<String, dynamic> toJson() {
@@ -233,6 +238,7 @@ class Works {
     map['correct_uid'] = _correct_uid;
     map['correct_time'] = _correct_time;
     map['correct_name'] = _correct_name;
+    map['score'] = _score;
     return map;
   }
 

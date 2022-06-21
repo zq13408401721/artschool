@@ -98,11 +98,17 @@ class ColumnSubscribleTileState extends BaseState<ColumnSubscribleTile>{
             left:ScreenUtil().setWidth(SizeUtil.getWidth(26)),
             right:ScreenUtil().setWidth(SizeUtil.getWidth(26)),
             top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-          ),child: Row(
+          ),child: Text((widget.data.columnname != null && widget.data.columnname.length > 12) ? widget.data.columnname.substring(0,12) : widget.data.columnname,
+            style: Constant.titleTextStyleNormal,),),
+          Padding(padding: EdgeInsets.only(
+            left: ScreenUtil().setWidth(SizeUtil.getWidth(26)),
+            right: ScreenUtil().setWidth(SizeUtil.getWidth(26)),
+            top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
+            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+          ),child:Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text((widget.data.columnname != null && widget.data.columnname.length > 7) ? widget.data.columnname.substring(0,7) : widget.data.columnname,
-                style: Constant.titleTextStyleNormal,),
+              Text(widget.data.nickname == null ? widget.data.username : widget.data.nickname,style: Constant.smallTitleTextStyle,),
               Expanded(
                 child: InkWell(
                   onTap: (){
@@ -114,13 +120,7 @@ class ColumnSubscribleTileState extends BaseState<ColumnSubscribleTile>{
                 ),
               )
             ],
-          ),),
-          Padding(padding: EdgeInsets.only(
-            left: ScreenUtil().setWidth(SizeUtil.getWidth(26)),
-            right: ScreenUtil().setWidth(SizeUtil.getWidth(26)),
-            top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
-            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-          ),child: Text(widget.data.nickname == null ? widget.data.username : widget.data.nickname,style: Constant.smallTitleTextStyle,),),
+          ),)
         ],
       ),
     );

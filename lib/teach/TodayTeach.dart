@@ -71,6 +71,7 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
     classSelect = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.white);
     classNormal = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.black87);
     _scrollController = initScrollController();
+    isrefreshing = true;
   }
 
   @override
@@ -229,7 +230,7 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
                         ),
                         child: Column(
                           children: [
-                            AspectRatio(aspectRatio:1.1/1,
+                            AspectRatio(aspectRatio:1.3/1,
                               child: Container(
                                   child: CachedNetworkImage(
                                     imageUrl: Constant.parseNewIssueSmallString(_data[index].url,_data[index].width,_data[index].height),
@@ -259,33 +260,29 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
                                   )),
                             ),
                             Padding(padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),right:ScreenUtil().setWidth(SizeUtil.getWidth(40))),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    alignment: Alignment(-1,0),
-                                    color: Colors.white,
-                                    child: Text(
-                                      _data[index].name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),
+                              child: Container(
+                                alignment: Alignment(-1,0),
+                                color: Colors.white,
+                                child: Text(
+                                  _data[index].name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),
 
-                                    ),
-                                  ),
-                                  SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
-                                  Container(
-                                    alignment: Alignment(-1,0),
-                                    child: Text(
-                                      selectClassName,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Constant.smallTitleTextStyle,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            )
+                            ),
+                            Padding(padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),right:ScreenUtil().setWidth(SizeUtil.getWidth(40))),
+                              child: Container(
+                                alignment: Alignment(-1,0),
+                                child: Text(
+                                  selectClassName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Constant.smallTitleTextStyle,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         //child: TileCard(url: list[index].url,title: list[index].name,width: double.infinity,height: Constant.GARRERY_ITEM_HEIGHT,imgtype: ImageType.fill,),
@@ -381,7 +378,6 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
 
   @override
   List<Widget> addChildren() {
-    print("addChildren");
     return [
       //班级
       Container(

@@ -64,10 +64,31 @@ class ColumnMineTileState extends BasePhotoState<ColumnMineTile>{
             child: InkWell(
               onTap: (){
                 print("请上传作品");
-                openColumnGallery(context, widget.data.id, (bool value){
+                /*openColumnGallery(context, widget.data.id, (bool value){
                   if(value){
                     print("上传完成");
                     widget.cb(value);
+                  }
+                });*/
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>ColumnDetail(
+                  columnname: widget.data.name,
+                  columnid: widget.data.id,
+                  author: widget.data.nickname == null ? widget.data.username : widget.data.nickname,
+                  uid: widget.data.uid,
+                  count: widget.data.number,
+                  avater: widget.data.avater,
+                  issubscrible: true,
+                  visible: widget.data.visible,
+                  iscommon:true,
+                  cb: (id,subscrible){
+
+                  },
+                ))).then((value){
+                  //没有图片是否刷新
+                  if(value){
+                    //图片删除完，刷新列表
+                    widget.data.url = "";
+                    widget.cb(true);
                   }
                 });
               },

@@ -112,10 +112,16 @@ class ColumnListTileState extends BaseState<ColumnListTile>{
               left:ScreenUtil().setWidth(SizeUtil.getWidth(26)),
               right:ScreenUtil().setWidth(SizeUtil.getWidth(26)),
             top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-          ),child: Row(
+          ),child: Text("${(!Constant.isPad && widget.data.name != null && widget.data.name.length > 12)?widget.data.name.substring(0,12):widget.data.name}",style: Constant.titleTextStyleNormal,maxLines: 1,),),
+          Padding(padding: EdgeInsets.only(
+            left: ScreenUtil().setWidth(SizeUtil.getWidth(26)),
+            right: ScreenUtil().setWidth(SizeUtil.getWidth(26)),
+            top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
+            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+          ),child:Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("${(!Constant.isPad && widget.data.name != null && widget.data.name.length > 7)?widget.data.name.substring(0,7):widget.data.name}",style: Constant.titleTextStyleNormal,maxLines: 1,),
+              Text(widget.data.nickname == null ? widget.data.username : widget.data.nickname,style: Constant.smallTitleTextStyle,),
               Expanded(
                 child: InkWell(
                   onTap: (){
@@ -124,19 +130,12 @@ class ColumnListTileState extends BaseState<ColumnListTile>{
                     _commonSubscrible();
                   },
                   child: Text(widget.data.subscrible > 0 ? "取消收藏" : "收藏",textAlign: TextAlign.end,style: TextStyle(
-                    color: Colors.purpleAccent,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))
+                      color: Colors.purpleAccent,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))
                   ),),
                 ),
               )
             ],
-          ),),
-          Padding(padding: EdgeInsets.only(
-            left: ScreenUtil().setWidth(SizeUtil.getWidth(26)),
-            right: ScreenUtil().setWidth(SizeUtil.getWidth(26)),
-            top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
-            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-          ),child: Text(widget.data.nickname == null ? widget.data.username : widget.data.nickname,style: Constant.smallTitleTextStyle,),),
-
+          ))
         ],
       ),
     );

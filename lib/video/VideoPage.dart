@@ -37,6 +37,7 @@ import '../VideoWeb.dart';
 import '../WebStage.dart';
 import '../bean/column_list_bean.dart' as COLUMN;
 import '../column/ColumnDetail.dart';
+import '../widgets/ClickCallback.dart';
 import 'VideoAITile.dart';
 
 
@@ -582,7 +583,11 @@ class VideoPageState extends VersionState<VideoPage>{
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(ScreenUtil().setWidth(10)),
+            bottomRight: Radius.circular(ScreenUtil().setWidth(10))
+          )
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -910,12 +915,7 @@ class VideoPageState extends VersionState<VideoPage>{
                             childAspectRatio: Constant.isPad ? .87 : .78
                         ),
                         itemBuilder: (context,index){
-                          return InkWell(
-                              onTap: (){
-
-                              },
-                              child: getPanItem(columnList[index])
-                          );
+                          return getPanItem(columnList[index]);
                         }
                     ),
                     //滚动广告

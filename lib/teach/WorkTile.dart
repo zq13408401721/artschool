@@ -90,16 +90,32 @@ class WorkTile extends StatelessWidget{
               )
             ],
           ),
-          Offstage(
-            offstage: data.grade == 0,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.red
+          //分数
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Offstage(
+                offstage: data.score == null || data.score == 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.red
+                  ),
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(SizeUtil.getWidth(10))),
+                  child: Text("${data.score}",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.white,),),
+                ),
               ),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(SizeUtil.getWidth(10))),
-              child: Text("优秀作业",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.white,),),
-            ),
-          )
+              Offstage(
+                offstage: data.grade == 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.red
+                  ),
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(SizeUtil.getWidth(10))),
+                  child: Text("优",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.white,),),
+                ),
+              )
+            ],
+          ),
         ],
       ),
     );
