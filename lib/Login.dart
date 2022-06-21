@@ -33,7 +33,7 @@ class Login extends StatefulWidget{
 
 class LoginState extends BaseState<Login>{
 
-  VideoPlayerController _videoPlayerController;
+  //VideoPlayerController _videoPlayerController;
 
   var _username="",_password="";
 
@@ -47,7 +47,7 @@ class LoginState extends BaseState<Login>{
     Constant.isLogin = true;
     //clearCache();
     print("state:${Constant.isPad}");
-    _videoPlayerController = VideoPlayerController.asset(Constant.logn_bg(this.isAndroid));
+    /*_videoPlayerController = VideoPlayerController.asset(Constant.logn_bg(this.isAndroid));
     _videoPlayerController.addListener(() {
       //print("启动视频播放："+_videoPlayerController.value.isPlaying.toString());
     });
@@ -57,7 +57,7 @@ class LoginState extends BaseState<Login>{
         isinit = true;
       });
     });
-    _videoPlayerController.play();
+    _videoPlayerController.play();*/
     initUser();
   }
 
@@ -117,9 +117,9 @@ class LoginState extends BaseState<Login>{
   @override
   void dispose() {
     Constant.isLogin = false;
-    if(_videoPlayerController.value.isPlaying){
+    /*if(_videoPlayerController.value.isPlaying){
       _videoPlayerController.pause();
-    }
+    }*/
     super.dispose();
   }
 

@@ -26,6 +26,7 @@ import 'package:yhschool/video/VideoChoiceTile.dart';
 import 'package:yhschool/video/VideoEditorTab.dart';
 import 'package:yhschool/video/VideoMorePage.dart';
 import 'package:yhschool/video/VideoTile.dart';
+import 'package:yhschool/widgets/ClickCallback.dart';
 import 'package:yhschool/widgets/EgWordWidget.dart';
 import 'package:yhschool/widgets/Marquee.dart';
 import 'package:yhschool/bean/choice_bean.dart' as C;
@@ -79,7 +80,8 @@ class _BrochureParam extends BaseParam{
 
 class VideoPage extends StatefulWidget{
 
-  VideoPage({Key key}):super(key: key);
+  CallBack_Column callback;
+  VideoPage({Key key,@required this.callback}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -87,7 +89,7 @@ class VideoPage extends StatefulWidget{
   }
 }
 
-class VideoPageState extends VersionState{
+class VideoPageState extends VersionState<VideoPage>{
 
   TextStyle _tabSelectStyle;
   TextStyle _tabNormalStyle;
@@ -579,28 +581,47 @@ class VideoPageState extends VersionState{
     print(item.url);
     return InkWell(
       child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white
+        ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                CachedNetworkImage(imageUrl: Constant.parseNewColumnListIconString(item.url,item.width,item.height),fit: BoxFit.fitWidth,),
-                Positioned(
-                  child: Text("${item.count}张图片"),
-                  top: 5,
-                  right: 5,
-                )
-              ],
+            Expanded(
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: ClipRect(
+                      child: CachedNetworkImage(imageUrl: Constant.parseNewColumnListIconString(item.url,item.width,item.height),fit: BoxFit.cover,),
+                    ),
+                  ),
+                  Positioned(
+                    child: Text("${item.count}张图片"),
+                    top: 5,
+                    right: 5,
+                  )
+                ],
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(
                   left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
                   right: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
                   top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-                  bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
               ),
               child: Text(item.name,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),maxLines: 1,),
             ),
-            Text(item.nickname == null ? item.nickname : item.username)
+            Padding(
+              padding: EdgeInsets.only(
+                  left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
+                  right: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
+                  top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
+                  bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
+              ),
+              child: Text(item.username == null ? item.username : item.nickname,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),maxLines: 1,),
+            )
           ],
         ),
       ),
@@ -862,10 +883,11 @@ class VideoPageState extends VersionState{
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("今日更新了6个网盘，共计$columnNum个文件"),
+                          Text("今日更新了${columnList.length}个网盘，共计$columnNum个文件"),
                           InkWell(
                               onTap: (){
                                 //切换到网盘
+                                widget.callback();
                               },
                               child: Icon(Icons.more_horiz)
                           )
@@ -877,7 +899,10 @@ class VideoPageState extends VersionState{
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: columnList.length,
-                        padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
+                        padding: EdgeInsets.only(
+                          left: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+                          right: ScreenUtil().setHeight(SizeUtil.getHeight(20))
+                        ),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             mainAxisSpacing: ScreenUtil().setWidth(Constant.PADDING_GALLERY_CROSS),
@@ -887,9 +912,7 @@ class VideoPageState extends VersionState{
                         itemBuilder: (context,index){
                           return InkWell(
                               onTap: (){
-                                // Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                //
-                                // ));
+
                               },
                               child: getPanItem(columnList[index])
                           );
@@ -907,7 +930,8 @@ class VideoPageState extends VersionState{
                         margin: EdgeInsets.only(
                           bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
                           left: ScreenUtil().setHeight(SizeUtil.getWidth(20)),
-                          right: ScreenUtil().setHeight(SizeUtil.getWidth(20))
+                          right: ScreenUtil().setHeight(SizeUtil.getWidth(20)),
+                          top: ScreenUtil().setHeight(SizeUtil.getWidth(20)),
                         ),
                         padding: EdgeInsets.symmetric(
                           vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20)),

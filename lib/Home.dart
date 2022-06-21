@@ -118,7 +118,9 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
     //初始化日期格式
     pages = [
       //Video(key: videoStateKey),
-      VideoPage(key: videoStateKey,),
+      VideoPage(key: videoStateKey,callback: (){
+        _selectBar(3);
+      },),
       Gallery(key:galleryStateKey),
       //Issue(key: issueStateKey,),
       //Shared(key:sharedStateKey),

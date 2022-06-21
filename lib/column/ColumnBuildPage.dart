@@ -57,7 +57,7 @@ class ColumnBuildPageState extends BaseState{
     var option = {
       "type":selectItem.id,
       "name":columnname,
-      "visible":isopen ? 1 : 0
+      "visible":isopen ? 0 : 1
     };
 
     httpUtil.post(DataUtils.api_addcolumn,data: option).then((value){
@@ -130,9 +130,9 @@ class ColumnBuildPageState extends BaseState{
                           },
                         ),
                       ),
-                      Checkbox(value: isopen, onChanged: (value){
+                      Checkbox(value: !isopen, onChanged: (value){
                         setState(() {
-                          this.isopen = value;
+                          this.isopen = !value;
                         });
                       }),
                       Text("仅本校看")

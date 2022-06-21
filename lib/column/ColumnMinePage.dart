@@ -158,7 +158,7 @@ class ColumnMinePageState extends BaseRefreshState<ColumnMinePage>{
         itemBuilder: (context,index){
           return columnList[index].id > 0 ? InkWell(
             onTap: (){
-              print("点击订阅的网盘");
+              print("点击收藏的网盘");
             },
             child: ColumnMineTile(data: columnList[index],cb: (value){
               //处理图片上传完成以后列表的刷新

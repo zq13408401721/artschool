@@ -12,3 +12,6 @@ class ClickCallback{
 
 // 主页接口回调
 typedef CallBack = void Function(CMD_MINE _cmd,bool _bool,dynamic data);
+
+// 专栏导航切换
+typedef CallBack_Column = void Function();

@@ -110,7 +110,7 @@ class ColumnSubscribleTileState extends BaseState<ColumnSubscribleTile>{
                     this.ishttp = true;
                     _cancelSubscrible();
                   },
-                  child: Text("取消订阅",textAlign: TextAlign.end,),
+                  child: Text("取消收藏",textAlign: TextAlign.end,),
                 ),
               )
             ],

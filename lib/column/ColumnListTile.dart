@@ -51,10 +51,10 @@ class ColumnListTileState extends BaseState<ColumnListTile>{
         setState(() {
           if(widget.data.subscrible > 0){
             widget.data.subscrible = 0;
-            showToast("取消订阅成功");
+            showToast("取消收藏成功");
           }else{
             widget.data.subscrible = 1;
-            showToast("订阅成功");
+            showToast("收藏成功");
           }
         });
       }else{
@@ -123,7 +123,7 @@ class ColumnListTileState extends BaseState<ColumnListTile>{
                     this.ishttp = true;
                     _commonSubscrible();
                   },
-                  child: Text(widget.data.subscrible > 0 ? "取消订阅" : "订阅",textAlign: TextAlign.end,style: TextStyle(
+                  child: Text(widget.data.subscrible > 0 ? "取消收藏" : "收藏",textAlign: TextAlign.end,style: TextStyle(
                     color: Colors.purpleAccent,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))
                   ),),
                 ),

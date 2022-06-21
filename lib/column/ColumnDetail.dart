@@ -255,7 +255,7 @@ class ColumnDetailState extends BaseCoustPageRefreshState<ColumnDetail>{
               },
               child: Container(
                 padding: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                child: Text(this.issubscrible ? "取消订阅" : "+ 订阅",style: TextStyle(color: Colors.red,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                child: Text(this.issubscrible ? "取消收藏" : "+ 收藏",style: TextStyle(color: Colors.red,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
               ),
             )
           ],
