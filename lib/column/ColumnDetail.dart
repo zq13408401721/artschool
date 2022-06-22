@@ -213,6 +213,30 @@ class ColumnDetailState extends BaseCoustPageRefreshState<ColumnDetail>{
     }
   }
 
+  void _showAlertDialog(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('是否确定删除'),
+        content: const Text('Proceed with destructive action?'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('No'),
+          ),
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Yes'),
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   List<Widget> addChildren(){
@@ -226,25 +250,38 @@ class ColumnDetailState extends BaseCoustPageRefreshState<ColumnDetail>{
             BackButtonWidget(cb: (){
               Navigator.pop(context,list.length == 0 ? true : false);
             }, title:"返回"),
-            isself ? InkWell(
-              onTap: (){
-                showEditorColumn(context,this.columnid,this.columnname,(widget as ColumnDetail).visible).then((value) => {
-                  if(value != null){
-                    //修改专栏
-                    setState(() {
-                      if(value["name"] != null){
-                        this.columnname = value["name"];
+            isself ? Row(
+              children: [
+                InkWell(
+                  onTap: (){
+                    //删除提示dialog
+                    _showAlertDialog(context);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
+                    child: Text("删除",style: TextStyle(color: Colors.red,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                  ),
+                ),
+                InkWell(
+                  onTap: (){
+                    showEditorColumn(context,this.columnid,this.columnname,(widget as ColumnDetail).visible).then((value) => {
+                      if(value != null){
+                        //修改专栏
+                        setState(() {
+                          if(value["name"] != null){
+                            this.columnname = value["name"];
+                          }
+                        })
                       }
-                    })
-                  }
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                child: Text("编辑",style: TextStyle(color: Colors.red,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
-              ),
-            )
-                : InkWell(
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
+                    child: Text("编辑",style: TextStyle(color: Colors.red,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                  ),
+                )
+              ],
+            ) : InkWell(
               onTap:(){
                 //订阅
                 if(this.issubscrible){
