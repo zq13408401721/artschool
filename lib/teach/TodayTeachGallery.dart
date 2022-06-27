@@ -10,6 +10,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:yhschool/BaseRefreshState.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/bean/entity_gallery_list.dart';
+import 'package:yhschool/bean/issue_delete_bean.dart';
 import 'package:yhschool/bean/issue_gallery_bean.dart';
 import 'package:yhschool/gallery/GalleryPageView.dart';
 import 'package:yhschool/teach/TeachTile.dart';
@@ -127,6 +128,30 @@ class TodayTeachGalleryState extends BaseRefreshState<TodayTeachGallery>{
     });
   }
 
+  /**
+   * 删除资料
+   */
+  void deleteTile(int id){
+    var option = {
+      "galleryid":id
+    };
+    httpUtil.post(DataUtils.api_issuedeletegallery,data: option).then((value){
+      IssueDeleteBean result = IssueDeleteBean.fromJson(value);
+      if(result != null){
+        for(Gallery item in this.list){
+          if(item.id == result.data.id){
+            this.list.remove(item);
+            break;
+          }
+        }
+        setState(() {
+        });
+      }
+    }).catchError((err){
+      print(err);
+    });
+  }
+
   @override
   Widget addChildren() {
     return Container(
@@ -145,9 +170,14 @@ class TodayTeachGalleryState extends BaseRefreshState<TodayTeachGallery>{
           return GestureDetector(
             //child: TileCard(key:GlobalObjectKey(list[index].id),url: list[index].url,title: list[index].name,imgtype: ImageType.issue,width: list[index].width,height: list[index].height,),
             child: TeachTile(smallurl: Constant.parseNewIssueSmallString(list[index].url,list[index].width,list[index].height),
-              title: Constant.getFileNameByUrl(list[index].url,list[index].filename),author: list[index].name,role: this.role,gallery: list[index],),
+              title: Constant.getFileNameByUrl(list[index].url,list[index].filename),author: list[index].name,role: this.role,
+              gallery: list[index],cb: (){
+                //删除图片资料
+                showAlertTips(context, "确定删除？", (){
+                  deleteTile(list[index].id);
+                });
+              },),
             onTap: (){
-
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
                 List<GalleryListData> _list = [];
                 list.forEach((element) {

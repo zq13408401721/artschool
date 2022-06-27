@@ -8,6 +8,7 @@ import 'package:yhschool/BaseCoustRefreshState.dart';
 import 'package:yhschool/BasePhotoState.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/bean/teacher_classes_bean.dart' as T;
+import 'package:yhschool/bean/work_delete_bean.dart';
 import 'package:yhschool/bean/work_list_bean.dart' as M;
 import 'package:yhschool/bean/work_mark_bean.dart';
 import 'package:yhschool/teach/ClassWorkDetail.dart';
@@ -167,6 +168,40 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
   }
 
   /**
+   * 删除作业
+   */
+  void deleteWork(int workid){
+    var option = {
+      "workid":workid
+    };
+    httpUtil.post(DataUtils.api_workdelete,data:option).then((value){
+      WorkDeleteBean bean = WorkDeleteBean.fromJson(json.decode(value));
+      bool delete=false;
+      if(bean.errno == 0){
+        for(M.Data item in workList){
+          for(M.Works work in item.works){
+            if(workid == work.id){
+              item.works.remove(work);
+              delete = true;
+              break;
+            }
+          }
+          if(delete){
+            if(item.works.length == 0){
+              workList.remove(item);
+            }
+            break;
+          }
+        }
+        setState(() {
+        });
+      }else{
+        showToast(bean.errmsg);
+      }
+    });
+  }
+
+  /**
    * 作业条目
    */
   Widget workItem(M.Data _data){
@@ -201,7 +236,7 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
                 },clickDelete: (){
                   //删除作业
                   showAlertTips(context, "确定删除作业？", (){
-
+                    deleteWork(_data.works[index].id);
                   });
                 },isself: m_uid == _data.works[index].uid,),
                 onTap: (){

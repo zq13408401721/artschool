@@ -86,7 +86,7 @@ class WorkTile extends StatelessWidget{
                             this.clickDelete();
                           }
                         },
-                        child: Image.asset("image/ic_fork.png"),
+                        child: Image.asset("image/ic_fork.png",color: Colors.black12,),
                       ),
                     )
                   ],
@@ -112,7 +112,7 @@ class WorkTile extends StatelessWidget{
                 offstage: data.score == null || data.score == 0,
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.red
+                      color: Colors.blueAccent
                   ),
                   padding: EdgeInsets.all(ScreenUtil().setWidth(SizeUtil.getWidth(10))),
                   child: Text("${data.score}分",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.white,),),
@@ -124,11 +124,8 @@ class WorkTile extends StatelessWidget{
                   decoration: BoxDecoration(
                       color: Colors.purple
                   ),
-                  padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
-                      vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20))
-                  ),
-                  child: Text("已评",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(36)),color: Colors.white),),
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(SizeUtil.getWidth(10))),
+                  child: Text("已评",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.white),),
                 ),
               ),
               Offstage(

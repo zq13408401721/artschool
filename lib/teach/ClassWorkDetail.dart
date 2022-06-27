@@ -288,8 +288,9 @@ class ClassWorkDetailState extends BaseViewPagerState<Works,ClassWorkDetail>{
         padding: EdgeInsets.only(
           top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
           bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+          left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+          right:ScreenUtil().setWidth(SizeUtil.getWidth(40))
         ),
-        margin: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(10))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -335,8 +336,9 @@ class ClassWorkDetailState extends BaseViewPagerState<Works,ClassWorkDetail>{
         padding: EdgeInsets.only(
           top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
           bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+          left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+          right:ScreenUtil().setWidth(SizeUtil.getWidth(40))
         ),
-        margin: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(10))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -508,7 +510,7 @@ class ClassWorkDetailState extends BaseViewPagerState<Works,ClassWorkDetail>{
                     child: scoreItem(data),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(40)),vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
                     child: correctItem(data),
                   ),
                   //作品评价

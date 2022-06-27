@@ -24,7 +24,7 @@ class BarItem extends StatelessWidget{
 
 
   Widget labelTxt(){
-    if(label == "课堂"){
+    if(label == "上课"){
       if(select){
         return SizedBox();
       }

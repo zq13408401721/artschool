@@ -29,6 +29,7 @@ class DataUtils{
   static const String api_issuegallery = "issue/newIssueGallery"; //发布图片列表
   static const String api_issuedateid = "issue/issueDateId"; //发布图片的日期id
   static const String api_issuedateidbyclass = "issue/issueDateIdByClass"; //获取发布作品班级对应的日期数据
+  static const String api_issuedeletegallery = "issue/issueDeleteGallery"; //删除课堂对应的图片作品
   static const String api_pantabs = "pan/panTabs"; //获取网盘的tabs
   static const String api_pancreate = "pan/createPan"; //创建网盘
   static const String api_panlist = "pan/panlist";  // 获取网盘数据
@@ -78,6 +79,7 @@ class DataUtils{
   static const String api_workcorrect = "work_correct"; //作业批改提交
   static const String api_workputscore = "work/putWorkScore"; //作业打分
   static const String api_getworkscorebyworkid = "work/getWorkScoreByWorkid"; //获取作业分数
+  static const String api_workdelete = "work/deleteWork";  //删除作业
 
   static const String api_queryteacherbyschool = "home/queryTeacherBySchool"; //查询学校老师
   static const String api_pushnotice = "notice/pushNotice"; //发布公告
