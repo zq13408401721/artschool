@@ -362,7 +362,7 @@ class MineState extends BaseDialogState{
                     top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
                     bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
                 ),
-                child: Text("双师课堂排课",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),color: Colors.black54,fontWeight: FontWeight.bold),),
+                child: Text("视频课堂排课",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),color: Colors.black54,fontWeight: FontWeight.bold),),
               ),
             ),
           )

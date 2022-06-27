@@ -67,7 +67,7 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
     ["image/ic_tab_mine_normal.png","image/ic_tab_mine_select.png"]
   ];
 
-  final List<String> barTitles = ["视频","图库","课堂","网盘","我的"];
+  final List<String> barTitles = ["视频","图库","上课","网盘","我的"];
 
   TabController tabController;
 

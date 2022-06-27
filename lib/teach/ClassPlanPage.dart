@@ -404,7 +404,7 @@ class ClassPlanPageState extends BaseState<ClassPlanPage>{
                   ),
                   child: BackButtonWidget(cb: (){
                     Navigator.pop(context);
-                  }, title: "双师课堂排课"),
+                  }, title: "视频课堂排课"),
                 ),
                 //选中的日期
                 Container(

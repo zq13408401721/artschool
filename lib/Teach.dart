@@ -243,7 +243,7 @@ class TeachState extends BaseDialogState{
                                 _clearTools();
                               });
                             },
-                            child: Text("双师课堂",style: TextStyle(
+                            child: Text("视频课堂",style: TextStyle(
                                 fontSize: _teach == TEACH.NET ? ScreenUtil().setSp(SizeUtil.getFontSize(40)) : ScreenUtil().setSp(SizeUtil.getFontSize(30)),
                                 color: _teach == TEACH.NET ? Colors.red : Colors.black87,
                                 fontWeight: _teach == TEACH.NET ? FontWeight.bold : FontWeight.normal

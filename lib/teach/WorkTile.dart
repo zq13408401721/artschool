@@ -12,8 +12,10 @@ class WorkTile extends StatelessWidget{
   String smallUrl;
   bool ismark; //是否带有标记功能
   Function clickMark;
+  Function clickDelete;
+  bool isself;
 
-  WorkTile({@required this.data,@required this.ismark=false,@required this.clickMark}){
+  WorkTile({@required this.data,@required this.ismark=false,@required this.clickMark,@required this.clickDelete,@required this.isself}){
     smallUrl = Constant.parseNewWorkListIconString(data.url,data.width,data.height);
   }
 
@@ -76,23 +78,35 @@ class WorkTile extends StatelessWidget{
                       style: Constant.smallTitleTextStyle
                     ),
                     Offstage(
-                      offstage: !ismark,
+                      offstage: !this.isself,
                       child: InkWell(
                         onTap: (){
-                          //标记当前的作业是否是优秀作品
-                          clickMark();
+                          //删除作业
+                          if(this.clickDelete != null){
+                            this.clickDelete();
+                          }
                         },
-                        child: Text(data.grade == 0 ? "标记优秀作业" : "取消标记",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                        child: Image.asset("image/ic_fork.png"),
                       ),
                     )
                   ],
+                ),
+              ),
+              Offstage(
+                offstage: !ismark,
+                child: InkWell(
+                  onTap: (){
+                    //标记当前的作业是否是优秀作品
+                    clickMark();
+                  },
+                  child: Text(data.grade == 0 ? "评优秀" : "取消标记",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
                 ),
               )
             ],
           ),
           //分数
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Offstage(
                 offstage: data.score == null || data.score == 0,
@@ -101,7 +115,20 @@ class WorkTile extends StatelessWidget{
                       color: Colors.red
                   ),
                   padding: EdgeInsets.all(ScreenUtil().setWidth(SizeUtil.getWidth(10))),
-                  child: Text("${data.score}",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.white,),),
+                  child: Text("${data.score}分",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.white,),),
+                ),
+              ),
+              Offstage(
+                offstage: data.correct == null,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.purple
+                  ),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+                      vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20))
+                  ),
+                  child: Text("已评",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(36)),color: Colors.white),),
                 ),
               ),
               Offstage(
@@ -111,7 +138,7 @@ class WorkTile extends StatelessWidget{
                       color: Colors.red
                   ),
                   padding: EdgeInsets.all(ScreenUtil().setWidth(SizeUtil.getWidth(10))),
-                  child: Text("优",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.white,),),
+                  child: Text("优秀",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.white,),),
                 ),
               )
             ],

@@ -198,7 +198,12 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
                 child: WorkTile(data: _data.works[index],ismark: m_role == 1,clickMark: (){
                   //给作业打标记
                   _markWork(_data.works[index],_data.classid);
-                },),
+                },clickDelete: (){
+                  //删除作业
+                  showAlertTips(context, "确定删除作业？", (){
+
+                  });
+                },isself: m_uid == _data.works[index].uid,),
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>
                       ClassWorkDetail(data: _data.works,position: index,classid: selectClassId,)

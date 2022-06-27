@@ -242,132 +242,129 @@ class ClassWorkDetailState extends BaseViewPagerState<Works,ClassWorkDetail>{
    * 作业打分
    */
   Widget scoreItem(Works data){
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: InkWell(
-            onTap: (){
-              //打分
-              if((workScoreBean == null || workScoreBean.data == null) && role == 1){
-                showWorkScore(data.id).then((value){
-                  if(value != null){
-                    setState(() {
-                      workScoreBean = WorkScoreBean.fromJson(json.decode(value));
-                      data.workScoreBean = workScoreBean;
-                    });
-                  }
-                });
-              }else{
-                showToast("已打分或没权限打分");
-              }
-            },
-            child: (workScoreBean != null && workScoreBean.data != null && data.id == workScoreBean.data.workid) ?
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-                    color: Colors.white
-                ),
-                alignment: Alignment(0,0),
-                padding: EdgeInsets.only(
-                  top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-                  bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-                  left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
-                  right:ScreenUtil().setWidth(SizeUtil.getWidth(40)),
-                ),
-                margin: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(10))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text("${workScoreBean.data.score} 分",style: TextStyle(color: Colors.red),),
-                        Image.asset("image/ic_score.png",width: ScreenUtil().setWidth(40),height:ScreenUtil().setWidth(40)),
-                      ],
-                    ),
-                    Text(workScoreBean.data.nickname == null ? "${workScoreBean.data.username}老师" : "${workScoreBean.data.nickname}老师",style: TextStyle(color: Colors.grey),)
-                  ],
-                ),
-              ) : Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-                  color: Colors.white
-              ),
-              alignment: Alignment(0,0),
-              padding: EdgeInsets.only(
-                top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-                bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-              ),
-              margin: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(10))),
-              child: Text("打分",style: TextStyle(color: Colors.red),),
-            ),
-          ),
+    return InkWell(
+      onTap: (){
+        //打分
+        if((workScoreBean == null || workScoreBean.data == null) && role == 1){
+          showWorkScore(data.id).then((value){
+            if(value != null){
+              setState(() {
+                workScoreBean = WorkScoreBean.fromJson(json.decode(value));
+                data.workScoreBean = workScoreBean;
+              });
+            }
+          });
+        }else{
+          showToast("已打分或没权限打分");
+        }
+      },
+      child: (workScoreBean != null && workScoreBean.data != null && data.id == workScoreBean.data.workid) ?
+      Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+            color: Colors.white
         ),
-        Expanded(
-          child: InkWell(
-            onTap: (){
-              //
-              if((data.correct_uid != null && data.correct_uid == uid || data.correct_uid == null) && role == 1){
-                //批改作业
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>WorkCorrect(classid: classid, data: data))).then((value){
-                  //批改作业返回
-                  if(value != null){
-                    setState(() {
-                      data.correct = value.correct;
-                      data.correct_uid = value.correctUid;
-                      data.correct_name = m_username;
-                      data.correct_time = value.correctTime;
-                    });
-                  }
-                });
-              }else{
-                showToast("已批改或没权限批改");
-              }
-            },
-            child: data.correct == null ?
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-                  color: Colors.white
-              ),
-              alignment: Alignment(0,0),
-              padding: EdgeInsets.only(
-                top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-                bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-              ),
-              margin: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(10))),
-              child: Text("批改",style: TextStyle(color: Colors.red),),
-            ) : Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-                  color: Colors.white
-              ),
-              alignment: Alignment(0,0),
-              padding: EdgeInsets.only(
-                top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-                bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-                left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
-                right:ScreenUtil().setWidth(SizeUtil.getWidth(40)),
-              ),
-              margin: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(10))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Text("已批改",style: TextStyle(color: Colors.red),),
-                      Image.asset("image/ic_score.png",width: ScreenUtil().setWidth(40),height:ScreenUtil().setWidth(40)),
-                    ],
-                  ),
-                  Text("${data.correct_name}老师",style: TextStyle(color: Colors.grey),)
-                ],
-              ),
-            ),
-          ),
-        )
-      ],
+        alignment: Alignment(0,0),
+        padding: EdgeInsets.only(
+          top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+          bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+          left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+          right:ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+        ),
+        margin: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(10))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("${workScoreBean.data.score}分",style: TextStyle(color: Colors.red),),
+            Text(workScoreBean.data.nickname == null ? "${workScoreBean.data.username}老师" : "${workScoreBean.data.nickname}老师",style: TextStyle(color: Colors.grey),)
+          ],
+        ),
+      ) : Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+            color: Colors.white
+        ),
+        alignment: Alignment(0,0),
+        padding: EdgeInsets.only(
+          top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+          bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+        ),
+        margin: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(10))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("打分",style: TextStyle(color: Colors.black54),),
+            Text("百分制",style: TextStyle(color: Colors.black12),),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /**
+   * 批改作业状态
+   */
+  Widget correctItem(Works data){
+    return InkWell(
+      onTap: (){
+        //
+        if((data.correct_uid != null && data.correct_uid == uid || data.correct_uid == null) && role == 1){
+          //批改作业
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>WorkCorrect(classid: classid, data: data))).then((value){
+            //批改作业返回
+            if(value != null){
+              setState(() {
+                data.correct = value.correct;
+                data.correct_uid = value.correctUid;
+                data.correct_name = m_username;
+                data.correct_time = value.correctTime;
+              });
+            }
+          });
+        }else{
+          showToast("已批改或没权限批改");
+        }
+      },
+      child: data.correct == null ?
+      Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+            color: Colors.white
+        ),
+        alignment: Alignment(0,0),
+        padding: EdgeInsets.only(
+          top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+          bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+        ),
+        margin: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(10))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("批改 / 点评",style: TextStyle(color: Colors.black54),),
+            Text("老师点评批改",style: TextStyle(color: Colors.black12),)
+          ],
+        ),
+      ) : Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+            color: Colors.white
+        ),
+        alignment: Alignment(0,0),
+        padding: EdgeInsets.only(
+          top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+          bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+          left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+          right:ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+        ),
+        margin: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(10))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("已批改",style: TextStyle(color: Colors.red),),
+            Text("${data.correct_name} ${data.createtime}",style: TextStyle(color: Colors.grey),)
+          ],
+        ),
+      ),
     );
   }
 
@@ -509,6 +506,10 @@ class ClassWorkDetailState extends BaseViewPagerState<Works,ClassWorkDetail>{
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
                     child: scoreItem(data),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
+                    child: correctItem(data),
                   ),
                   //作品评价
                   /*Padding(
