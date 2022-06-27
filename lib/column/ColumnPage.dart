@@ -42,7 +42,7 @@ class ColumnPageState extends BaseState{
 
 
   List<Data> types=[];
-  int page=0;
+  int page=1;
 
   void changePage(CMD_MINE cmd){
     if(cmd == CMD_MINE.CMD_PAGE_COLUMN_MINE){

@@ -23,17 +23,20 @@ class VideoChoiceTile extends StatelessWidget{
     return  Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
+          /*borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(10))),
               bottomRight: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(10)))
-          )
+          )*/
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
-              CachedNetworkImage(imageUrl:data.cover),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(5)),
+                child: CachedNetworkImage(imageUrl:data.cover,fit: BoxFit.cover,),
+              ),
               Positioned(
                 top: 0,
                 bottom: 0,
@@ -45,23 +48,23 @@ class VideoChoiceTile extends StatelessWidget{
               ),
             ],
           ),
-          Spacer(),
           Padding(
             padding: EdgeInsets.only(
-                left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
-                right: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+                //left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+                //right: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+                top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
                 bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
             ),
             child: Text(data.name,style: Constant.titleTextStyleNormal,maxLines: 1,),
           ),
           Padding(
             padding: EdgeInsets.only(
-              left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
-              right: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+              //left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+              //right: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
             ),
             child: Text(title,style: Constant.smallTitleTextStyle,maxLines: 1,),
           ),
-          SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(30)),)
+          //SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(30)),)
         ],
       ),
     );

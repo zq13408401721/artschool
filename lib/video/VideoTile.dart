@@ -36,7 +36,10 @@ class VideoTile extends StatelessWidget{
         children: [
           Stack(
             children: [
-              CachedNetworkImage(imageUrl: data != null ? data.cover : videoCategoryData.cover),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(5))),
+                child: CachedNetworkImage(imageUrl: data != null ? data.cover : videoCategoryData.cover),
+              ),
               Positioned(
                 top: 0,bottom: 0,left: 0,right: 0,
                 child: Image.asset(Constant.isPad ? "image/ic_play.png" : "image/ic_play_30.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(60)),height: ScreenUtil().setHeight(SizeUtil.getHeight(60)),),
