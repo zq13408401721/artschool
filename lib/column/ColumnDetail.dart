@@ -376,7 +376,13 @@ class ColumnDetailState extends BaseCoustPageRefreshState<ColumnDetail>{
                 horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
                 vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20))
             ),
-            child: Text("+ 上传图片",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(36)),fontWeight: FontWeight.bold),),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("+ 上传图片",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(36)),fontWeight: FontWeight.bold),),
+                Text("严禁上传色情反动类图片",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25)),color: Colors.black12),)
+              ],
+            )
           ),
         ),
       ),

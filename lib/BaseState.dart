@@ -49,7 +49,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   //当前是否正在发起http请求
   bool ishttp = false;
 
-  String m_uid="",m_username="",m_nickname="";
+  String m_uid="",m_username="",m_nickname="",m_schoolid="";
   int m_role;
   bool isShowDialog = false;
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -83,6 +83,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
             m_username = value["username"];
             m_nickname = value["nickname"];
             m_role = value["role"];
+            m_schoolid = value["schoolid"];
           }
         });
       }

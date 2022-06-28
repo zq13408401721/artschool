@@ -7,6 +7,7 @@ import 'package:yhschool/bean/special_type_bean.dart';
 import 'package:yhschool/column/ColumnGalleryPage.dart';
 import 'package:yhschool/column/ColumnListPage.dart';
 import 'package:yhschool/column/ColumnMinePage.dart';
+import 'package:yhschool/column/ColumnSchoolPage.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/EnumType.dart';
@@ -32,17 +33,20 @@ class ColumnPageState extends BaseState{
 
   final GlobalKey<M.TextButtonState> columnGalleryKey = GlobalKey<M.TextButtonState>();
   final GlobalKey<M.TextButtonState> columnAllKey = GlobalKey<M.TextButtonState>();
-  final GlobalKey<M.TextButtonState> columnSubscribeKey = GlobalKey<M.TextButtonState>();
+  final GlobalKey<M.TextButtonState> columnSchoolKey = GlobalKey<M.TextButtonState>();
   final GlobalKey<M.TextButtonState> columnMyKey = GlobalKey<M.TextButtonState>();
 
   final GlobalKey<ColumnGalleryPageState> columnGalleryPageKey = GlobalKey<ColumnGalleryPageState>();
   final GlobalKey<ColumnListPageState> columnListPageKey = GlobalKey<ColumnListPageState>();
-  final GlobalKey<ColumnSubscriblePageState> columnSubsriblePageKey = GlobalKey<ColumnSubscriblePageState>();
+  //final GlobalKey<ColumnSubscriblePageState> columnSubsriblePageKey = GlobalKey<ColumnSubscriblePageState>();
   final GlobalKey<ColumnMinePageState> columnMinePageKey = GlobalKey<ColumnMinePageState>();
+  final GlobalKey<ColumnSchoolPageState> columnSchoolPageKey = GlobalKey<ColumnSchoolPageState>();
+
 
 
   List<Data> types=[];
   int page=1;
+  bool showteacher = true;
 
   void changePage(CMD_MINE cmd){
     if(cmd == CMD_MINE.CMD_PAGE_COLUMN_MINE){
@@ -92,12 +96,12 @@ class ColumnPageState extends BaseState{
   void _changeColumnTab(int index){
     //columnGalleryKey.currentState.updateState(false);
     columnAllKey.currentState.updateState(false);
-    columnSubscribeKey.currentState.updateState(false);
+    columnSchoolKey.currentState.updateState(false);
     columnMyKey.currentState.updateState(false);
     //if(index == 0)columnGalleryKey.currentState.updateState(true);
     if(index == 0) columnMyKey.currentState.updateState(true);
     if(index == 1) columnAllKey.currentState.updateState(true);
-    if(index == 2) columnSubscribeKey.currentState.updateState(true);
+    if(index == 2) columnSchoolKey.currentState.updateState(true);
   }
 
   /**
@@ -107,7 +111,7 @@ class ColumnPageState extends BaseState{
     //if(page == 0) columnGalleryPageKey.currentState.updateGalleryList(id);
     if(page == 0) columnMinePageKey.currentState.updateMineColumn(id);
     if(page == 1) columnListPageKey.currentState.updateColumnList(id);
-    if(page == 2) columnSubsriblePageKey.currentState.updateSubscrible(id);
+    if(page == 2) columnSchoolPageKey.currentState.updateColumnSchool(id);
   }
 
   /**
@@ -170,7 +174,7 @@ class ColumnPageState extends BaseState{
                       _changeType(0);
                     });
                   },),
-                  M.TextButton(key:columnSubscribeKey,label:"我的收藏",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
+                  M.TextButton(key:columnSchoolKey,label:"学校网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
                     print("我的订阅");
                     _changeColumnTab(2);
                     //切换到我的订阅刷新页面
@@ -180,7 +184,25 @@ class ColumnPageState extends BaseState{
                       _changeType(0);
                     });
                   },),
-
+                  Expanded(
+                    child: Offstage(
+                      offstage: page != 2,
+                      child: Container(
+                        alignment: Alignment(1,0),
+                        child: Row(
+                          children: [
+                            Checkbox(value: showteacher,onChanged: (value){
+                              columnSchoolPageKey.currentState.updateSchoolColumnShow(value);
+                              setState(() {
+                                showteacher = value;
+                              });
+                            },),
+                            Text("仅老师",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.black12),)
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -209,10 +231,11 @@ class ColumnPageState extends BaseState{
                   //ColumnGalleryPage(key: columnGalleryPageKey,),
                   ColumnMinePage(key: columnMinePageKey,),
                   ColumnListPage(key: columnListPageKey,),
+                  ColumnSchoolPage(key: columnSchoolKey,)
                   //订阅列表页面
-                  ColumnSubscriblePage(key:columnSubsriblePageKey,cb: (int cid){
+                  /*ColumnSubscriblePage(key:columnSubsriblePageKey,cb: (int cid){
                     columnListPageKey.currentState.updateColumnSubscrible(cid);
-                  },)
+                  },)*/
                 ],
               ),
             )

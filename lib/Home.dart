@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ import 'dart:io';
 import 'package:yhschool/Video.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/EnumType.dart';
+import 'package:yhschool/utils/EventBusUtils.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/video/VideoPage.dart';
 import 'package:video_player/video_player.dart';
@@ -143,6 +145,10 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
     });
 
     tabController = new TabController(length: 5, vsync: this);
+    // 跨页面数据传递 更新专栏订阅状态
+    EventBusUtils.instance.getEventBus().on<int>().listen((event) {
+      columnPageStateKey.currentState.columnListPageKey.currentState.updateColumnSubscrible(event);
+    });
   }
 
   /**
