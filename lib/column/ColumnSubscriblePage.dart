@@ -16,6 +16,10 @@ import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
 import 'package:yhschool/widgets/YStaggeredGridView.dart';
 
+import '../bean/special_type_bean.dart' as M;
+import '../utils/SizeUtil.dart';
+import '../widgets/BackButtonWidget.dart';
+import '../widgets/HorizontalListTab.dart';
 import 'ColumnDetail.dart';
 import 'ColumnImageDetail.dart';
 
@@ -37,6 +41,7 @@ class ColumnSubscriblePageState extends BaseListRefresh<ColumnSubscriblePage>{
   int page=1,size=20;
   List<Data> list=[];
   ScrollController scrollController;
+  List<M.Data> types=[];
 
   String oldtime=""; //作为分页获取的一个起点
 
@@ -52,8 +57,28 @@ class ColumnSubscriblePageState extends BaseListRefresh<ColumnSubscriblePage>{
     super.initState();
     print("ColumnSubscriblePage initState");
     scrollController = initScrollController(isfresh:false);
-
+    _getColumnType();
     _columnSubscribleList(currenttype);
+  }
+
+  void _getColumnType(){
+    types.clear();
+    types.add(M.Data(id: 0,name: "全部",sort: 0)
+      ..select = true);
+    httpUtil.post(DataUtils.api_querycolumntype,data: {}).then((value) {
+      print("ColumnPage mounted:$mounted value:$value");
+      String result = checkLoginExpire(value);
+      if(result.isNotEmpty){
+        M.SpecialTypeBean bean = M.SpecialTypeBean.fromJson(json.decode(value));
+        if(bean.errno == 0){
+          setState(() {
+            types.addAll(bean.data);
+          });
+        }else{
+          //showToast(bean.errmsg);
+        }
+      }
+    });
   }
 
   @override
@@ -176,59 +201,98 @@ class ColumnSubscriblePageState extends BaseListRefresh<ColumnSubscriblePage>{
 
   @override
   Widget addChildren(){
-    return StaggeredGridView.countBuilder(
-      crossAxisCount: Constant.isPad ? 3 : 2,
-      itemCount: list.length,
-      //primary: false,
-      mainAxisSpacing: ScreenUtil().setWidth(Constant.DIS_LIST),
-      crossAxisSpacing: ScreenUtil().setWidth(Constant.DIS_LIST),
-      controller: scrollController,
-      //addAutomaticKeepAlives: false,
-      padding: EdgeInsets.only(left: ScreenUtil().setWidth(Constant.DIS_LIST),right: ScreenUtil().setWidth(Constant.DIS_LIST)),
-      staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-      //StaggeredTile.count(3,index==0?2:3),
-      itemBuilder: (context,index){
-        return InkWell(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>ColumnDetail(
-              columnname: list[index].columnname,
-              columnid: list[index].columnid,
-              author: list[index].nickname == null ? list[index].username : list[index].nickname,
-              uid: list[index].subscribleuid,
-              count: list[index].count,
-              issubscrible: true,
-              cb: (id,subscrible){
-                setState(() {
-                  for(var i=0; i<list.length; i++){
-                    if(id == list[i].columnid){
-                      list.removeAt(i);
-                      //刷新全部专栏的状态
-                      if(widget.cb != null){
-                        widget.cb(id);
-                      }
-                      return;
-                    }
-                  }
-                });
-              },
-            )));
-          },
-          child: ColumnSubscribleTile(data:list[index],click: (int id){
-            print("click:${list[index].columnname}");
-            setState(() {
-              for(var i=0; i<list.length; i++){
-                if(id == list[i].columnid){
-                  list.removeAt(i);
-                  if(widget.cb != null){
-                    widget.cb(id);
-                  }
-                  return;
-                }
-              }
-            });
-          },),
-        );
-      },
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              //height: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.SIZE_TOP_HEIGHT)),
+              decoration: BoxDecoration(
+                  color: Colors.white
+              ),
+              child:BackButtonWidget(
+                cb: (){
+                  Navigator.pop(context);
+                },title: "我的订阅",
+              ),
+            ),
+            //分类
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white
+              ),
+              padding: EdgeInsets.only(
+                  left:ScreenUtil().setWidth(SizeUtil.getWidth(30)),
+                  right: ScreenUtil().setWidth(SizeUtil.getWidth(30))
+              ),
+              margin: EdgeInsets.only(
+                  bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
+              ),
+              child: HorizontalListTab(datas: types, click: (dynamic _data){
+                print("${_data.id}");
+                updateSubscrible(_data.id);
+              }),
+            ),
+            Expanded(
+              child: StaggeredGridView.countBuilder(
+                crossAxisCount: Constant.isPad ? 3 : 2,
+                itemCount: list.length,
+                //primary: false,
+                mainAxisSpacing: ScreenUtil().setWidth(Constant.DIS_LIST),
+                crossAxisSpacing: ScreenUtil().setWidth(Constant.DIS_LIST),
+                controller: scrollController,
+                //addAutomaticKeepAlives: false,
+                padding: EdgeInsets.only(left: ScreenUtil().setWidth(Constant.DIS_LIST),right: ScreenUtil().setWidth(Constant.DIS_LIST)),
+                staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+                //StaggeredTile.count(3,index==0?2:3),
+                itemBuilder: (context,index){
+                  return InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>ColumnDetail(
+                        columnname: list[index].columnname,
+                        columnid: list[index].columnid,
+                        author: list[index].nickname == null ? list[index].username : list[index].nickname,
+                        uid: list[index].subscribleuid,
+                        count: list[index].count,
+                        issubscrible: true,
+                        cb: (id,subscrible){
+                          setState(() {
+                            for(var i=0; i<list.length; i++){
+                              if(id == list[i].columnid){
+                                list.removeAt(i);
+                                //刷新全部专栏的状态
+                                if(widget.cb != null){
+                                  widget.cb(id);
+                                }
+                                return;
+                              }
+                            }
+                          });
+                        },
+                      )));
+                    },
+                    child: ColumnSubscribleTile(data:list[index],click: (int id){
+                      print("click:${list[index].columnname}");
+                      setState(() {
+                        for(var i=0; i<list.length; i++){
+                          if(id == list[i].columnid){
+                            list.removeAt(i);
+                            if(widget.cb != null){
+                              widget.cb(id);
+                            }
+                            return;
+                          }
+                        }
+                      });
+                    },),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      )
     );
 
   }

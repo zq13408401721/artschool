@@ -87,6 +87,10 @@ class MineState extends BaseDialogState{
     {"id":5,"name":"我的作业","icon":"image/ic_mywork.png"},
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
+    {"id":9,"name":"听歌","icon":"image/ic_music.png"},
+    {"id":12,"name":"关于艺画","icon":"image/ic_about_yihua.png"},
+    {"id":13,"name":"提意见","icon":"image/ic_advise.png"}
+
     //{"id":6,"name":"看MV","icon":"image/ic_mv.png"}
   ];
 
@@ -97,16 +101,19 @@ class MineState extends BaseDialogState{
     {"id":11,"name":"我的订阅","icon":"image/ic_column.png"},
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
+    {"id":9,"name":"听歌","icon":"image/ic_music.png"},
+    {"id":12,"name":"关于艺画","icon":"image/ic_about_yihua.png"},
+    {"id":13,"name":"提意见","icon":"image/ic_advise.png"}
     //{"id":6,"name":"看MV","icon":"image/ic_mv.png"},
   ];
 
   @override
   void initState() {
 
-    if(!this.isAndroid){
+    /*if(!this.isAndroid){
       _studentToolsData.add({"id":9,"name":"听歌","icon":"image/ic_music.png"});
       _teacherToolsData.add({"id":9,"name":"听歌","icon":"image/ic_music.png"});
-    }
+    }*/
     // _studentToolsData.add({"id":10,"name":"关于艺画","icon":"image/ic_about.png"});
     // _teacherToolsData.add({"id":10,"name":"关于艺画","icon":"image/ic_about.png"});
 
@@ -404,6 +411,12 @@ class MineState extends BaseDialogState{
           Navigator.push(context, MaterialPageRoute(builder: (context) => ColumnSubscriblePage(cb: (cid){
             EventBusUtils.instance.getEventBus().fire(cid);
           })));
+        }else if(_data["id"] == 12){ //关于艺画
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+              WebStage(url: 'http://res.yimios.com:9050/html/yihua.html', title: "")
+          ));
+        }else if(_data["id"] == 13){ //提意见
+
         }
       },
       child: Container(
@@ -411,7 +424,7 @@ class MineState extends BaseDialogState{
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(_data["icon"],width: ScreenUtil().setWidth(SizeUtil.getWidth(55)),height: ScreenUtil().setWidth(SizeUtil.getWidth(55)),fit: BoxFit.fill,),
+            Image.asset(_data["icon"],width: ScreenUtil().setWidth(SizeUtil.getWidth(114)),height: ScreenUtil().setWidth(SizeUtil.getWidth(114)),fit: BoxFit.fill,),
             SizedBox(height:4),
             Text(_data["name"],style: TextStyle(color: Colors.black54,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
           ],
@@ -440,11 +453,12 @@ class MineState extends BaseDialogState{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("常用功能",style: Constant.titleTextStyle,),
-            SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(350)),
+            SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(700)),
               child: GridView.count(
-                crossAxisCount: 4,
+                crossAxisCount: 3,
                 padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(10))),
                 childAspectRatio:Constant.isPad ? 2/1 : 1.1,
+                physics: const NeverScrollableScrollPhysics(),
                 children: role == 1 ? _teacherToolsData.map((e) => _toolItem(e)).toList() : _studentToolsData.map((e) => _toolItem(e)).toList(),
               ),
             )
@@ -909,7 +923,7 @@ class MineState extends BaseDialogState{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("帮助中心",style:  Constant.titleTextStyle,),
-              InkWell(
+              /*InkWell(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) =>
                       WebStage(url: 'http://res.yimios.com:9050/html/yihua.html', title: "")
@@ -927,7 +941,7 @@ class MineState extends BaseDialogState{
                   margin: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
                   child: Text("关于艺画",style: TextStyle(color: Colors.white),),
                 )
-              ),
+              ),*/
             ],
           ),
           //视频栏目
@@ -991,7 +1005,7 @@ class MineState extends BaseDialogState{
               //用户信息
               _userInfo(),
               //排课图标
-              role == 1 ? _classCard() : Container(),
+              //role == 1 ? _classCard() : Container(),
               _tools(),
               //_teachers(),
               _noticeImage(),

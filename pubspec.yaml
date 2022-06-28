@@ -184,8 +184,12 @@ flutter:
     - image/ic_mycourse.png
     - image/ic_mv.png
     - image/ic_music.png
+    - image/ic_advise.png
+    - image/ic_about_yihua.png
     - image/ic_btn_plan.png
     - image/ic_btn_editor.png
+    - image/ic_tips.png
+    - image/ic_more_column.png
     - image/start.png
     - image/ic_tool_add.png
     - image/ic_tool_photo.png

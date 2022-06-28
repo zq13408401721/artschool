@@ -12,6 +12,7 @@ import 'package:yhschool/column/ColumnMineTile.dart';
 import 'package:yhschool/column/ColumnMineTileAdd.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
+import 'package:yhschool/utils/EventBusUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 
@@ -32,17 +33,24 @@ class ColumnMinePageState extends BaseRefreshState<ColumnMinePage>{
 
   int currentType=0; //当前的分类
 
-  ScrollController _scrollController;
   Map _map = new Map();
   int newid=0,oldid=0; //当前最新和最老的列表id
 
   @override
   void initState() {
     super.initState();
-    print("ColumnMinePage initState");
-    _scrollController = initScrollController();
     columnList.add(Data(id: 0));
     _queryColumnList();
+    EventBusUtils.instance.getEventBus().on<int>().listen((event) {
+      for(Data item in columnList){
+        if(item.id == event){
+          columnList.remove(item);
+          break;
+        }
+      }
+      setState(() {
+      });
+    });
   }
 
   @override

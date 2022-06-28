@@ -31,12 +31,12 @@ class ColumnPage extends StatefulWidget{
 
 class ColumnPageState extends BaseState{
 
-  final GlobalKey<M.TextButtonState> columnGalleryKey = GlobalKey<M.TextButtonState>();
+  //final GlobalKey<M.TextButtonState> columnGalleryKey = GlobalKey<M.TextButtonState>();
   final GlobalKey<M.TextButtonState> columnAllKey = GlobalKey<M.TextButtonState>();
   final GlobalKey<M.TextButtonState> columnSchoolKey = GlobalKey<M.TextButtonState>();
   final GlobalKey<M.TextButtonState> columnMyKey = GlobalKey<M.TextButtonState>();
 
-  final GlobalKey<ColumnGalleryPageState> columnGalleryPageKey = GlobalKey<ColumnGalleryPageState>();
+  //final GlobalKey<ColumnGalleryPageState> columnGalleryPageKey = GlobalKey<ColumnGalleryPageState>();
   final GlobalKey<ColumnListPageState> columnListPageKey = GlobalKey<ColumnListPageState>();
   //final GlobalKey<ColumnSubscriblePageState> columnSubsriblePageKey = GlobalKey<ColumnSubscriblePageState>();
   final GlobalKey<ColumnMinePageState> columnMinePageKey = GlobalKey<ColumnMinePageState>();
@@ -45,7 +45,7 @@ class ColumnPageState extends BaseState{
 
 
   List<Data> types=[];
-  int page=1;
+  int page=0;
   bool showteacher = true;
 
   void changePage(CMD_MINE cmd){
@@ -175,7 +175,6 @@ class ColumnPageState extends BaseState{
                     });
                   },),
                   M.TextButton(key:columnSchoolKey,label:"学校网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
-                    print("我的订阅");
                     _changeColumnTab(2);
                     //切换到我的订阅刷新页面
                     setState(() {
@@ -188,8 +187,8 @@ class ColumnPageState extends BaseState{
                     child: Offstage(
                       offstage: page != 2,
                       child: Container(
-                        alignment: Alignment(1,0),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Checkbox(value: showteacher,onChanged: (value){
                               columnSchoolPageKey.currentState.updateSchoolColumnShow(value);
@@ -197,7 +196,7 @@ class ColumnPageState extends BaseState{
                                 showteacher = value;
                               });
                             },),
-                            Text("仅老师",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.black12),)
+                            Text("仅老师",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.grey),)
                           ],
                         ),
                       ),
@@ -228,10 +227,9 @@ class ColumnPageState extends BaseState{
               child: IndexedStack(
                 index: page,
                 children: [
-                  //ColumnGalleryPage(key: columnGalleryPageKey,),
                   ColumnMinePage(key: columnMinePageKey,),
                   ColumnListPage(key: columnListPageKey,),
-                  ColumnSchoolPage(key: columnSchoolKey,)
+                  ColumnSchoolPage(key: columnSchoolPageKey,)
                   //订阅列表页面
                   /*ColumnSubscriblePage(key:columnSubsriblePageKey,cb: (int cid){
                     columnListPageKey.currentState.updateColumnSubscrible(cid);

@@ -112,6 +112,7 @@ class DataUtils{
   static const String api_refreshspecialcolumnlist = "column/refreshSpecialColumnList"; //刷新专栏列表
   static const String api_loadmorespecialcolumnlist = "column/loadMoreSpecialColumnList";  //加载更多专栏列表
   static const String api_deletegallerybycolumn = "column/deleteColumnGallery"; //删除专栏图片
+  static const String api_deletecolumn = "column/deleteColumn"; //删除专栏
 
   /********************music and mv *******************/
   static const String api_loadmv = "other/loadMV"; //获取MV数据

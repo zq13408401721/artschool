@@ -637,7 +637,7 @@ class VideoPageState extends VersionState<VideoPage>{
                   //left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
                   //right: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
               ),
-              child: Text(item.username == null ? item.username : item.nickname,style: Constant.smallTitleTextStyle,maxLines: 1,),
+              child: Text(item.username != null ? item.username : item.nickname,style: Constant.smallTitleTextStyle,maxLines: 1,),
             ),
             //SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(30)),)
           ],
@@ -749,16 +749,7 @@ class VideoPageState extends VersionState<VideoPage>{
                             onTap: (){
                               //
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black12,
-                                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(25)))
-                              ),
-                              width: ScreenUtil().setWidth(40),
-                              height: ScreenUtil().setWidth(40),
-                              alignment: Alignment(0,0),
-                              child: Text("?",style: TextStyle(color: Colors.white),)
-                            )
+                            child:Image.asset("image/ic_tips.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setWidth(60),)
                         ),
                         InkWell(
                             onTap: (){
@@ -769,7 +760,7 @@ class VideoPageState extends VersionState<VideoPage>{
                                   left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
                                   right: ScreenUtil().setWidth(SizeUtil.getWidth(40))
                               ),
-                              child: Image.asset("image/ic_qr.png",width: ScreenUtil().setWidth(40),height: ScreenUtil().setWidth(40),),
+                              child: Image.asset("image/ic_qr.png",width: ScreenUtil().setWidth(48),height: ScreenUtil().setWidth(48),),
                             )
                         )
                       ],
@@ -929,13 +920,7 @@ class VideoPageState extends VersionState<VideoPage>{
                                       //切换到网盘
                                       widget.callback();
                                     },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(25)),
-                                          color: Colors.black12
-                                      ),
-                                      child: Icon(Icons.more_horiz,color: Colors.white,),
-                                    ),
+                                    child: Image.asset("image/ic_more_column.png",width: ScreenUtil().setWidth(48),height: ScreenUtil().setWidth(48),),
                                   )
                                 ],
                               ),

@@ -60,7 +60,9 @@ class UserInfoDetailState extends BaseDialogState{
     String pw = await prefs.getString("password");
     int policy = await prefs.getInt("policy");
     prefs.clear();
-    prefs.setInt("policy", policy);
+    if(policy != null){
+      prefs.setInt("policy", policy);
+    }
     prefs.setString("username", username);
     prefs.setString("password", pw);
     return 1;

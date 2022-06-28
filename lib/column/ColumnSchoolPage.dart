@@ -34,7 +34,7 @@ class ColumnSchoolPageState extends BaseRefreshState<ColumnSchoolPage>{
   int type = 0;
   int newid=0,oldid=0; //当前最新和最老的列表id
   Map _map = new Map(); //缓存所有的专栏数据
-  bool showonlyteacher; //是否只显示老师
+  bool showonlyteacher=false; //是否只显示老师
 
   @override
   void initState() {
@@ -58,8 +58,7 @@ class ColumnSchoolPageState extends BaseRefreshState<ColumnSchoolPage>{
     var option = {
       "columnid":newid,
       "size":size,
-      "type":type,
-      "schoolid":m_schoolid
+      "type":type
     };
     var key = "columnlist"+type.toString();
     httpUtil.post(DataUtils.api_refreshspecialcolumnlist,data: option,context: context).then((value){
@@ -166,7 +165,6 @@ class ColumnSchoolPageState extends BaseRefreshState<ColumnSchoolPage>{
     var option = {
       "page":page,
       "size":size,
-      "schoolid":m_schoolid,
       "showteacher":showonlyteacher ? 1 : 0
     };
     if(type > 0){
@@ -204,7 +202,6 @@ class ColumnSchoolPageState extends BaseRefreshState<ColumnSchoolPage>{
     return StaggeredGridView.countBuilder(
       crossAxisCount: Constant.isPad ? 3 : 2,
       itemCount: list.length,
-      //primary: false,
       physics: BouncingScrollPhysics(),
       mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(Constant.DIS_LIST)),
       crossAxisSpacing: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.DIS_LIST)),

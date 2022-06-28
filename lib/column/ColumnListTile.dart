@@ -121,7 +121,7 @@ class ColumnListTileState extends BaseState<ColumnListTile>{
           ),child:Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(widget.data.nickname == null ? widget.data.username : widget.data.nickname,style: Constant.smallTitleTextStyle,),
+              Text(widget.data.nickname != null ? widget.data.nickname : widget.data.username,style: Constant.smallTitleTextStyle,),
               Expanded(
                 child: InkWell(
                   onTap: (){

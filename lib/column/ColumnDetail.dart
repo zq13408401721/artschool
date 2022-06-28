@@ -17,6 +17,7 @@ import 'package:yhschool/column/ColumnImageDetail.dart';
 import 'package:yhschool/column/ColumnImageTile.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
+import 'package:yhschool/utils/EventBusUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/widgets/BackButtonWidget.dart';
@@ -203,6 +204,25 @@ class ColumnDetailState extends BaseCoustPageRefreshState<ColumnDetail>{
     });
   }
 
+  /**
+   * 删除专栏
+   */
+  void _deleteColumn(int cid){
+    var option = {
+      "columnid":cid
+    };
+    httpUtil.post(DataUtils.api_deletecolumn,data:option).then((value){
+      print(value);
+      ColumnGalleryDeleteBean bean = ColumnGalleryDeleteBean.fromJson(json.decode(value));
+      if(bean.errno == 0){
+        EventBusUtils.instance.getEventBus().fire(cid);
+        Navigator.pop(context);
+      }else{
+        showToast(bean.errmsg);
+      }
+    });
+  }
+
   @override
   void refresh(){}
 
@@ -211,31 +231,6 @@ class ColumnDetailState extends BaseCoustPageRefreshState<ColumnDetail>{
     if(!isloading){
       _getColumnGalleryListMore();
     }
-  }
-
-  void _showAlertDialog(BuildContext context) {
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text('是否确定删除'),
-        content: const Text('Proceed with destructive action?'),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('No'),
-          ),
-          CupertinoDialogAction(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Yes'),
-          )
-        ],
-      ),
-    );
   }
 
   @override
@@ -255,7 +250,9 @@ class ColumnDetailState extends BaseCoustPageRefreshState<ColumnDetail>{
                 InkWell(
                   onTap: (){
                     //删除提示dialog
-                    _showAlertDialog(context);
+                    showAlertTips(context, "确定删除？", (){
+                      _deleteColumn(columnid);
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
@@ -369,6 +366,7 @@ class ColumnDetailState extends BaseCoustPageRefreshState<ColumnDetail>{
             ),
             padding: EdgeInsets.only(
                 left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+                right: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
                 top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
                 bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20))
             ),
@@ -380,7 +378,7 @@ class ColumnDetailState extends BaseCoustPageRefreshState<ColumnDetail>{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("+ 上传图片",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(36)),fontWeight: FontWeight.bold),),
-                Text("严禁上传色情反动类图片",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25)),color: Colors.black12),)
+                Text("严禁上传色情反动类图片",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25)),color: Colors.grey),)
               ],
             )
           ),
