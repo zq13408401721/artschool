@@ -46,9 +46,11 @@ class TeachTileState extends BaseState<TeachTile>{
   void initState() {
     super.initState();
     getUid().then((value){
-      setState(() {
-        this.uid = value;
-      });
+      if(mounted){
+        setState(() {
+          this.uid = value;
+        });
+      }
     });
   }
 
@@ -142,7 +144,7 @@ class TeachTileState extends BaseState<TeachTile>{
                 Offstage(
                   offstage: uid != gallery.tid,
                   child: Padding(
-                    padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
+                    padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -157,9 +159,14 @@ class TeachTileState extends BaseState<TeachTile>{
                             decoration: BoxDecoration(
                                 color: Color.fromARGB(1, 246, 186, 207)
                             ),
-                            child: Text(getMarkWord(),style: gallery.markname != null ? TextStyle(
-                                fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),fontWeight: FontWeight.bold,color: Colors.red
-                            ) : TextStyle( fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),fontWeight: FontWeight.bold,color:Color(0xFF3d5afe)),),
+                            child: Row(
+                              children: [
+                                Image.asset("image/ic_work_mark.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(24)),height: ScreenUtil().setWidth(SizeUtil.getWidth(24)),),
+                                Text(getMarkWord(),style: gallery.markname != null ? TextStyle(
+                                    fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),fontWeight: FontWeight.bold,color: Colors.red
+                                ) : TextStyle( fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),fontWeight: FontWeight.bold,color:Color(0xFF3d5afe)),),
+                              ],
+                            )
                           ),
                         ),
                         InkWell(
@@ -168,7 +175,7 @@ class TeachTileState extends BaseState<TeachTile>{
                               widget.cb();
                             }
                           },
-                          child: Image.asset("image/ic_fork.png",color: Colors.black12,),
+                          child: Image.asset("image/ic_fork.png",color: Colors.black12,width: ScreenUtil().setWidth(16),height: ScreenUtil().setWidth(16),),
                         )
                       ],
                     ),

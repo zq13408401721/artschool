@@ -222,7 +222,15 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
    */
   void clearCache() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String username = await prefs.getString("username");
+    String pw = await prefs.getString("password");
+    int policy = await prefs.getInt("policy");
     prefs.clear();
+    if(policy != null){
+      prefs.setInt("policy", policy);
+    }
+    prefs.setString("username", username);
+    prefs.setString("password", pw);
   }
 
   /**
@@ -590,7 +598,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
             alignment: Alignment(0,0),
             child: Text(
               title,
-              style: TextStyle(fontSize: ScreenUtil().setSp(60),fontWeight: FontWeight.bold),
+              style: TextStyle(color:Colors.grey,fontSize: ScreenUtil().setSp(30),fontWeight: FontWeight.normal,decoration: TextDecoration.none),
             ),
           ),
           // 显示更多
@@ -776,7 +784,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
                                TextSpan(
                                    text:"请你务必审慎阅读、充分理解\"服务协议\"和\"隐私政策\"各条款，包括但不限于为了向你提供资料、内容发布等服务，我们需要收集你的设备信息、操作日志等个人信息，你可以在"+
                                        "\"我的\"中查看本隐私条款。你可以阅读",
-                                   style:TextStyle(color: Colors.black54,fontSize: ScreenUtil().setSp(30))
+                                   style:TextStyle(color: Colors.black54,fontSize: ScreenUtil().setSp(30),wordSpacing: 20,letterSpacing: 2)
                                ),
                                TextSpan(
                                    text: "《服务协议》",

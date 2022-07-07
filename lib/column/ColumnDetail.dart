@@ -268,6 +268,9 @@ class ColumnDetailState extends BaseCoustPageRefreshState<ColumnDetail>{
                           if(value["name"] != null){
                             this.columnname = value["name"];
                           }
+                          if(value["visible"] != null){
+                            (widget as ColumnDetail).visible = value["visible"];
+                          }
                         })
                       }
                     });

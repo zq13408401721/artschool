@@ -73,7 +73,7 @@ class CollectGalleryState extends BaseRefreshState<CollectGallery>{
       itemBuilder: (context,index){
         return GestureDetector(
           child: CollectTile(
-            smallurl: Constant.parseCollectSmallString(list[index].from, list[index].url),
+            smallurl: Constant.parseCollectSmallString(list[index].from, list[index].url,list[index].width,list[index].height),
             url:list[index].url,
             title: list[index].title,
             name:list[index].name,

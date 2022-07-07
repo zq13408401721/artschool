@@ -6,6 +6,8 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intent/flag.dart';
+import 'package:intent/intent.dart';
 import 'package:package_info/package_info.dart';
 import 'package:yhschool/BarItem.dart';
 import 'package:yhschool/BaseState.dart';
@@ -29,8 +31,11 @@ import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 import 'dart:math' as math;
 
+
 import 'Login.dart';
 import 'mine/MinePage.dart';
+
+
 
 /*void main(){
   //设置沉侵式状态栏
@@ -122,6 +127,7 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
       //Video(key: videoStateKey),
       VideoPage(key: videoStateKey,callback: (){
         _selectBar(3);
+        columnPageStateKey.currentState.initColumn();
       },),
       Gallery(key:galleryStateKey),
       //Issue(key: issueStateKey,),
@@ -277,7 +283,8 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
                     height: double.infinity,
                     color: Colors.white,
                     child: Center(
-                        child: Image.asset("image/start.png",width: ScreenUtil().setWidth(463),height: ScreenUtil().setHeight(565),)
+                      child: Image.asset("image/start.png"),
+                        //child: Image.asset("image/start.png",width: ScreenUtil().setWidth(463),height: ScreenUtil().setHeight(565),)
                       //isinit ? VideoPlayer(_videoPlayerController) : SizedBox(),
                     ),
                   )
@@ -285,7 +292,7 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
                 ],
               ),
             ),
-            onWillPop: (){
+            onWillPop: () async{
               exit(0);
             });
       },

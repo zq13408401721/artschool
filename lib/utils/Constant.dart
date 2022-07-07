@@ -219,9 +219,9 @@ class Constant{
   /**
    * 包含ipad低版本图片
    */
-  static String parseNewIssueSmallString(String url,int w,int h){
+  static String parseNewIssueSmallString(String url,int w,int h,{int scale:100}){
     if(isIosLowVersion && w > 0 && h > 0){
-      return parseIosSmallString(url, w, h,100);
+      return parseIosSmallString(url, w, h,scale);
     }else{
       return parseIssueSmallString(url);
     }
@@ -301,13 +301,14 @@ class Constant{
    *解析收藏小图
    * from 1图库  2课堂  3专栏
    */
-  static String parseCollectSmallString(int from,String url){
+  static String parseCollectSmallString(int from,String url,int width,int height){
+    url = url.replaceFirst("9050", "9070");
     if(from == 1){
-      return parseGallerySmallString(url);
+      return parseGallerySmallString(url)+"?w=${width}&h=${height}&q=50";
     }else if(from == 2){
-      return parseIssueSmallString(url);
+      return parseIssueSmallString(url)+"?w=${width}&h=${height}&q=50";
     }else if(from == 3){
-      return parseColumnSmallString(url);
+      return parseColumnSmallString(url)+"?w=${width}&h=${height}&q=50";
     }
   }
 

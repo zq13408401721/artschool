@@ -83,7 +83,7 @@ class MineState extends BaseDialogState{
     //{"id":1,"name":"我的老师","icon":"image/ic_myteacher.png"},
     {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
     {"id":4,"name":"我的网盘","icon":"image/ic_column.png"},
-    {"id":11,"name":"我的订阅","icon":"image/ic_column.png"},
+    {"id":11,"name":"收藏的网盘","icon":"image/ic_column.png"},
     {"id":5,"name":"我的作业","icon":"image/ic_mywork.png"},
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
@@ -98,7 +98,7 @@ class MineState extends BaseDialogState{
     {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
     {"id":3,"name":"我的课件","icon":"image/ic_mycourse.png"},
     {"id":4,"name":"我的网盘","icon":"image/ic_column.png"},
-    {"id":11,"name":"我的订阅","icon":"image/ic_column.png"},
+    {"id":11,"name":"收藏的网盘","icon":"image/ic_column.png"},
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
     {"id":9,"name":"听歌","icon":"image/ic_music.png"},
@@ -416,7 +416,9 @@ class MineState extends BaseDialogState{
               WebStage(url: 'http://res.yimios.com:9050/html/yihua.html', title: "")
           ));
         }else if(_data["id"] == 13){ //提意见
-
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+              WebStage(url: 'https://support.qq.com/product/326279', title: "")
+          ));
         }
       },
       child: Container(
@@ -452,7 +454,7 @@ class MineState extends BaseDialogState{
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("常用功能",style: Constant.titleTextStyle,),
+            //Text("常用功能",style: Constant.titleTextStyle,),
             SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(700)),
               child: GridView.count(
                 crossAxisCount: 3,

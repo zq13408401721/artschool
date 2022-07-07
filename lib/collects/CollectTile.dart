@@ -23,7 +23,7 @@ class CollectTile extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    print("title:${title}");
+    print("title:${title} smallutl:${this.smallurl}");
     double _height = ScreenUtil().setHeight(SizeUtil.getHeight(Constant.getScaleH(width.toDouble(), height.toDouble())));
     return Card(
       color: Colors.white,

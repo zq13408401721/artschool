@@ -126,7 +126,7 @@ abstract class BaseListRefresh<T extends StatefulWidget> extends BaseState<T>{
                     child: CircularProgressIndicator(color: Colors.red,),
                   ),
                   SizedBox(width: 10,),
-                  Text("加载更多",style: TextStyle(color:Colors.grey),)
+                  Text("加载更多",style: TextStyle(color:Colors.grey,fontSize: ScreenUtil().setSp(30),fontWeight: FontWeight.normal,decoration: TextDecoration.none),)
                 ],
               ),
             ),

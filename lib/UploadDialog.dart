@@ -274,7 +274,7 @@ class UploadState extends BaseState<UploadDialog>{
           borderRadius: BorderRadius.circular(SizeUtil.getWidth(10)),
         ),
         child: comporessnum < total ? Center(
-          child: Text("资源处理中：${comporessnum}/${total}"),
+          child: Text("资源处理中：${comporessnum}/${total}",style: TextStyle(color:Colors.grey,fontSize: ScreenUtil().setSp(30),fontWeight: FontWeight.normal,decoration: TextDecoration.none),),
         ) :Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

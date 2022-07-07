@@ -58,7 +58,8 @@ class ColumnSchoolPageState extends BaseRefreshState<ColumnSchoolPage>{
     var option = {
       "columnid":newid,
       "size":size,
-      "type":type
+      "type":type,
+      "visible":showonlyteacher ? 1 : 0
     };
     var key = "columnlist"+type.toString();
     httpUtil.post(DataUtils.api_refreshspecialcolumnlist,data: option,context: context).then((value){
@@ -94,7 +95,8 @@ class ColumnSchoolPageState extends BaseRefreshState<ColumnSchoolPage>{
     var option = {
       "columnid":oldid,
       "size":size,
-      "type":type
+      "type":type,
+      "visible":showonlyteacher ? 1 : 0
     };
     var key = "columnlist"+type.toString();
     httpUtil.post(DataUtils.api_loadmorespecialcolumnlist,data: option,context: context).then((value){
@@ -165,7 +167,7 @@ class ColumnSchoolPageState extends BaseRefreshState<ColumnSchoolPage>{
     var option = {
       "page":page,
       "size":size,
-      "showteacher":showonlyteacher ? 1 : 0
+      "visible":showonlyteacher ? 1 : 0
     };
     if(type > 0){
       option["type"] = type;

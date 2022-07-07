@@ -16,6 +16,8 @@ import 'package:yhschool/utils/EventBusUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 
+import '../WebStage.dart';
+
 class ColumnMinePage extends StatefulWidget{
 
   ColumnMinePage({Key key}):super(key: key);
@@ -149,48 +151,80 @@ class ColumnMinePageState extends BaseRefreshState<ColumnMinePage>{
   @override
   Widget addChildren(){
     print("ColumnMinePage length:${columnList.length}");
-    return Container(
-      margin: EdgeInsets.only(top: ScreenUtil().setHeight(10)),
-      child: StaggeredGridView.countBuilder(
-        crossAxisCount: Constant.isPad ? 3 : 2,
-        itemCount: columnList.length,
-        //primary: false,
-        mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(Constant.DIS_LIST)),
-        crossAxisSpacing: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.DIS_LIST)),
-        //controller: _scrollController,
-        //addAutomaticKeepAlives: false,
-        padding: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(Constant.DIS_LIST)),right: ScreenUtil().setWidth(SizeUtil.getWidth(Constant.DIS_LIST))),
-        staggeredTileBuilder: (int index) =>
-            StaggeredTile.fit(1),
-        //StaggeredTile.count(3,index==0?2:3),
-        itemBuilder: (context,index){
-          return columnList[index].id > 0 ? InkWell(
+    return Column(
+      children: [
+        Container(
+          height: ScreenUtil().setHeight(SizeUtil.getHeight(300)),
+          width: double.infinity,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+              color: Colors.white
+          ),
+          margin: EdgeInsets.only(
+            left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
+            right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
+            top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
+            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20))
+          ),
+          child: InkWell(
             onTap: (){
-              print("点击收藏的网盘");
+              //
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                  WebStage(url: 'https://support.qq.com/products/326279/faqs/121943', title: "")
+              ));
             },
-            child: ColumnMineTile(data: columnList[index],cb: (value){
-              //处理图片上传完成以后列表的刷新
-              if(value){
-                columnList.clear();
-                columnList.add(Data(id: 0));
-                _queryColumnList();
-              }
-            },),
-          ) : ColumnMineTileAdd(cb: (){
-            //新建专栏
-            Navigator.push(context, MaterialPageRoute(
-                builder: (context)=>ColumnBuildPage()
-            )).then((value){
-              //创建专栏成功，然后重新请求专栏数据
-              if(value != null){
-                columnList.clear();
-                columnList.add(Data(id: 0));
-                _queryColumnList();
-              }
-            });
-          });
-        },
-      ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Image.network("http://res.yimios.com:9050/videos/advert/ic_advert_column.jpg",fit:BoxFit.cover),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(top: ScreenUtil().setHeight(10)),
+            child: StaggeredGridView.countBuilder(
+              crossAxisCount: Constant.isPad ? 3 : 2,
+              itemCount: columnList.length,
+              //primary: false,
+              mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(Constant.DIS_LIST)),
+              crossAxisSpacing: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.DIS_LIST)),
+              //controller: _scrollController,
+              //addAutomaticKeepAlives: false,
+              padding: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(Constant.DIS_LIST)),right: ScreenUtil().setWidth(SizeUtil.getWidth(Constant.DIS_LIST))),
+              staggeredTileBuilder: (int index) =>
+                  StaggeredTile.fit(1),
+              //StaggeredTile.count(3,index==0?2:3),
+              itemBuilder: (context,index){
+                return columnList[index].id > 0 ? InkWell(
+                  onTap: (){
+                    print("点击收藏的网盘");
+                  },
+                  child: ColumnMineTile(data: columnList[index],cb: (value){
+                    //处理图片上传完成以后列表的刷新
+                    if(value){
+                      columnList.clear();
+                      columnList.add(Data(id: 0));
+                      _queryColumnList();
+                    }
+                  },),
+                ) : ColumnMineTileAdd(cb: (){
+                  //新建专栏
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context)=>ColumnBuildPage()
+                  )).then((value){
+                    //创建专栏成功，然后重新请求专栏数据
+                    if(value != null){
+                      columnList.clear();
+                      columnList.add(Data(id: 0));
+                      _queryColumnList();
+                    }
+                  });
+                });
+              },
+            ),
+          ),
+        )
+      ],
     );
   }
 

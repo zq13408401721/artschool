@@ -217,8 +217,10 @@ flutter:
     - image/ic_red_refresh.png
     - image/ic_score.png
     - image/ic_correct.png
-    - image/ic_login_bg.jpg
+    - image/ic_login_bg.png
     - image/ic_school.png
+    - image/ic_comment.png
+    - image/ic_work_mark.png
     - videos/login_page.mp4
     - videos/x2/login_page_x2.mp4
     - videos/x2/login_page_android_x2.mp4

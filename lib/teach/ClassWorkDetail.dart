@@ -276,7 +276,7 @@ class ClassWorkDetailState extends BaseViewPagerState<Works,ClassWorkDetail>{
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("${workScoreBean.data.score}分",style: TextStyle(color: Colors.red),),
-            Text(workScoreBean.data.nickname == null ? "${workScoreBean.data.username}老师" : "${workScoreBean.data.nickname}老师",style: TextStyle(color: Colors.grey),)
+            Text(workScoreBean.data.nickname == null ? "${workScoreBean.data.username}" : "${workScoreBean.data.nickname}",style: TextStyle(color: Colors.grey),)
           ],
         ),
       ) : Container(

@@ -130,7 +130,7 @@ class ColumnListTileState extends BaseState<ColumnListTile>{
                     _commonSubscrible();
                   },
                   child: Text(widget.data.subscrible > 0 ? "取消收藏" : "收藏",textAlign: TextAlign.end,style: TextStyle(
-                      color: Colors.purpleAccent,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))
+                      color: Colors.purpleAccent,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25))
                   ),),
                 ),
               )

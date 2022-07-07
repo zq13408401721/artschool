@@ -202,7 +202,7 @@ class ColumnSubscriblePageState extends BaseListRefresh<ColumnSubscriblePage>{
   @override
   Widget addChildren(){
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: Column(
           children: [
@@ -214,7 +214,7 @@ class ColumnSubscriblePageState extends BaseListRefresh<ColumnSubscriblePage>{
               child:BackButtonWidget(
                 cb: (){
                   Navigator.pop(context);
-                },title: "我的订阅",
+                },title: "收藏的网盘",
               ),
             ),
             //分类

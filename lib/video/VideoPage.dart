@@ -506,7 +506,7 @@ class VideoPageState extends VersionState<VideoPage>{
                         horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20))
                     ),
                     alignment: Alignment(0,0),
-                    child: Text("更多 >"),
+                    child: Text("更多"),
                   ),
                 )
               ],
@@ -565,7 +565,7 @@ class VideoPageState extends VersionState<VideoPage>{
   void columnGalleryList(){
     var option = {
       "page":1,
-      "size":6,
+      "size":12,
     };
     httpUtil.post(DataUtils.api_columnlist,data: option).then((value){
       String result = checkLoginExpire(value);
@@ -594,6 +594,9 @@ class VideoPageState extends VersionState<VideoPage>{
     print(item.url);
     return InkWell(
       child: Container(
+        margin: EdgeInsets.only(
+          bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
+        ),
         decoration: BoxDecoration(
           color: Colors.white,
           /*borderRadius: BorderRadius.only(
@@ -637,7 +640,7 @@ class VideoPageState extends VersionState<VideoPage>{
                   //left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
                   //right: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
               ),
-              child: Text(item.username != null ? item.username : item.nickname,style: Constant.smallTitleTextStyle,maxLines: 1,),
+              child: Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,maxLines: 1,),
             ),
             //SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(30)),)
           ],
@@ -747,10 +750,13 @@ class VideoPageState extends VersionState<VideoPage>{
                       children: [
                         InkWell(
                             onTap: (){
-                              //
+                              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                  WebStage(url: 'https://support.qq.com/products/326279/faqs/121944', title: "")
+                              ));
                             },
-                            child:Image.asset("image/ic_tips.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setWidth(60),)
+                            child:Image.asset("image/ic_tips.png",width: ScreenUtil().setWidth(48),height: ScreenUtil().setWidth(48),)
                         ),
+                        SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(30)),),
                         InkWell(
                             onTap: (){
                               _openQr();
@@ -760,7 +766,7 @@ class VideoPageState extends VersionState<VideoPage>{
                                   left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
                                   right: ScreenUtil().setWidth(SizeUtil.getWidth(40))
                               ),
-                              child: Image.asset("image/ic_qr.png",width: ScreenUtil().setWidth(48),height: ScreenUtil().setWidth(48),),
+                              child: Image.asset("image/ic_qr.png",width: ScreenUtil().setWidth(36),height: ScreenUtil().setWidth(36),),
                             )
                         )
                       ],
@@ -931,7 +937,7 @@ class VideoPageState extends VersionState<VideoPage>{
                                   left: ScreenUtil().setWidth(20),right: ScreenUtil().setHeight(20),
                                   top:  ScreenUtil().setHeight(5),bottom: ScreenUtil().setHeight(20)
                               ),
-                              child: Text("今日更新了${columnList.length}个网盘，共计$columnNum个文件",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                              child: Text("今日更新了${columnList.length}个网盘，共计$columnNum个文件",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(28)),color: Colors.grey),),
                             ),
                             //专题列表
                             GridView.builder(
@@ -975,7 +981,7 @@ class VideoPageState extends VersionState<VideoPage>{
                           onTap: (){
                             //
                             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                WebStage(url: 'https://support.qq.com/products/326279/faqs/119498', title: "")
+                                WebStage(url: 'https://support.qq.com/products/326279/faqs/121955', title: "")
                             ));
                           },
                           child: ClipRRect(
@@ -997,7 +1003,7 @@ class VideoPageState extends VersionState<VideoPage>{
                         ),
                         margin: EdgeInsets.only(
                           left: ScreenUtil().setWidth(20),right: ScreenUtil().setWidth(20),
-                          top: ScreenUtil().setHeight(20),bottom: ScreenUtil().setHeight(100)),
+                          top: ScreenUtil().setHeight(30),bottom: ScreenUtil().setHeight(100)),
                         padding: EdgeInsets.symmetric(horizontal:ScreenUtil().setWidth(20),vertical: ScreenUtil().setHeight(20)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1022,7 +1028,7 @@ class VideoPageState extends VersionState<VideoPage>{
                                   vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
                                   horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20))
                               ),
-                              child: Marquee(textList: marquee,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),),
+                              child: Marquee(textList: marquee,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(28)),textColor: Colors.grey,),
                             ),
                             //官方精选
                             Padding(

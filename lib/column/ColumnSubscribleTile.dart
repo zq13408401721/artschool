@@ -116,9 +116,10 @@ class ColumnSubscribleTileState extends BaseState<ColumnSubscribleTile>{
                     this.ishttp = true;
                     _cancelSubscrible();
                   },
-                  child: Text("取消收藏",textAlign: TextAlign.end,),
-                ),
-              )
+                  child: Text("取消收藏",textAlign: TextAlign.end,style: TextStyle(
+                      color: Colors.purpleAccent,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25))),
+                  ),
+              ))
             ],
           ),)
         ],

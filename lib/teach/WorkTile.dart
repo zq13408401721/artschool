@@ -99,7 +99,20 @@ class WorkTile extends StatelessWidget{
                     //标记当前的作业是否是优秀作品
                     clickMark();
                   },
-                  child: Text(data.grade == 0 ? "评优秀" : "取消标记",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
+                      bottom: ScreenUtil().setWidth(SizeUtil.getWidth(10))
+                    ),
+                    child: data.grade == 0 ?
+                    Row(
+                      children: [
+                        Image.asset("image/ic_comment.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(32)),height: ScreenUtil().setHeight(SizeUtil.getWidth(32)),),
+                        Text("评优秀",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),)
+                      ],
+                    ) :
+                    Text("取消标记",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                  )
                 ),
               )
             ],

@@ -138,7 +138,7 @@ class LoginState extends BaseState<Login>{
   Widget _videoWidget(){
     return Container(
       color: Colors.black,
-      child: Image.asset("image/ic_login_bg.jpg",fit: BoxFit.cover,width: double.infinity,height: double.infinity,),
+      child: Image.asset("image/ic_login_bg.png",fit: BoxFit.cover,width: double.infinity,height: double.infinity,),
       //child: isinit ? VideoPlayer(_videoPlayerController) : SizedBox(),
     );
   }

@@ -155,6 +155,9 @@ class TodayTeachGalleryState extends BaseRefreshState<TodayTeachGallery>{
   @override
   Widget addChildren() {
     return Container(
+      padding: EdgeInsets.only(
+        bottom: ScreenUtil().setHeight(40)
+      ),
       child: StaggeredGridView.countBuilder(
         crossAxisCount: Constant.isPad ? 3 : 2,
         itemCount: list.length,
@@ -169,7 +172,7 @@ class TodayTeachGalleryState extends BaseRefreshState<TodayTeachGallery>{
         itemBuilder: (context,index){
           return GestureDetector(
             //child: TileCard(key:GlobalObjectKey(list[index].id),url: list[index].url,title: list[index].name,imgtype: ImageType.issue,width: list[index].width,height: list[index].height,),
-            child: TeachTile(smallurl: Constant.parseNewIssueSmallString(list[index].url,list[index].width,list[index].height),
+            child: TeachTile(smallurl: Constant.parseNewIssueSmallString(list[index].url,list[index].width,list[index].height,scale: 50),
               title: Constant.getFileNameByUrl(list[index].url,list[index].filename),author: list[index].name,role: this.role,
               gallery: list[index],cb: (){
                 //删除图片资料

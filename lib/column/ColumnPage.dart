@@ -46,12 +46,15 @@ class ColumnPageState extends BaseState{
 
   List<Data> types=[];
   int page=0;
-  bool showteacher = true;
+  bool showteacher = false;
 
   void changePage(CMD_MINE cmd){
     if(cmd == CMD_MINE.CMD_PAGE_COLUMN_MINE){
+      changeColumnTab(0);
       setState(() {
-        page = 3;
+        page=0;
+        _resetTypeSelect();
+        changeType(0);
       });
     }
   }
@@ -93,7 +96,7 @@ class ColumnPageState extends BaseState{
   /**
    * 切换专栏tab
    */
-  void _changeColumnTab(int index){
+  void changeColumnTab(int index){
     //columnGalleryKey.currentState.updateState(false);
     columnAllKey.currentState.updateState(false);
     columnSchoolKey.currentState.updateState(false);
@@ -107,11 +110,21 @@ class ColumnPageState extends BaseState{
   /**
    * 切换分类
    */
-  void _changeType(int id){
+  void changeType(int id){
     //if(page == 0) columnGalleryPageKey.currentState.updateGalleryList(id);
     if(page == 0) columnMinePageKey.currentState.updateMineColumn(id);
     if(page == 1) columnListPageKey.currentState.updateColumnList(id);
     if(page == 2) columnSchoolPageKey.currentState.updateColumnSchool(id);
+  }
+
+  //初始化显示共享网盘
+  void initColumn(){
+    changeColumnTab(1);
+    setState(() {
+      page=1;
+      _resetTypeSelect();
+      changeType(0);
+    });
   }
 
   /**
@@ -158,29 +171,29 @@ class ColumnPageState extends BaseState{
                   },),*/
                   M.TextButton(key:columnMyKey,label:"我的网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),defaultSelect:true,cb: (){
                     print("我的专栏");
-                    _changeColumnTab(0);
+                    changeColumnTab(0);
                     setState(() {
                       page = 0;
                       _resetTypeSelect();
-                      _changeType(0);
+                      changeType(0);
                     });
                   },),
-                  M.TextButton(key:columnAllKey,label:"共享网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
+                  M.TextButton(key:columnAllKey,label:"全部网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
                     print("全部专栏");
-                    _changeColumnTab(1);
+                    changeColumnTab(1);
                     setState(() {
                       page=1;
                       _resetTypeSelect();
-                      _changeType(0);
+                      changeType(0);
                     });
                   },),
                   M.TextButton(key:columnSchoolKey,label:"学校网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
-                    _changeColumnTab(2);
+                    changeColumnTab(2);
                     //切换到我的订阅刷新页面
                     setState(() {
                       page=2;
                       _resetTypeSelect();
-                      _changeType(0);
+                      changeType(0);
                     });
                   },),
                   Expanded(
@@ -219,7 +232,7 @@ class ColumnPageState extends BaseState{
               ),
               child: HorizontalListTab(datas: types, click: (dynamic _data){
                 print("${_data.id}");
-                _changeType(_data.id);
+                changeType(_data.id);
               }),
             ),
             //列表
