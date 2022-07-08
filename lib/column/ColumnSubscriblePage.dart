@@ -202,95 +202,99 @@ class ColumnSubscriblePageState extends BaseListRefresh<ColumnSubscriblePage>{
   @override
   Widget addChildren(){
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              //height: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.SIZE_TOP_HEIGHT)),
-              decoration: BoxDecoration(
-                  color: Colors.white
+        child: Container(
+          color: Colors.grey[100],
+          child: Column(
+            children: [
+              Container(
+                //height: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.SIZE_TOP_HEIGHT)),
+                decoration: BoxDecoration(
+                    color: Colors.white
+                ),
+                padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+                child:BackButtonWidget(
+                  cb: (){
+                    Navigator.pop(context);
+                  },title: "收藏的网盘",
+                ),
               ),
-              child:BackButtonWidget(
-                cb: (){
-                  Navigator.pop(context);
-                },title: "收藏的网盘",
+              //分类
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white
+                ),
+                padding: EdgeInsets.only(
+                    left:ScreenUtil().setWidth(SizeUtil.getWidth(30)),
+                    right: ScreenUtil().setWidth(SizeUtil.getWidth(30))
+                ),
+                margin: EdgeInsets.only(
+                    bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
+                ),
+                child: HorizontalListTab(datas: types, click: (dynamic _data){
+                  print("${_data.id}");
+                  updateSubscrible(_data.id);
+                }),
               ),
-            ),
-            //分类
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white
-              ),
-              padding: EdgeInsets.only(
-                  left:ScreenUtil().setWidth(SizeUtil.getWidth(30)),
-                  right: ScreenUtil().setWidth(SizeUtil.getWidth(30))
-              ),
-              margin: EdgeInsets.only(
-                  bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
-              ),
-              child: HorizontalListTab(datas: types, click: (dynamic _data){
-                print("${_data.id}");
-                updateSubscrible(_data.id);
-              }),
-            ),
-            Expanded(
-              child: StaggeredGridView.countBuilder(
-                crossAxisCount: Constant.isPad ? 3 : 2,
-                itemCount: list.length,
-                //primary: false,
-                mainAxisSpacing: ScreenUtil().setWidth(Constant.DIS_LIST),
-                crossAxisSpacing: ScreenUtil().setWidth(Constant.DIS_LIST),
-                controller: scrollController,
-                //addAutomaticKeepAlives: false,
-                padding: EdgeInsets.only(left: ScreenUtil().setWidth(Constant.DIS_LIST),right: ScreenUtil().setWidth(Constant.DIS_LIST)),
-                staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-                //StaggeredTile.count(3,index==0?2:3),
-                itemBuilder: (context,index){
-                  return InkWell(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>ColumnDetail(
-                        columnname: list[index].columnname,
-                        columnid: list[index].columnid,
-                        author: list[index].nickname == null ? list[index].username : list[index].nickname,
-                        uid: list[index].subscribleuid,
-                        count: list[index].count,
-                        issubscrible: true,
-                        cb: (id,subscrible){
-                          setState(() {
-                            for(var i=0; i<list.length; i++){
-                              if(id == list[i].columnid){
-                                list.removeAt(i);
-                                //刷新全部专栏的状态
-                                if(widget.cb != null){
-                                  widget.cb(id);
+              Expanded(
+                child: StaggeredGridView.countBuilder(
+                  crossAxisCount: Constant.isPad ? 3 : 2,
+                  itemCount: list.length,
+                  //primary: false,
+                  mainAxisSpacing: ScreenUtil().setWidth(Constant.DIS_LIST),
+                  crossAxisSpacing: ScreenUtil().setWidth(Constant.DIS_LIST),
+                  controller: scrollController,
+                  //addAutomaticKeepAlives: false,
+                  padding: EdgeInsets.only(left: ScreenUtil().setWidth(Constant.DIS_LIST),right: ScreenUtil().setWidth(Constant.DIS_LIST)),
+                  staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+                  //StaggeredTile.count(3,index==0?2:3),
+                  itemBuilder: (context,index){
+                    return InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>ColumnDetail(
+                          columnname: list[index].columnname,
+                          columnid: list[index].columnid,
+                          author: list[index].nickname == null ? list[index].username : list[index].nickname,
+                          uid: list[index].subscribleuid,
+                          count: list[index].count,
+                          issubscrible: true,
+                          cb: (id,subscrible){
+                            setState(() {
+                              for(var i=0; i<list.length; i++){
+                                if(id == list[i].columnid){
+                                  list.removeAt(i);
+                                  //刷新全部专栏的状态
+                                  if(widget.cb != null){
+                                    widget.cb(id);
+                                  }
+                                  return;
                                 }
-                                return;
                               }
+                            });
+                          },
+                        )));
+                      },
+                      child: ColumnSubscribleTile(data:list[index],click: (int id){
+                        print("click:${list[index].columnname}");
+                        setState(() {
+                          for(var i=0; i<list.length; i++){
+                            if(id == list[i].columnid){
+                              list.removeAt(i);
+                              if(widget.cb != null){
+                                widget.cb(id);
+                              }
+                              return;
                             }
-                          });
-                        },
-                      )));
-                    },
-                    child: ColumnSubscribleTile(data:list[index],click: (int id){
-                      print("click:${list[index].columnname}");
-                      setState(() {
-                        for(var i=0; i<list.length; i++){
-                          if(id == list[i].columnid){
-                            list.removeAt(i);
-                            if(widget.cb != null){
-                              widget.cb(id);
-                            }
-                            return;
                           }
-                        }
-                      });
-                    },),
-                  );
-                },
-              ),
-            )
-          ],
+                        });
+                      },),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       )
     );

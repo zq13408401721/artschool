@@ -108,7 +108,9 @@ class WorkTile extends StatelessWidget{
                     Row(
                       children: [
                         Image.asset("image/ic_comment.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(32)),height: ScreenUtil().setHeight(SizeUtil.getWidth(32)),),
-                        Text("评优秀",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),)
+                        Padding(padding: EdgeInsets.only(left: ScreenUtil().setSp(10)),
+                          child: Text("评优秀",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                        )
                       ],
                     ) :
                     Text("取消标记",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),

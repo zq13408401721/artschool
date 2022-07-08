@@ -85,7 +85,7 @@ class TeachTileState extends BaseState<TeachTile>{
     }else{
       //如果没有标签作品发布者不是自己，就不显示
       if(uid == gallery.tid){
-        return "标记";
+        return "写要求";
       }else{
         return "";
       }

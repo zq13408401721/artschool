@@ -6,8 +6,6 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intent/flag.dart';
-import 'package:intent/intent.dart';
 import 'package:package_info/package_info.dart';
 import 'package:yhschool/BarItem.dart';
 import 'package:yhschool/BaseState.dart';

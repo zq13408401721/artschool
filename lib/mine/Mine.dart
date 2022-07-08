@@ -921,11 +921,11 @@ class MineState extends BaseDialogState{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //帮助中心
-          Row(
+          /*Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("帮助中心",style:  Constant.titleTextStyle,),
-              /*InkWell(
+              InkWell(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) =>
                       WebStage(url: 'http://res.yimios.com:9050/html/yihua.html', title: "")
@@ -943,9 +943,9 @@ class MineState extends BaseDialogState{
                   margin: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
                   child: Text("关于艺画",style: TextStyle(color: Colors.white),),
                 )
-              ),*/
+              ),
             ],
-          ),
+          ),*/
           //视频栏目
           Container(
             margin: EdgeInsets.symmetric(

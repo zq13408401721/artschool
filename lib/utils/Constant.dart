@@ -290,11 +290,12 @@ class Constant{
   }
 
   static String parseNewWorkListIconString(String url,int w,int h){
-    if(isIosLowVersion && w > 0 && h > 0){
+    return parseIosSmallString(url, w, h,70);
+    /*if(isIosLowVersion && w > 0 && h > 0){
       return parseIosSmallString(url, w, h,70);
     }else{
       return parseWorkListIconString(url);
-    }
+    }*/
   }
 
   /**
