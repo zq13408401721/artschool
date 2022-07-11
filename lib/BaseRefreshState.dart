@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yhschool/BaseState.dart';
+import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/widgets/BackButtonWidget.dart';
 
@@ -10,6 +11,8 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
   bool isloading = false,isrefreshing = false; //是否加载中
   bool hasData = true; //是否有更多数据
 
+  bool isShowAdvert = false;
+  dynamic advertData = null;
   ScrollController _scrollController;
 
   @override
@@ -77,8 +80,6 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -102,6 +103,9 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
                   },title: "返回",
                 ),
               ),*/
+          //是否显示广告
+          (isShowAdvert && advertData != null) ?
+          createAdvert(advertData["url"],advertData["weburl"],advertData["height"]) : SizedBox(),
           //刷新动画
           isrefreshing ?
           Center(

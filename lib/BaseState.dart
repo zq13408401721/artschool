@@ -55,6 +55,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String,dynamic> deviceData = <String,dynamic>{};
 
+
   @override
   void initState() async{
     super.initState();
@@ -838,6 +839,38 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
         }
       );
     });
+  }
+
+  /**
+   * 广告组件
+   */
+  Widget createAdvert(String url,String weburl,int height){
+    return Container(
+      height: ScreenUtil().setHeight(SizeUtil.getHeight(height.toDouble())),
+      width: double.infinity,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+          color: Colors.white
+      ),
+      margin: EdgeInsets.only(
+          left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
+          right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
+          top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
+          bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20))
+      ),
+      child: InkWell(
+        onTap: (){
+          //
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+              WebStage(url: weburl, title: "")
+          ));
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Image.network(url,fit:BoxFit.cover),
+        ),
+      ),
+    );
   }
 
   @override

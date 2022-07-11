@@ -42,6 +42,12 @@ class ColumnMinePageState extends BaseRefreshState<ColumnMinePage>{
   void initState() {
     super.initState();
     columnList.add(Data(id: 0));
+    isShowAdvert = true;
+    super.advertData = {
+      "url":"http://res.yimios.com:9050/videos/advert/ic_advert_column.jpg",
+      "weburl":"https://support.qq.com/products/326279/faqs/121943",
+      "height":Constant.ADVERT_COLUMN_HEIGHT
+    };
     _queryColumnList();
     EventBusUtils.instance.getEventBus().on<int>().listen((event) {
       for(Data item in columnList){
@@ -153,32 +159,6 @@ class ColumnMinePageState extends BaseRefreshState<ColumnMinePage>{
     print("ColumnMinePage length:${columnList.length}");
     return Column(
       children: [
-        Container(
-          height: ScreenUtil().setHeight(SizeUtil.getHeight(300)),
-          width: double.infinity,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-              color: Colors.white
-          ),
-          margin: EdgeInsets.only(
-            left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-            right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-            top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
-            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20))
-          ),
-          child: InkWell(
-            onTap: (){
-              //
-              Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                  WebStage(url: 'https://support.qq.com/products/326279/faqs/121943', title: "")
-              ));
-            },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Image.network("http://res.yimios.com:9050/videos/advert/ic_advert_column.jpg",fit:BoxFit.cover),
-            ),
-          ),
-        ),
         Expanded(
           child: Container(
             margin: EdgeInsets.only(top: ScreenUtil().setHeight(10)),

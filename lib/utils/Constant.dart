@@ -129,6 +129,10 @@ class Constant{
 
   static final List<String> appraise = ["构图","造型","结构","体积","空间","塑造","色调","质感"];
 
+  //广告组件
+  static final int ADVERT_DEFAULT_HEIGHT = 300;
+  static final int ADVERT_COLUMN_HEIGHT = 150;
+
   static final List _colors = [Colors.amberAccent[600],Colors.greenAccent[600],Colors.purpleAccent[600],Colors.lightBlue[600]];
 
   static final List _randomColors = [Color(0xFFFCF6F6),Color(0xFFFCF7F1),Color(0xFFFAF7EB),Color(0xFFFFF7EE)];

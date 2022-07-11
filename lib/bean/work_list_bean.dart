@@ -103,7 +103,7 @@ class Data {
 /// url : "/Users/zhangquan/work/art/img-server/files/3/5694e443-188c-492c-9d07-cf35461d8469/WechatIMG2.jpeg"
 /// correct : null
 /// grade : 0
-/// dateid : 1
+/// dateid : 1标记
 
 class Works {
   int _id;

@@ -40,6 +40,12 @@ class ColumnSchoolPageState extends BaseRefreshState<ColumnSchoolPage>{
   void initState() {
     super.initState();
     print("ColumnListPage initState");
+    isShowAdvert = true;
+    super.advertData = {
+      "url":"http://res.yimios.com:9050/videos/advert/ic_advert_column.jpg",
+      "weburl":"https://support.qq.com/products/326279/faqs/121943",
+      "height":Constant.ADVERT_COLUMN_HEIGHT
+    };
     _scrollController = initScrollController();
     _getColumnList(0);
   }
