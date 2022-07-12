@@ -42,8 +42,8 @@ class ColumnSchoolPageState extends BaseRefreshState<ColumnSchoolPage>{
     print("ColumnListPage initState");
     isShowAdvert = true;
     super.advertData = {
-      "url":"http://res.yimios.com:9050/videos/advert/ic_advert_column.jpg",
-      "weburl":"https://support.qq.com/products/326279/faqs/121943",
+      "url":"http://res.yimios.com:9050/videos/advert/advert_column_school.jpg",
+      "weburl":"https://support.qq.com/products/326279/faqs/122095",
       "height":Constant.ADVERT_COLUMN_HEIGHT
     };
     _scrollController = initScrollController();
@@ -166,6 +166,8 @@ class ColumnSchoolPageState extends BaseRefreshState<ColumnSchoolPage>{
    */
   void updateSchoolColumnShow(bool _bool){
     showonlyteacher = _bool;
+    _map.clear();
+    list.clear();
     _getColumnList(type);
   }
 

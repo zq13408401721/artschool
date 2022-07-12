@@ -44,7 +44,7 @@ class ColumnMinePageState extends BaseRefreshState<ColumnMinePage>{
     columnList.add(Data(id: 0));
     isShowAdvert = true;
     super.advertData = {
-      "url":"http://res.yimios.com:9050/videos/advert/ic_advert_column.jpg",
+      "url":"http://res.yimios.com:9050/videos/advert/advert_column_mine.jpg",
       "weburl":"https://support.qq.com/products/326279/faqs/121943",
       "height":Constant.ADVERT_COLUMN_HEIGHT
     };

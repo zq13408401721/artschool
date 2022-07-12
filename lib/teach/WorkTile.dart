@@ -67,7 +67,7 @@ class WorkTile extends StatelessWidget{
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(5)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(18)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
+                padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(0)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -86,7 +86,10 @@ class WorkTile extends StatelessWidget{
                             this.clickDelete();
                           }
                         },
-                        child: Image.asset("image/ic_fork.png",color: Colors.black12,),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20),vertical: ScreenUtil().setHeight(10)),
+                          child: Image.asset("image/ic_fork.png",color: Colors.black12,width: ScreenUtil().setWidth(20),height: ScreenUtil().setWidth(20),),
+                        )
                       ),
                     )
                   ],

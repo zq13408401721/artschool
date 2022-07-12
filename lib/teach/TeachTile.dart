@@ -1,3 +1,4 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -133,7 +134,7 @@ class TeachTileState extends BaseState<TeachTile>{
                     )
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
+                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
                   child: Text(
                     '$author',
                     maxLines: 1,
@@ -144,7 +145,7 @@ class TeachTileState extends BaseState<TeachTile>{
                 Offstage(
                   offstage: uid != gallery.tid,
                   child: Padding(
-                    padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
+                    padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(0)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -171,11 +172,15 @@ class TeachTileState extends BaseState<TeachTile>{
                         ),
                         InkWell(
                           onTap: (){
+                            print("delete work");
                             if(widget.cb != null){
                               widget.cb();
                             }
                           },
-                          child: Image.asset("image/ic_fork.png",color: Colors.black12,width: ScreenUtil().setWidth(16),height: ScreenUtil().setWidth(16),),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20),vertical: ScreenUtil().setHeight(10)),
+                            child: Image.asset("image/ic_fork.png",color: Colors.black12,width: ScreenUtil().setWidth(20),height: ScreenUtil().setWidth(20),),
+                          )
                         )
                       ],
                     ),

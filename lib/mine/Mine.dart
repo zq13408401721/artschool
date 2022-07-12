@@ -342,7 +342,7 @@ class MineState extends BaseDialogState{
                 ),
                 alignment: Alignment(0,0),
                 padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setHeight(SizeUtil.getHeight(80))
+                    vertical: ScreenUtil().setHeight(SizeUtil.getHeight(60))
                 ),
                 margin: EdgeInsets.only(
                     right: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
@@ -366,7 +366,7 @@ class MineState extends BaseDialogState{
                 ),
                 alignment: Alignment(0,0),
                 padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setHeight(SizeUtil.getHeight(80))
+                    vertical: ScreenUtil().setHeight(SizeUtil.getHeight(60))
                 ),
                 margin: EdgeInsets.only(
                     left: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
@@ -1007,7 +1007,7 @@ class MineState extends BaseDialogState{
               //用户信息
               _userInfo(),
               //排课图标
-              //role == 1 ? _classCard() : Container(),
+              role == 1 ? _classCard() : Container(),
               _tools(),
               //_teachers(),
               _noticeImage(),
