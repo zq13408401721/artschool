@@ -87,13 +87,15 @@ class ActiveCodePageState extends BaseState<ActiveCodePage>{
         setData("password", this._password);
         saveToken(loginBean.data.userinfo.token);
         String classes = '';
+        String classids = '';
         if(loginBean.data.classes != null && loginBean.data.classes.length > 0){
           loginBean.data.classes.forEach((element) {
             classes += element.name+"、";
+            classids += element.id.toString()+"、";
           });
           classes = classes.substring(0,classes.length-1);
         }
-        saveUser(loginBean.data.userinfo,classes);
+        saveUser(loginBean.data.userinfo,classes,classids);
         //跳转页面
         Navigator.pop(context,true);
       }else{

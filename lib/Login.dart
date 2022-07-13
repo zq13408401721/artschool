@@ -90,14 +90,16 @@ class LoginState extends BaseState<Login>{
     if(result.errno == 0){
       Constant.isLogin = false;
       saveToken(result.data.userinfo.token);
-      String classes = '';
+      String classes = "";
+      String classids = "";
       if(result.data.classes != null && result.data.classes.length > 0){
         result.data.classes.forEach((element) {
           classes += element.name+"、";
+          classids += element.id.toString()+"、";
         });
         classes = classes.substring(0,classes.length-1);
       }
-      await saveUser(result.data.userinfo,classes);
+      await saveUser(result.data.userinfo,classes,classids);
       Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
       //Navigator.pop(context,true);
     }else if(result.errno == 99998){ //跳转到激活页面

@@ -14,9 +14,20 @@ class WorkTile extends StatelessWidget{
   Function clickMark;
   Function clickDelete;
   bool isself;
+  bool isInClass;
 
-  WorkTile({@required this.data,@required this.ismark=false,@required this.clickMark,@required this.clickDelete,@required this.isself}){
+  WorkTile({@required this.data,@required this.ismark=false,@required this.clickMark,@required this.clickDelete,@required this.isself,@required this.isInClass}){
     smallUrl = Constant.parseNewWorkListIconString(data.url,data.width,data.height);
+  }
+
+  bool isShowDelete(){
+    if(this.isself){
+      return false;
+    }
+    if(this.isInClass){
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -78,7 +89,7 @@ class WorkTile extends StatelessWidget{
                       style: Constant.smallTitleTextStyle
                     ),
                     Offstage(
-                      offstage: !this.isself,
+                      offstage: isShowDelete(),
                       child: InkWell(
                         onTap: (){
                           //删除作业

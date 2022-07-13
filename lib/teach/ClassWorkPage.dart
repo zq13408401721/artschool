@@ -202,6 +202,16 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
   }
 
   /**
+   * 是否显示删除按钮 老师身份并且老师在此班级中满足该条件
+   */
+  bool isShowDeleteButton(int cid){
+    if(m_role == 1){
+      return inClass(cid);
+    }
+    return false;
+  }
+
+  /**
    * 作业条目
    */
   Widget workItem(M.Data _data){
@@ -230,7 +240,7 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
             //StaggeredTile.count(3,index==0?2:3),
             itemBuilder: (context,index){
               return GestureDetector(
-                child: WorkTile(data: _data.works[index],ismark: m_role == 1,clickMark: (){
+                child: WorkTile(data: _data.works[index],ismark: m_role == 1,isInClass:isShowDeleteButton(_data.classid),clickMark: (){
                   //给作业打标记
                   _markWork(_data.works[index],_data.classid);
                 },clickDelete: (){

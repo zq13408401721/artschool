@@ -54,6 +54,8 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   bool isShowDialog = false;
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String,dynamic> deviceData = <String,dynamic>{};
+  //当前用户所在的班级ID
+  List<String> selfclassids = List.empty();
 
 
   @override
@@ -85,6 +87,10 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
             m_nickname = value["nickname"];
             m_role = value["role"];
             m_schoolid = value["schoolid"];
+            String classids = value["classids"];
+            if(classids != null){
+              selfclassids = classids.split("、");
+            }
           }
         });
       }
@@ -325,7 +331,8 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
       "uid":prefs.getString("uid"),
       "classes":prefs.getString("classes"),
       "schoolname":prefs.getString("schoolname"),
-      "phoneno":prefs.getString("phoneno")
+      "phoneno":prefs.getString("phoneno"),
+      "classids":prefs.getString("classids")
     };
     return option;
   }
@@ -341,7 +348,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   /**
    * 保存用户信息
    */
-  void saveUser(Userinfo info,String classes) async{
+  void saveUser(Userinfo info,String classes,String classids) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if(info.avater != null){
       prefs.setString("avater", info.avater);
@@ -355,6 +362,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     prefs.setString("schoolid", info.schoolid);
     prefs.setString("uid", info.uid);
     prefs.setString("classes", classes);
+    prefs.setString("classids", classids);
     prefs.setString("schoolname", info.schoolname);
     if(info.phone != null){
       prefs.setString("phoneno", info.phone);
@@ -377,6 +385,17 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   void saveIssueDate(date,dateId) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(date, dateId);
+  }
+
+  /**
+   * 判断当前用户是否在此班级中
+   */
+  bool inClass(int cid){
+    if(selfclassids != null){
+      int index = selfclassids.indexOf(cid.toString());
+      return index >= 0;
+    }
+    return false;
   }
 
   /**
