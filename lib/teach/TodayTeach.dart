@@ -58,7 +58,7 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
   List<M.Data> dateList=[]; //发布作品班级相关日期数据
   int selectClassId=0;
   String selectClassName=""; //班级名称
-  int page=1,size=3;
+  int page=1,size=10;
 
   TextStyle classSelect;
   TextStyle classNormal;
