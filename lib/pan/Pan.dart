@@ -27,6 +27,9 @@ class PanState extends BaseState{
   final GlobalKey<PanTopTabButtonState> schoolTopTabState = GlobalKey<PanTopTabButtonState>();
   final GlobalKey<PanTopTabButtonState> mineTopTabState = GlobalKey<PanTopTabButtonState>();
 
+  int page = 0;
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -164,6 +167,17 @@ class PanState extends BaseState{
             ),
             //广告栏
             CachedNetworkImage(imageUrl: ""),
+            Expanded(
+              child: IndexedStack(
+                index: page,
+                children: [
+                  //订阅列表页面
+                  /*ColumnSubscriblePage(key:columnSubsriblePageKey,cb: (int cid){
+                    columnListPageKey.currentState.updateColumnSubscrible(cid);
+                  },)*/
+                ],
+              ),
+            ),
             //盘列表
             GridView.builder(
                 shrinkWrap: true,
