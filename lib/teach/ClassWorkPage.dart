@@ -170,11 +170,18 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
   /**
    * 删除作业
    */
-  void deleteWork(int workid){
+  void deleteWork(int workid,String uid){
     var option = {
-      "workid":workid
+      "workid":workid.toString()
     };
-    httpUtil.post(DataUtils.api_workdelete,data:option).then((value){
+    String action;
+    if(uid != null){
+      action = DataUtils.api_workdeletebyteacher;
+      option["uid"] = uid;
+    }else{
+      action = DataUtils.api_workdelete;
+    }
+    httpUtil.post(action,data:option).then((value){
       WorkDeleteBean bean = WorkDeleteBean.fromJson(json.decode(value));
       bool delete=false;
       if(bean.errno == 0){
@@ -246,7 +253,11 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
                 },clickDelete: (){
                   //删除作业
                   showAlertTips(context, "确定删除作业？", (){
-                    deleteWork(_data.works[index].id);
+                    if(_data.works[index].uid == m_uid){
+                      deleteWork(_data.works[index].id,null);
+                    }else{
+                      deleteWork(_data.works[index].id,_data.works[index].uid);
+                    }
                   });
                 },isself: m_uid == _data.works[index].uid,),
                 onTap: (){

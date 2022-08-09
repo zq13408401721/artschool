@@ -413,7 +413,7 @@ class MineState extends BaseDialogState{
           })));
         }else if(_data["id"] == 12){ //关于艺画
           Navigator.push(context, MaterialPageRoute(builder: (context) =>
-              WebStage(url: 'http://res.yimios.com:9050/html/yihua.html', title: "")
+              WebStage(url: 'https://yihua.my.qingzhan.com/', title: "")
           ));
         }else if(_data["id"] == 13){ //提意见
           Navigator.push(context, MaterialPageRoute(builder: (context) =>

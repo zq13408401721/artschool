@@ -80,6 +80,7 @@ class DataUtils{
   static const String api_workputscore = "work/putWorkScore"; //作业打分
   static const String api_getworkscorebyworkid = "work/getWorkScoreByWorkid"; //获取作业分数
   static const String api_workdelete = "work/deleteWork";  //删除作业
+  static const String api_workdeletebyteacher = "work/deleteWorkByTeacher"; //老师删除学生作业
 
   static const String api_queryteacherbyschool = "home/queryTeacherBySchool"; //查询学校老师
   static const String api_pushnotice = "notice/pushNotice"; //发布公告
