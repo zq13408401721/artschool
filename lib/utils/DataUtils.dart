@@ -30,9 +30,31 @@ class DataUtils{
   static const String api_issuedateid = "issue/issueDateId"; //发布图片的日期id
   static const String api_issuedateidbyclass = "issue/issueDateIdByClass"; //获取发布作品班级对应的日期数据
   static const String api_issuedeletegallery = "issue/issueDeleteGallery"; //删除课堂对应的图片作品
+
+  /********************pan******************************/
+  static const String api_panclassify = "pan/panClassify"; //网盘分类
+  static const String api_panmark = "pan/panMark"; //网盘分类对应的标记
   static const String api_pantabs = "pan/panTabs"; //获取网盘的tabs
   static const String api_pancreate = "pan/createPan"; //创建网盘
+  // schoolid uid不传 获取全部网盘数据，schoolid学校网盘数据 uid我的网盘数据
   static const String api_panlist = "pan/panlist";  // 获取网盘数据
+  static const String api_querymypan = "pan/queryMyPan"; //查询我的网盘
+  static const String api_searchpan = "pan/searchPan"; //网盘搜索
+  static const String api_queryuserdetail = "pan/queryUserDetail"; //用户详情
+  static const String api_queryuserpan = "pan/queryUserPan"; //查询用户网盘
+  static const String api_queryuserpanimage = "pan/queryUserPanImage"; //查询用户网盘文件数据
+  static const String api_queryuserfollow = "pan/queryUserFollow"; //查询粉丝和关注用户列表
+  static const String api_adduserfollow = "pan/addUserFollow"; //添加关注数据
+  static const String api_pantopping = "pan/panTopping"; //网盘排序
+  static const String api_panfiletopping = "pan/panFileTopping"; //网盘文件排序
+  static const String api_pancopy = "pan/copyPan"; //复制网盘
+  static const String api_pancopyfile = "pan/copyPanFile"; //复制网盘文件
+  static const String api_addpanfilelike = "pan/addPanFileLike"; //添加网盘文件like
+  static const String api_deletepan = "pan/deletePan"; //删除网盘
+  static const String api_deletepanfile = "pan/deletePanFile"; //删除网盘文件
+  static const String api_deletepanfilelike = "pan/deletePanFileLike"; //删除网盘文件like
+
+
   static const String api_panfoldercreate = "pan/createPanFolder"; //创建网盘目录
   static const String api_panfolderlist = "pan/panFolderList"; //盘目录列表
   static const String api_panupload = "pan_upload"; //盘文件上传
@@ -40,6 +62,8 @@ class DataUtils{
   static const String api_pandeletefile = "pan/deletePanFile"; //删除网盘文件
   static const String api_pandeletefolder = "pan/deletePanFolder"; //删除文件夹
   static const String api_pandelete = "pan/deletePan"; //删除网盘
+
+
   static const String api_getschoolteacher = "shared/getSchoolTeacher"; //获取学校老师
   static const String api_getsharedteacher = "shared/getSharedTeacher"; //获取分享的选择老师
   static const String api_addsharedteacher = "shared/addSharedTeacher"; //添加分享的老师
@@ -114,6 +138,7 @@ class DataUtils{
   static const String api_loadmorespecialcolumnlist = "column/loadMoreSpecialColumnList";  //加载更多专栏列表
   static const String api_deletegallerybycolumn = "column/deleteColumnGallery"; //删除专栏图片
   static const String api_deletecolumn = "column/deleteColumn"; //删除专栏
+
 
   /********************music and mv *******************/
   static const String api_loadmv = "other/loadMV"; //获取MV数据

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yhschool/BaseEditorState.dart';
 import 'package:yhschool/BaseState.dart';
-import 'package:yhschool/PanFile.dart';
 import 'package:yhschool/bean/pan_create_folder_bean.dart' as Folder;
 import 'package:yhschool/bean/pan_delete_folder.dart' as DeleteFolder;
 import 'package:yhschool/bean/pan_folder_bean.dart';
@@ -283,9 +282,7 @@ class PanFoldersState extends BaseEditorState<PanFolders>{
                                 }
                               });
                             }else{
-                              Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                  PanFile(folderid: list[index].id,foldername: list[index].name,isShowMore: this.isShowMore,)
-                              ));
+
                             }
                           },
                           child: Container(

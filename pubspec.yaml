@@ -221,6 +221,18 @@ flutter:
     - image/ic_school.png
     - image/ic_comment.png
     - image/ic_work_mark.png
+    - image/ic_search.png
+    - image/ic_unenable_teacher.png
+    - image/ic_enable_teacher.png
+    - image/ic_pan_screen.png
+    - image/ic_pan_create.png
+    - image/ic_pan_copy.png
+    - image/ic_pan_top.png
+    - image/ic_pan_toped.png
+    - image/ic_pan_delete.png
+    - image/ic_pan_editor.png
+    - image/ic_pan_unlike.png
+    - image/ic_pan_like.png
     - videos/login_page.mp4
     - videos/x2/login_page_x2.mp4
     - videos/x2/login_page_android_x2.mp4

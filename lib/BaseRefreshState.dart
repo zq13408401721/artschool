@@ -13,6 +13,7 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
 
   bool isShowAdvert = false;
   dynamic advertData = null;
+
   ScrollController _scrollController;
 
   @override
@@ -152,6 +153,72 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
         ],
       ),
     );
+  }
+
+  //置顶网盘
+  Future<bool> showPanTopping() async{
+    bool _bool = false;
+    await showDialog(context: context, builder: (context){
+      return StatefulBuilder(builder: (context,state){
+        return FractionallySizedBox(
+          widthFactor: 2/3,
+          heightFactor: 1/6,
+          child: Card(
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeUtil.getAppWidth(20),
+                  vertical: SizeUtil.getAppHeight(20)
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("是否置顶本网盘?",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                  SizedBox(height: SizeUtil.getHeight(20),),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            _bool = true;
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
+                            padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
+                            ),
+                            child: Text("确定",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                          ),
+                        ),
+                        InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
+                              padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
+                              ),
+                              child: Text("取消",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                            )
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      });
+    });
+    return _bool;
   }
 
   @override

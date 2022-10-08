@@ -20,6 +20,7 @@ import 'package:yhschool/VersionState.dart';
 import 'dart:io';
 
 import 'package:yhschool/Video.dart';
+import 'package:yhschool/pan/PanPage.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/EnumType.dart';
 import 'package:yhschool/utils/EventBusUtils.dart';
@@ -63,6 +64,8 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
   final GlobalKey<ColumnPageState> columnPageStateKey = GlobalKey<ColumnPageState>();
   //课堂全局状态
   final GlobalKey<TeachState> teachStateKey = GlobalKey<TeachState>();
+  //网盘
+  final GlobalKey<PanPageState> panPageStateKey = GlobalKey<PanPageState>();
 
   final List<List<String>> barIcons = [
     ["image/ic_tab_video_normal.png","image/ic_tab_video_select.png"],
@@ -133,7 +136,8 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
       Teach(key: teachStateKey,callBack: (CMD_MINE _cmd,bool _bool,dynamic data){
         _parseMineCMD(cmd: _cmd, data: data, isbool: _bool);
       },),
-      ColumnPage(key: columnPageStateKey,),
+      //ColumnPage(key: columnPageStateKey,),
+      PanPage(key:panPageStateKey),
       Mine(key:mineStateKey,callBack:(CMD_MINE _cmd,bool _bool,dynamic data){
         _parseMineCMD(cmd: _cmd, data: data, isbool: _bool);
       },)

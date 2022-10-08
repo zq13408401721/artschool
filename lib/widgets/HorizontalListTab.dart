@@ -28,7 +28,9 @@ class HorizontalListTabState extends BaseState<HorizontalListTab>{
     super.initState();
     normalStyle = TextStyle(color: Colors.black87,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)));
     selectStyle = TextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)));
-
+    if(widget.datas.length > 0) {
+      _resetSelect(widget.datas[0].id);
+    }
   }
 
   void _resetSelect(int id){

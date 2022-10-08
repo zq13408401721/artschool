@@ -13,6 +13,8 @@ class PanTitle extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(10))),
       child: Row(
         children: [
           InkWell(

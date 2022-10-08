@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yhschool/utils/Constant.dart';
 
 class SizeUtil{
@@ -23,6 +24,18 @@ class SizeUtil{
 
   static double getFontSize(double value){
     return Constant.isPad ? value * 1 : value * Constant.FONT_SCALE;
+  }
+
+  static double getAppWidth(double value){
+    return ScreenUtil().setWidth(getWidth(value));
+  }
+
+  static double getAppHeight(double value){
+    return ScreenUtil().setHeight(getHeight(value));
+  }
+
+  static double getAppFontSize(double value){
+    return ScreenUtil().setSp(getFontSize(value));
   }
 
 }

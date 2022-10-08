@@ -18,7 +18,7 @@ class ColumnListBean {
     _errno = errno;
     _errmsg = errmsg;
     _data = data;
-}
+  }
 
   ColumnListBean.fromJson(dynamic json) {
     _errno = json['errno'];

@@ -73,8 +73,8 @@ var httpUtilJson = HttpUtil(
 
 //图片上传
 var httpUpload = HttpUtil(
-  baseUrl: "http://res.yimios.com:9060/api/",
-  //baseUrl: "http://192.168.0.179:12000/api/",
+  //baseUrl: "http://res.yimios.com:9060/api/",
+  baseUrl: "http://192.168.0.194:10001/api/",
   header: headers
 );
 

@@ -32,8 +32,9 @@ class UploadDialog extends StatefulWidget{
   List<int> classids; //选中需要发布的班级id
   UploadType uploadType; //上传图片功能列表
   String date; //排课日期
+  String panid; //网盘id
   
-  UploadDialog({Key key,@required this.list,@required this.classids,@required this.date,@required this.uploadType=UploadType.ISSUE}):super(key: key);
+  UploadDialog({Key key,@required this.list,@required this.classids,@required this.date,@required this.panid,@required this.uploadType=UploadType.ISSUE}):super(key: key);
   @override
   State<StatefulWidget> createState() {
     return UploadState()
@@ -61,7 +62,11 @@ class UploadState extends BaseState<UploadDialog>{
     //先进行图片压缩
     _compressFile().then((value){
       if(value){
-        _galleryPlan();
+        if(widget.uploadType == UploadType.PAN){
+          _submitPan();
+        }else{
+          _galleryPlan();
+        }
       }
     });
     //dateInfo();
@@ -203,6 +208,64 @@ class UploadState extends BaseState<UploadDialog>{
       });
       //上传图片
       httpIssueUpload.post(DataUtils.api_issueupload, data: formdata).then((value) {
+        print("图片上传成功：${value}");
+        loaded++;
+        setState(() {
+          updateImgsState(localFile.filename, "成功");
+          if(current < total){
+            current ++;
+          }
+          //上传完成
+          if(loaded >= imgs.length){
+            Navigator.pop(context);
+          }
+        });
+      }).catchError((err){
+        showToast("文件上传失败：${localFile.filename} "+err.toString());
+        loaded++;
+        setState(() {
+          updateImgsState(localFile.filename, "失败");
+          if(current < total){
+            current ++;
+          }
+          //上传完成
+          if(loaded >= imgs.length){
+            Navigator.pop(context);
+          }
+        });
+      });
+    }
+  }
+
+  /**
+   * 网盘数据提交
+   */
+  void _submitPan() async{
+    List<MultipartFile> imageList = new List<MultipartFile>();
+    String uid = await getUid();
+    int loaded = 0;
+    int index = 0;
+    int time = DateTime.now().millisecondsSinceEpoch;
+    for (LocalFile localFile in imgs) {
+      index ++;
+      //将图片转化为二进制
+      File file = new File(localFile.path);
+      List<int> imageData = file.readAsBytesSync();
+      MultipartFile multipartFile = new MultipartFile.fromBytes(
+          imageData,
+          filename: localFile.filename,
+          contentType: MediaType("image", "jpg")
+      );
+      imageList.add(multipartFile);
+      // 开启上传 一张图对应会有多个班级日期数据，这里的dateid改为多个
+      FormData formdata = new FormData.fromMap({
+        "file": multipartFile,
+        "panid": widget.panid,
+        "date": time+index,
+        "uid": uid
+      });
+      //上传图片
+      httpIssueUpload.post(DataUtils.api_panupload, data: formdata).then((value) {
         print("图片上传成功：${value}");
         loaded++;
         setState(() {

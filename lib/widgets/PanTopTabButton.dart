@@ -8,9 +8,7 @@ class PanTopTabButton extends StatefulWidget{
   String tab;
   int index;
 
-  TextStyle nameSelect;
-  TextStyle nameStyle;
-  TextStyle tabStyle;
+
 
   Function clickCB;
 
@@ -18,18 +16,29 @@ class PanTopTabButton extends StatefulWidget{
 
   @override
   State<StatefulWidget> createState() {
-
-    nameSelect = new TextStyle(color: Colors.red,fontSize: ScreenUtil().setSp(36));
-    nameStyle = new TextStyle(color: Colors.grey,fontSize: ScreenUtil().setSp(30));
-    tabStyle = new TextStyle(color: Colors.grey,fontSize: ScreenUtil().setSp(25));
-
     return new PanTopTabButtonState();
   }
 }
 
 class PanTopTabButtonState extends State<PanTopTabButton>{
 
-  bool _select;
+  TextStyle nameSelect;
+  TextStyle nameStyle;
+  TextStyle tabStyle;
+
+  bool _select = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    nameSelect = new TextStyle(color: Colors.red,fontSize: ScreenUtil().setSp(36));
+    nameStyle = new TextStyle(color: Colors.grey,fontSize: ScreenUtil().setSp(30));
+    tabStyle = new TextStyle(color: Colors.grey,fontSize: ScreenUtil().setSp(25));
+    if(widget.index == 0){
+      select(true);
+    }
+  }
 
   /**
    * 选中
@@ -42,18 +51,20 @@ class PanTopTabButtonState extends State<PanTopTabButton>{
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: (){
-        if(widget.clickCB != null){
-          widget.clickCB(widget.index);
-        }
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(widget.name,style: _select ? widget.nameSelect : widget.nameStyle,),
-          Text(widget.tab,style: widget.tabStyle,)
-        ],
+    return Container(
+      child: InkWell(
+        onTap: (){
+          if(widget.clickCB != null){
+            widget.clickCB(widget.index);
+          }
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(widget.name,style: _select ? nameSelect : nameStyle,),
+            Text(widget.tab,style: tabStyle,)
+          ],
+        ),
       ),
     );
   }

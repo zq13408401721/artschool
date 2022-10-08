@@ -11,7 +11,6 @@ import 'package:package_info/package_info.dart';
 import 'package:yhschool/BaseDialogState.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/Login.dart';
-import 'package:yhschool/PanPage.dart';
 import 'package:yhschool/WebStage.dart';
 import 'package:yhschool/bean/edit_user_info_bean.dart';
 import 'package:yhschool/bean/my_work_bean.dart' as W;

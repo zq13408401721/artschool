@@ -509,6 +509,18 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     return policy;
   }
 
+  Future<bool> savePanVisible(bool select) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _bool = await prefs.setBool("panvisible",select);
+    return _bool;
+  }
+
+  Future<bool> getPanVisible() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _bool = await prefs.getBool("panvisible");
+    return _bool;
+  }
+
   /**
    * 显示toast
    */

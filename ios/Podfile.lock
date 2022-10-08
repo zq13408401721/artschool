@@ -15,7 +15,7 @@ PODS:
   - Flutter (1.0.0)
   - flutter_absolute_path (0.0.1):
     - Flutter
-  - flutter_image_compress (0.0.1):
+  - flutter_image_compress (1.0.0):
     - Flutter
     - Mantle
     - SDWebImage
@@ -181,7 +181,7 @@ SPEC CHECKSUMS:
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_absolute_path: 5adb13678c88f0bdfba527f3851f9543d01dde66
-  flutter_image_compress: fd2b476345226e1a10ea352fa306af95704642c1
+  flutter_image_compress: 5a5e9aee05b6553048b8df1c3bc456d0afaac433
   flutter_native_image: 9c0b7451838484458e5b0fae007b86a4c2d4bdfe
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
