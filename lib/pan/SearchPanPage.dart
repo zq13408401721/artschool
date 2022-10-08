@@ -11,6 +11,7 @@ import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
 
 import '../bean/pan_search.dart';
+import '../bean/User_search.dart' as U;
 import '../utils/SizeUtil.dart';
 
 class SearchPanPage extends StatefulWidget{
@@ -38,6 +39,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
 
   List<Data> searchList = [];
   List<String> historyList = [];
+  List<U.Data> searchUsers = [];
 
   @override
   void initState() {
@@ -51,6 +53,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
   void search(){
     if(searchword != null){
       searchList = [];
+      querySearch();
     }
   }
 
@@ -67,7 +70,8 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
       if(value != null){
         print("search result:$value");
         if(option["type"] != null){
-
+          U.UserSearch userSearch = U.UserSearch.fromJson(json.decode(value));
+          searchUsers.addAll(userSearch.data);
         }else{
           PanSearch panSearch = PanSearch.fromJson(json.decode(value));
           searchList.addAll(panSearch.data);
@@ -115,7 +119,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
     );
   }
 
-  Widget userItem(Data data){
+  Widget userItem(U.Data data){
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5))
@@ -124,9 +128,10 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
         children: [
           Center(
             child: ClipOval(
-              child: CachedNetworkImage(imageUrl: "",),
-            ),
-          )
+              child: (data.avater == null || data.avater.length == 0)
+                  ? Image.asset("image/ic_head.png",width: ScreenUtil().setWidth(50),height: ScreenUtil().setWidth(50),fit: BoxFit.cover,)
+                  : CachedNetworkImage(imageUrl: data.avater,width: ScreenUtil().setWidth(50),height: ScreenUtil().setWidth(50),fit: BoxFit.cover),
+            )),
         ],
       ),
     );
@@ -270,9 +275,10 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("共有40个相关网盘",style: Constant.smallTitleTextStyle,),
-          /*StaggeredGridView.countBuilder(
-            crossAxisCount: Constant.isPad ? 3 : 2,
-              itemCount: searchList.length,
+          Expanded(
+            child: StaggeredGridView.countBuilder(
+              crossAxisCount: Constant.isPad ? 3 : 2,
+              itemCount: searchType == "用户" ? searchUsers.length : searchList.length,
               //primary: false,
               physics: BouncingScrollPhysics(),
               mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(Constant.DIS_LIST)),
@@ -283,14 +289,11 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
               staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
               //StaggeredTile.count(3,index==0?2:3),
               itemBuilder: (context,index){
-                return GestureDetector(
-                  child: panItem(searchList[index]),
-                  onTap:(){
-
-                  },
-                );
+                return searchType == "用户" ? userItem(searchUsers[index]) : panItem(searchList[index]);
               },
-          )*/
+            ),
+          )
+
         ],
       ),
     );
