@@ -11,7 +11,7 @@ import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
 
 import '../bean/pan_search.dart';
-import '../bean/User_search.dart' as U;
+import '../bean/user_search.dart' as U;
 import '../utils/SizeUtil.dart';
 
 class SearchPanPage extends StatefulWidget{
@@ -36,15 +36,16 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
   String searchType;
   int page = 1;
   int size = 10;
+  int total = 0;
 
-  List<Data> searchList = [];
+  List<Result> searchList = [];
   List<String> historyList = [];
-  List<U.Data> searchUsers = [];
+  List<U.Result> searchUsers = [];
 
   @override
   void initState() {
     super.initState();
-    _scrollController = initScrollController();
+    _scrollController = initScrollController(isfresh: false);
   }
 
   /**
@@ -65,16 +66,22 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
     };
     if(searchType != null && searchType == "用户"){
       option["type"] = "1";
+      option["size"] = 30;
     }
     httpUtil.post(DataUtils.api_searchpan,data: option).then((value){
+      hideRefreshing();
+      hideLoadMore();
       if(value != null){
         print("search result:$value");
+        page++;
         if(option["type"] != null){
           U.UserSearch userSearch = U.UserSearch.fromJson(json.decode(value));
-          searchUsers.addAll(userSearch.data);
+          total = userSearch.data.total;
+          searchUsers.addAll(userSearch.data.result);
         }else{
           PanSearch panSearch = PanSearch.fromJson(json.decode(value));
-          searchList.addAll(panSearch.data);
+          total = panSearch.data.total;
+          searchList.addAll(panSearch.data.result);
         }
       }
       setState(() {
@@ -82,33 +89,80 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
     });
   }
 
+  void clearList(){
+    if(searchType == null || searchType == "网盘"){
+      searchList.clear();
+    }else{
+      searchUsers.clear();
+    }
+    total = 0;
+    page = 1;
+    setState(() {
+    });
+  }
+
   //panitem
-  Widget panItem(Data data){
+  Widget panItem(Result data){
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
+        color: Colors.white
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //CachedNetworkImage(imageUrl: data.),
-          Text("title"),
-          Text("author"),
-          Text("P100"),
+          CachedNetworkImage(imageUrl: data.url),
+          Container(
+            padding: EdgeInsets.symmetric(
+              vertical: SizeUtil.getAppHeight(10),
+              horizontal: SizeUtil.getAppWidth(20)
+            ),
+            child: Text(data.name,style: Constant.titleTextStyleNormal,),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
+                vertical: SizeUtil.getAppHeight(10),
+                horizontal: SizeUtil.getAppWidth(20)
+            ),
+            child: Text(data.nickname != null ? data.nickname : data.username,style: Constant.smallTitleTextStyle,),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
+                vertical: SizeUtil.getAppHeight(10),
+                horizontal: SizeUtil.getAppWidth(20)
+            ),
+            child: Text("P${data.num}",style: TextStyle(color: Colors.grey[300],fontSize: SizeUtil.getAppFontSize(36),fontWeight: FontWeight.bold),),
+          ),
           Align(
             alignment:Alignment.centerRight,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 //copy
                 InkWell(
                   onTap: (){
 
                   },
-                  child: Image.asset("image/ic_copy.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: SizeUtil.getAppWidth(20),
+                      vertical: SizeUtil.getAppHeight(10)
+                    ),
+                    child: Image.asset("image/ic_pan_copy.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
+                  ),
                 ),
                 //关注
                 InkWell(
                   onTap: (){
 
                   },
-                  child: Image.asset("image/ic_like.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: SizeUtil.getAppWidth(20),
+                        vertical: SizeUtil.getAppHeight(10)
+                    ),
+                    child: Image.asset("image/ic_pan_like.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
+                  ),
                 )
 
               ],
@@ -119,19 +173,41 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
     );
   }
 
-  Widget userItem(U.Data data){
+  Widget userItem(U.Result data){
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5))
+        borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
+        border: Border.all(color: Colors.grey[400],width: SizeUtil.getAppWidth(1))
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
-            child: ClipOval(
-              child: (data.avater == null || data.avater.length == 0)
-                  ? Image.asset("image/ic_head.png",width: ScreenUtil().setWidth(50),height: ScreenUtil().setWidth(50),fit: BoxFit.cover,)
-                  : CachedNetworkImage(imageUrl: data.avater,width: ScreenUtil().setWidth(50),height: ScreenUtil().setWidth(50),fit: BoxFit.cover),
-            )),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: SizeUtil.getAppHeight(40)
+              ),
+              child: ClipOval(
+                child: (data.avater == null || data.avater.length == 0)
+                    ? Image.asset("image/ic_head.png",width: ScreenUtil().setWidth(120),height: ScreenUtil().setWidth(120),fit: BoxFit.cover,)
+                    : CachedNetworkImage(imageUrl: data.avater,width: ScreenUtil().setWidth(120),height: ScreenUtil().setWidth(120),fit: BoxFit.cover),
+              ),
+            )
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: SizeUtil.getAppWidth(20),
+              vertical: SizeUtil.getAppHeight(10)
+            ),
+            child: Text(data.nickname != null ? data.nickname : data.username,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),fontWeight: FontWeight.bold),),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: SizeUtil.getAppWidth(20),
+              vertical: SizeUtil.getAppHeight(10)
+            ),
+            child: Text("${data.fansnum}粉丝",style: Constant.smallTitleTextStyle,),
+          )
         ],
       ),
     );
@@ -141,7 +217,8 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
   Widget addHeaderWidget() {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: SizeUtil.getAppWidth(40)
+        horizontal: SizeUtil.getAppWidth(40),
+        vertical: SizeUtil.getAppHeight(40)
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +229,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
             },
             child: Container(
               padding: EdgeInsets.symmetric(
-                vertical: SizeUtil.getAppHeight(40)
+                vertical: SizeUtil.getAppHeight(20)
               ),
               child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
             ),
@@ -177,6 +254,9 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
                   ),
                   onChanged: (value){
                     searchword = value;
+                    if(searchword.length == 0){
+                      clearList();
+                    }
                   },
                 ),
               ),
@@ -274,7 +354,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("共有40个相关网盘",style: Constant.smallTitleTextStyle,),
+          Text("共有$total个相关网盘",style: Constant.smallTitleTextStyle,),
           Expanded(
             child: StaggeredGridView.countBuilder(
               crossAxisCount: Constant.isPad ? 3 : 2,
