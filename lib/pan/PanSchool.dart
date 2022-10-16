@@ -99,7 +99,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(imageUrl: item.url),
+            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url)),
             Padding(padding: EdgeInsets.only(
               left: SizeUtil.getAppWidth(20),
               right: SizeUtil.getAppWidth(20),

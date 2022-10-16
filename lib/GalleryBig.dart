@@ -18,7 +18,7 @@ class GalleryBig extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     return GalleryBigState()
-        .._imgUrl = Constant.parseBigImageString(imgUrl, width*3, height*3,90)
+        .._imgUrl = imageType == BigImageType.pan ? imgUrl : Constant.parseBigImageString(imgUrl, width*3, height*3,90)
         ..imageType = imageType;
   }
 

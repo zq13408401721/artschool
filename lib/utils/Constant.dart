@@ -214,6 +214,14 @@ class Constant{
   }
 
   /**
+   * 网盘小图
+   */
+  static String parsePanSmallString(String url){
+    if(url == null) return "";
+    return url.replaceFirst("res.yimios.com:9050/pan", "res.yimios.com:9050/pan/small");
+  }
+
+  /**
    * 今日课堂小图
    */
   static String parseIssueSmallString(String url){
@@ -317,11 +325,6 @@ class Constant{
     }
   }
 
-
-  static String parsePanSmallString(String url,String host){
-    return url.replaceFirst(host, "res.yimios.com:9070/pan/small");
-  }
-
   static String parsePanString(String url ,String port){
     return url.replaceFirst(port, "9070");
   }
@@ -419,5 +422,13 @@ class Constant{
       if(result == null) result = element.toString() else result = '$result,$element'
     });
     return result;
+  }
+
+  /**
+   * 角色名
+   */
+  static String parseRole(int role){
+    if(role == null || role == 0) return "";
+    return role == 1 ? "老师" : "学生";
   }
 }

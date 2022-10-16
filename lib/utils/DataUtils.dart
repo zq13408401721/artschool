@@ -43,6 +43,9 @@ class DataUtils{
   static const String api_queryuserdetail = "pan/queryUserDetail"; //用户详情
   static const String api_queryuserpan = "pan/queryUserPan"; //查询用户网盘
   static const String api_queryuserpanimage = "pan/queryUserPanImage"; //查询用户网盘文件数据
+  static const String api_querypanimagebyuser = "pan/queryPanImageByUser"; //查询用户的网盘图片数据
+  static const String api_queryusercourse = "pan/queryUserCourse"; //查询用户的课程
+  static const String api_queryuserlikepanimage = "pan/queryUserLikePanImage"; //查询用户喜欢的网盘图片
   static const String api_queryuserfollow = "pan/queryUserFollow"; //查询粉丝和关注用户列表
   static const String api_adduserfollow = "pan/addUserFollow"; //添加关注数据
   static const String api_pantopping = "pan/panTopping"; //网盘排序

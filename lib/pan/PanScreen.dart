@@ -132,7 +132,7 @@ class PanScreenState extends BaseState<PanScreen>{
                         },
                         child: Container(
                           padding: EdgeInsets.all(ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                          child: Image.asset("image/ic_fork.png",width: ScreenUtil().setWidth(16),height:  ScreenUtil().setWidth(16),),
+                          child: Image.asset("image/ic_fork.png",width:SizeUtil.getAppWidth(40),height:SizeUtil.getAppWidth(40),),
                         ),
                       ),
                     )

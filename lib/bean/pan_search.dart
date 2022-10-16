@@ -1,5 +1,5 @@
-class UserSearch {
-  UserSearch({
+class PanSearch {
+  PanSearch({
       int errno, 
       String errmsg, 
       Data data,}){
@@ -8,7 +8,7 @@ class UserSearch {
     _data = data;
 }
 
-  UserSearch.fromJson(dynamic json) {
+  PanSearch.fromJson(dynamic json) {
     _errno = json['errno'];
     _errmsg = json['errmsg'];
     _data = json['data'] != null ? Data.fromJson(json['data']) : null;
@@ -69,57 +69,80 @@ class Data {
 
 class Result {
   Result({
-      String username, 
+      String panid, 
+      String name, 
+      dynamic url, 
+      dynamic width, 
+      dynamic height, 
       dynamic nickname, 
-      dynamic avater, 
-      int role, 
-      int follow, 
-      int fansnum,
-      String uid,}){
-    _username = username;
+      String username,
+      String uid,
+      String avater,
+      String date,
+      int num,}){
+    _panid = panid;
+    _name = name;
+    _url = url;
+    _width = width;
+    _height = height;
     _nickname = nickname;
-    _avater = avater;
-    _role = role;
-    _follow = follow;
-    _fansnum = fansnum;
+    _username = username;
     _uid = uid;
-
+    _avater = avater;
+    _num = num;
+    _date = date;
 }
 
   Result.fromJson(dynamic json) {
-    _username = json['username'];
+    _panid = json['panid'];
+    _name = json['name'];
+    _url = json['url'];
+    _width = json['width'];
+    _height = json['height'];
     _nickname = json['nickname'];
-    _avater = json['avater'];
-    _role = json['role'];
-    _follow = json['follow'];
-    _fansnum = json['fansnum'];
+    _username = json['username'];
     _uid = json['uid'];
+    _avater = json['avater'];
+    _num = json['num'];
+    _date = json['date'];
   }
-  String _username;
+  String _panid;
+  String _name;
+  dynamic _url;
+  dynamic _width;
+  dynamic _height;
   dynamic _nickname;
-  dynamic _avater;
-  int _role;
-  int _follow;
-  int _fansnum;
+  String _username;
   String _uid;
+  String _avater;
+  String _date;
+  int _num;
 
-  String get username => _username;
+  String get panid => _panid;
+  String get name => _name;
+  dynamic get url => _url;
+  dynamic get width => _width;
+  dynamic get height => _height;
   dynamic get nickname => _nickname;
-  dynamic get avater => _avater;
-  int get role => _role;
-  int get follow => _follow;
-  int get fansnum => _fansnum;
+  String get username => _username;
   String get uid => _uid;
+  String get avater => _avater;
+  int get num => _num;
+  String get date => _date;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['username'] = _username;
+    map['panid'] = _panid;
+    map['name'] = _name;
+    map['url'] = _url;
+    map['width'] = _width;
+    map['height'] = _height;
     map['nickname'] = _nickname;
-    map['avater'] = _avater;
-    map['role'] = _role;
-    map['follow'] = _follow;
-    map['fansnum'] = _fansnum;
+    map['username'] = _username;
     map['uid'] = _uid;
+    map['avater'] = _avater;
+    map['num'] = _num;
+    map['date'] = _date;
     return map;
   }
 

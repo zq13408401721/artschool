@@ -11,6 +11,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:yhschool/BaseCoustRefreshState.dart';
 import 'package:yhschool/bean/pan_file_bean.dart' as F;
 import 'package:yhschool/bean/pan_list_bean.dart';
+import 'package:yhschool/pan/PanImageDetail.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/EnumType.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
@@ -239,6 +240,9 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
       child: InkWell(
         onTap: (){
           //进入网盘详情页面
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return PanImageDetail(panData: widget.panData);
+          }));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

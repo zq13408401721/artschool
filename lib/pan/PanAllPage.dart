@@ -132,7 +132,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(imageUrl: item.url),
+            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url)),
             Padding(padding: EdgeInsets.only(
               left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
               right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),

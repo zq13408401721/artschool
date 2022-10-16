@@ -6,13 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:yhschool/BaseHeaderRefreshState.dart';
+import 'package:yhschool/pan/PanUserDetail.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
+import 'package:yhschool/bean/pan_list_bean.dart' as P;
+
 
 import '../bean/pan_search.dart';
 import '../bean/user_search.dart' as U;
 import '../utils/SizeUtil.dart';
+import 'PanDetailPage.dart';
 
 class SearchPanPage extends StatefulWidget{
 
@@ -103,112 +107,144 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
 
   //panitem
   Widget panItem(Result data){
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
-        color: Colors.white
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CachedNetworkImage(imageUrl: data.url),
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: SizeUtil.getAppHeight(10),
-              horizontal: SizeUtil.getAppWidth(20)
+    return InkWell(
+      onTap: (){
+        P.Data item = new P.Data(
+          panid: data.panid,
+          name: data.name,
+          uid: data.uid,
+          avater: data.avater,
+          username: data.username,
+          nickname: data.nickname,
+          imagenum: data.num,
+          date: data.date,
+          url: data.url
+        );
+        //进入网盘详情页面
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return PanDetailPage(panData: item,isself: item.uid == m_uid,);
+        }));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
+            color: Colors.white
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(data.url)),
+            Container(
+              padding: EdgeInsets.symmetric(
+                  vertical: SizeUtil.getAppHeight(10),
+                  horizontal: SizeUtil.getAppWidth(20)
+              ),
+              child: Text(data.name,style: Constant.titleTextStyleNormal,),
             ),
-            child: Text(data.name,style: Constant.titleTextStyleNormal,),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(
-                vertical: SizeUtil.getAppHeight(10),
-                horizontal: SizeUtil.getAppWidth(20)
+            Container(
+              padding: EdgeInsets.symmetric(
+                  vertical: SizeUtil.getAppHeight(10),
+                  horizontal: SizeUtil.getAppWidth(20)
+              ),
+              child: Text(data.nickname != null ? data.nickname : data.username,style: Constant.smallTitleTextStyle,),
             ),
-            child: Text(data.nickname != null ? data.nickname : data.username,style: Constant.smallTitleTextStyle,),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(
-                vertical: SizeUtil.getAppHeight(10),
-                horizontal: SizeUtil.getAppWidth(20)
+            Container(
+              padding: EdgeInsets.symmetric(
+                  vertical: SizeUtil.getAppHeight(10),
+                  horizontal: SizeUtil.getAppWidth(20)
+              ),
+              child: Text("P${data.num}",style: TextStyle(color: Colors.grey[300],fontSize: SizeUtil.getAppFontSize(36),fontWeight: FontWeight.bold),),
             ),
-            child: Text("P${data.num}",style: TextStyle(color: Colors.grey[300],fontSize: SizeUtil.getAppFontSize(36),fontWeight: FontWeight.bold),),
-          ),
-          Align(
-            alignment:Alignment.centerRight,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                //copy
-                InkWell(
-                  onTap: (){
+            Align(
+              alignment:Alignment.centerRight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  //copy
+                  Offstage(
+                    offstage: m_uid == data.uid,
+                    child: InkWell(
+                      onTap: (){
 
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: SizeUtil.getAppWidth(20),
-                      vertical: SizeUtil.getAppHeight(10)
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: SizeUtil.getAppWidth(20),
+                            vertical: SizeUtil.getAppHeight(10)
+                        ),
+                        child: Image.asset("image/ic_pan_copy.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
+                      ),
                     ),
-                    child: Image.asset("image/ic_pan_copy.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
                   ),
-                ),
-                //关注
-                InkWell(
-                  onTap: (){
+                  //关注
+                  Offstage(
+                    offstage: m_uid == data.uid,
+                    child: InkWell(
+                      onTap: (){
 
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: SizeUtil.getAppWidth(20),
-                        vertical: SizeUtil.getAppHeight(10)
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: SizeUtil.getAppWidth(20),
+                            vertical: SizeUtil.getAppHeight(10)
+                        ),
+                        child: Image.asset("image/ic_pan_like.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
+                      ),
                     ),
-                    child: Image.asset("image/ic_pan_like.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
-                  ),
-                )
-
-              ],
-            ),
-          )
-        ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
   Widget userItem(U.Result data){
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
-        border: Border.all(color: Colors.grey[400],width: SizeUtil.getAppWidth(1))
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Padding(
+    return InkWell(
+      onTap: (){
+        //进入用户详情页
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return PanUserDetail(data: data,);
+        }));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
+            border: Border.all(color: Colors.grey[400],width: SizeUtil.getAppWidth(1))
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: SizeUtil.getAppHeight(40)
+                  ),
+                  child: ClipOval(
+                    child: (data.avater == null || data.avater.length == 0)
+                        ? Image.asset("image/ic_head.png",width: ScreenUtil().setWidth(120),height: ScreenUtil().setWidth(120),fit: BoxFit.cover,)
+                        : CachedNetworkImage(imageUrl: data.avater,width: ScreenUtil().setWidth(120),height: ScreenUtil().setWidth(120),fit: BoxFit.cover),
+                  ),
+                )
+            ),
+            Padding(
               padding: EdgeInsets.symmetric(
-                vertical: SizeUtil.getAppHeight(40)
+                  horizontal: SizeUtil.getAppWidth(20),
+                  vertical: SizeUtil.getAppHeight(10)
               ),
-              child: ClipOval(
-                child: (data.avater == null || data.avater.length == 0)
-                    ? Image.asset("image/ic_head.png",width: ScreenUtil().setWidth(120),height: ScreenUtil().setWidth(120),fit: BoxFit.cover,)
-                    : CachedNetworkImage(imageUrl: data.avater,width: ScreenUtil().setWidth(120),height: ScreenUtil().setWidth(120),fit: BoxFit.cover),
+              child: Text(data.nickname != null ? data.nickname : data.username,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),fontWeight: FontWeight.bold),),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeUtil.getAppWidth(20),
+                  vertical: SizeUtil.getAppHeight(10)
               ),
+              child: Text("${data.fansnum}粉丝",style: Constant.smallTitleTextStyle,),
             )
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: SizeUtil.getAppWidth(20),
-              vertical: SizeUtil.getAppHeight(10)
-            ),
-            child: Text(data.nickname != null ? data.nickname : data.username,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),fontWeight: FontWeight.bold),),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: SizeUtil.getAppWidth(20),
-              vertical: SizeUtil.getAppHeight(10)
-            ),
-            child: Text("${data.fansnum}粉丝",style: Constant.smallTitleTextStyle,),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

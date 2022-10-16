@@ -35,13 +35,13 @@ class HorizontalListTabState extends BaseState<HorizontalListTab>{
 
   void _resetSelect(int id){
     widget.datas.forEach((element) {
-      setState(() {
-        if(element.id == id){
-          element.select = true;
-        }else{
-          element.select = false;
-        }
-      });
+      if(element.id == id){
+        element.select = true;
+      }else{
+        element.select = false;
+      }
+    });
+    setState(() {
     });
   }
 
