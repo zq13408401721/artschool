@@ -42,6 +42,8 @@ class PanMineState extends BaseRefreshState<PanMine>{
   int pagenum=1,pagesize=10;
   List<Data> panList = [];
   dynamic queryParam;
+  String _marks;
+  int _classifyid;
 
   @override
   void initState() {
@@ -54,6 +56,8 @@ class PanMineState extends BaseRefreshState<PanMine>{
    * 查询网盘列表数据
    */
   void queryPanList({String schoolid,int classifyid,String marks}){
+    this.panList = [];
+    _classifyid = classifyid;
     var param = {
       "page":pagenum.toString(),
       "size":pagesize.toString(),
@@ -61,7 +65,22 @@ class PanMineState extends BaseRefreshState<PanMine>{
       "isself":true
     };
     if(marks != null){
+      _marks = marks;
       param["mark"] = marks;
+    }
+    queryParam = param;
+    _getPanList(param);
+  }
+
+  void _queryMore(){
+    var param = {
+      "page":pagenum.toString(),
+      "size":pagesize.toString(),
+      "classifyid":_classifyid.toString(),
+      "isself":true
+    };
+    if(_marks != null){
+      param["mark"] = _marks;
     }
     queryParam = param;
     _getPanList(param);
@@ -71,6 +90,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
    * 网盘置顶/取消置顶
    */
   void panTopping(int top,String panid){
+    this.panList = [];
     var param = {
       "top":top,
       "panid":panid
@@ -107,15 +127,14 @@ class PanMineState extends BaseRefreshState<PanMine>{
    * 获取网盘数据
    */
   void _getPanList(param){
-    this.panList = [];
     httpUtil.post(DataUtils.api_panlist,data: param).then((value){
       print("mine panlist:$value");
+      hideLoadMore();
       if(value != null){
         var panListBean = PanListBean.fromJson(json.decode(value));
         if(panListBean.errno == 0){
           panList.addAll(panListBean.data);
           setState(() {
-
           });
         }
       }
@@ -238,12 +257,11 @@ class PanMineState extends BaseRefreshState<PanMine>{
 
   @override
   void loadmore() {
-    // TODO: implement loadmore
+    _queryMore();
   }
 
   @override
   void refresh() {
-    // TODO: implement refresh
   }
 
 }

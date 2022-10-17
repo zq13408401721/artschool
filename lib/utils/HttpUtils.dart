@@ -37,7 +37,7 @@ class _ResultErr{
     var map = <String, dynamic>{};
     map['errno'] = _errno;
     map['errmsg'] = _errmsg;
-    map['data'] = "";
+    map['data'] = null;
     return map;
   }
 }
