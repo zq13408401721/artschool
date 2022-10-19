@@ -143,6 +143,53 @@ abstract class BaseCoustRefreshState<T extends StatefulWidget> extends BaseState
     );
   }
 
+  //刷新动画
+  Widget refreshUI(){
+    return isrefreshing ?
+      Center(
+        child: Container(
+          padding: EdgeInsets.symmetric(
+              vertical: ScreenUtil().setHeight(40)
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: ScreenUtil().setWidth(40),
+                height: ScreenUtil().setWidth(40),
+                child: CircularProgressIndicator(color: Colors.red,),
+              ),
+              SizedBox(width: 10,),
+              Text("数据刷新中",style: TextStyle(color: Colors.grey),)
+            ],
+          ),
+        ),
+      ) : SizedBox();
+  }
+
+  Widget loadmoreUI(){
+    return isloading ?
+    Center(
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            vertical: ScreenUtil().setHeight(40)
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: ScreenUtil().setWidth(40),
+              height: ScreenUtil().setWidth(40),
+              child: CircularProgressIndicator(color: Colors.red,),
+            ),
+            SizedBox(width: 10,),
+            Text("加载更多",style: TextStyle(color:Colors.grey,fontSize: ScreenUtil().setSp(30),fontWeight: FontWeight.normal,decoration: TextDecoration.none),)
+          ],
+        ),
+      ),
+    ) : SizedBox();
+  }
+
   @override
   void dispose() {
     if(_scrollController != null){

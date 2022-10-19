@@ -39,17 +39,20 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
 
   int pagenum=1,pagesize=10;
   List<Data> panList = [];
+  dynamic panParam;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = initScrollController();
+    _scrollController = initScrollController(isfresh: false);
   }
 
   /**
    * 查询网盘列表数据
    */
   void queryPanList({String schoolid,int classifyid,String marks}){
+    pagenum = 1;
+    panList.clear();
     var param = {
       "page":pagenum.toString(),
       "size":pagesize.toString(),
@@ -61,6 +64,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
     if(marks != null){
       param["marks"] = marks;
     }
+    panParam = param;
     _getPanList(param);
   }
 
@@ -68,12 +72,12 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
    * 获取网盘数据
    */
   void _getPanList(param){
-    panList = [];
     httpUtil.post(DataUtils.api_panlist,data: param).then((value){
       print("school panlist:$value");
       if(value != null){
         var panListBean = PanListBean.fromJson(json.decode(value));
         if(panListBean.errno == 0){
+          pagenum++;
           panList.addAll(panListBean.data);
           setState(() {
 
@@ -162,18 +166,15 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
       staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
       //StaggeredTile.count(3,index==0?2:3),
       itemBuilder: (context,index){
-        return GestureDetector(
-          child: panItem(panList[index]),
-          onTap:(){
-
-          },
-        );
+        return panItem(panList[index]);
       },
     );
   }
 
   @override
   void loadmore() {
+    panParam["page"] = pagenum;
+    _getPanList(panParam);
   }
 
   @override

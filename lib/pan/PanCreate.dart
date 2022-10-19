@@ -16,8 +16,10 @@ import '../utils/SizeUtil.dart';
 class PanCreate extends StatefulWidget{
 
   List<Data> tabs;
+  bool isCreate;
+  dynamic panData;
 
-  PanCreate({Key key,@required this.tabs}):super(key: key);
+  PanCreate({Key key,@required this.tabs,@required this.isCreate,@required this.panData = null}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -29,7 +31,7 @@ class PanCreate extends StatefulWidget{
 class PanCreateState extends BaseState<PanCreate>{
 
   String panName;
-  int visible = 1;
+  int visible = 0;
   List types;
   List classifys;
   List categorys;
@@ -52,22 +54,29 @@ class PanCreateState extends BaseState<PanCreate>{
     panMarkListThree = [];
     if(widget.tabs != null && widget.tabs.length > 0){
       selectItem = widget.tabs[0];
-      getPanMark();
+      getPanMarkList();
+      if(!widget.isCreate){
+        panName = widget.panData.name;
+        queryPanMark();
+      }
     }
   }
 
   void selectVisible(int value){
     print("selectVisible:" + value.toString());
-    this.visible = value;
+    if(this.visible == value){
+      this.visible = 0;
+    }else{
+      this.visible = value;
+    }
     setState(() {
-
     });
   }
 
   /**
    * 获取网盘相关的mark信息
    */
-  void getPanMark(){
+  void getPanMarkList(){
     if(selectItem == null){
       return;
     }
@@ -106,6 +115,46 @@ class PanCreateState extends BaseState<PanCreate>{
   }
 
   /**
+   * 查询网盘mark
+   */
+  void queryPanMark(){
+    var param = {
+      "panid":widget.panData.panid
+    };
+    httpUtil.post(DataUtils.api_panmark,data: param).then((value){
+      print('panmark$value');
+      if(value != null){
+        var result = json.decode(value);
+        String marks = result["data"];
+        var markids = marks.split(",");
+        if(markids.length >= 2){
+          for(var item in panMarkListOne){
+            if(item.id == int.parse(markids[0])){
+              item.select = true;
+              break;
+            }
+          }
+          for(var item in panMarkListTwo){
+            if(item.id == int.parse(markids[1])){
+              item.select = true;
+              break;
+            }
+          }
+          for(var markid in markids.getRange(2, markids.length)){
+            for(var item in panMarkListThree){
+              if(item.id == int.parse(markid)){
+                item.select = true;
+              }
+            }
+          }
+        }
+        setState(() {
+        });
+      }
+    });
+  }
+
+  /**
    * 提交创建网盘
    */
   void submitCreatePan(){
@@ -118,16 +167,29 @@ class PanCreateState extends BaseState<PanCreate>{
       return;
     }
     var marks = "";
+
+    //第一个tag
+    for(var item in panMarkListOne){
+      if(item.select){
+        marks = "${item.id}";
+        break;
+      }
+    }
+    //第二个tag
+    for(var item in panMarkListTwo){
+      if(item.select){
+        marks = "$marks"",""${item.id}";
+        break;
+      }
+    }
+    bool _bool;
     panMarkListThree.forEach((element) {
       if(element.select){
-        if(marks == ""){
-          marks = "${element.id}";
-        }else{
-          marks = "$marks"",""${element.id}";
-        }
+        marks = "$marks"",""${element.id}";
+        _bool = true;
       }
     });
-    if(marks.length == 0){
+    if(_bool == false){
       showToast("请选择标签");
       return;
     }
@@ -143,7 +205,61 @@ class PanCreateState extends BaseState<PanCreate>{
         Navigator.pop(context,true);
       }
     });
+  }
 
+  /**
+   * 提交网盘数据
+   */
+  void submitEditorPan(){
+    if(this.panName.isEmpty){
+      showToast("请输入网盘名称");
+      return;
+    }
+    if(this.selectItem == null){
+      showToast("请选择分类");
+      return;
+    }
+    var marks = "";
+    //第一个tag
+    for(var item in panMarkListOne){
+      if(item.select){
+        marks = "${item.id}";
+        break;
+      }
+    }
+    //第二个tag
+    for(var item in panMarkListTwo){
+      if(item.select){
+        marks = "$marks"",""${item.id}";
+        break;
+      }
+    }
+    bool _bool;
+    panMarkListThree.forEach((element) {
+      if(element.select){
+        marks = "$marks"",""${element.id}";
+        _bool = true;
+      }
+    });
+    if(_bool == false){
+      showToast("请选择标签");
+      return;
+    }
+    var option = {
+      "panid":widget.panData.panid,
+      "panname":panName,
+      "classifyid":selectItem.id,
+      "visible":visible
+    };
+    if(marks != widget.panData.marks){
+      option["markids"] = marks;
+    }
+    httpUtil.post(DataUtils.api_paneditor,data: option).then((value){
+      print("paneditor:$value");
+      if(value != null){
+        Navigator.pop(context,true);
+      }
+    });
   }
   
   @override
@@ -157,7 +273,7 @@ class PanCreateState extends BaseState<PanCreate>{
               //标题
               PanTitle(cb: (){
                 Navigator.pop(context);
-              }),
+              },title: widget.isCreate ? "新建网盘" : widget.panData.name,),
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
@@ -248,7 +364,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                               onChanged: (item){
                                                 setState(() {
                                                   selectItem = item;
-                                                  getPanMark();
+                                                  getPanMarkList();
                                                   print(item.name);
                                                 });
                                               },
@@ -368,7 +484,11 @@ class PanCreateState extends BaseState<PanCreate>{
                           InkWell(
                             onTap: (){
                               //创建网盘
-                              submitCreatePan();
+                              if(widget.isCreate){
+                                submitCreatePan();
+                              }else{
+                                submitEditorPan();
+                              }
                             },
                             child: Container(
                               width: double.infinity,

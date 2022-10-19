@@ -48,7 +48,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
   @override
   void initState() {
     super.initState();
-    _scrollController = initScrollController();
+    _scrollController = initScrollController(isfresh: false);
 
   }
 
@@ -56,6 +56,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
    * 查询网盘列表数据
    */
   void queryPanList({String schoolid,int classifyid,String marks}){
+    pagenum = 1;
     this.panList = [];
     _classifyid = classifyid;
     var param = {
@@ -90,6 +91,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
    * 网盘置顶/取消置顶
    */
   void panTopping(int top,String panid){
+    pagenum = 1;
     this.panList = [];
     var param = {
       "top":top,
@@ -133,6 +135,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
       if(value != null){
         var panListBean = PanListBean.fromJson(json.decode(value));
         if(panListBean.errno == 0){
+          pagenum++;
           panList.addAll(panListBean.data);
           setState(() {
           });
@@ -245,12 +248,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
       staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
       //StaggeredTile.count(3,index==0?2:3),
       itemBuilder: (context,index){
-        return GestureDetector(
-          child: panItem(panList[index]),
-          onTap:(){
-
-          },
-        );
+        return panItem(panList[index]);
       },
     );
   }

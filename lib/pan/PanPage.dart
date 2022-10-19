@@ -66,10 +66,13 @@ class PanPageState extends BaseDialogState<PanPage>{
 
   //切换顶部导航
   void changeTab(int index){
+    page = index;
     if(index == 0){
       allTopTabState.currentState.select(true);
       schoolTopTabState.currentState.select(false);
       mineTopTabState.currentState.select(false);
+      resetSelectTab();
+      updatePanList();
     }else if(index == 1){
       allTopTabState.currentState.select(false);
       schoolTopTabState.currentState.select(true);
@@ -82,7 +85,6 @@ class PanPageState extends BaseDialogState<PanPage>{
       panMineStateKey.currentState.queryPanList(classifyid: 0);
     }
     setState(() {
-      page = index;
     });
   }
 
@@ -111,11 +113,26 @@ class PanPageState extends BaseDialogState<PanPage>{
         this.tabsList.addAll(panClassify.data);
         selectClassify = this.tabsList[0].id;
         this.tabsList[0].select = true;
+        (this.panAllPageStateKey.currentWidget as PanAllPage).tabs.addAll(panClassify.data);
         this.panAllPageStateKey.currentState.queryPanListAll(selectClassify);
       }
       setState(() {
       });
     });
+  }
+
+  /**
+   * 顶部tab默认选中第一个
+   */
+  void resetSelectTab(){
+    for(var i=0; i<tabsList.length; i++){
+      if(i == 0){
+        tabsList[i].select = true;
+        selectClassify = tabsList[i].id;
+      }else{
+        tabsList[i].select = false;
+      }
+    }
   }
 
   @override
@@ -227,7 +244,7 @@ class PanPageState extends BaseDialogState<PanPage>{
                   child: IndexedStack(
                     index: page,
                     children: [
-                      PanAllPage(key: panAllPageStateKey,panContext: context),
+                      PanAllPage(key: panAllPageStateKey,panContext: context,),
                       PanSchool(key: panSchoolStateKey,panContext: context,),
                       PanMine(key: panMineStateKey,panContext: context,)
                     ],
@@ -241,7 +258,7 @@ class PanPageState extends BaseDialogState<PanPage>{
               child: InkWell(
                 onTap: (){
                   //创建网盘
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> PanCreate(tabs: tabsList,))).then((value){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> PanCreate(tabs: tabsList,isCreate: true,))).then((value){
                     if(value != null){
 
                     }

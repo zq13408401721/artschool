@@ -36,6 +36,7 @@ class DataUtils{
   static const String api_panmark = "pan/panMark"; //网盘分类对应的标记
   static const String api_pantabs = "pan/panTabs"; //获取网盘的tabs
   static const String api_pancreate = "pan/createPan"; //创建网盘
+  static const String api_paneditor = "pan/editorPan"; //编辑网盘
   // schoolid uid不传 获取全部网盘数据，schoolid学校网盘数据 uid我的网盘数据
   static const String api_panlist = "pan/panlist";  // 获取网盘数据
   static const String api_querymypan = "pan/queryMyPan"; //查询我的网盘

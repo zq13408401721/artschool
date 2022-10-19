@@ -140,6 +140,9 @@ class Data {
   num get width => _width;
   num get height => _height;
   num get imagenum => _imagenum;
+  void set imagenum(int value){
+    _imagenum = value;
+  }
   String get username => _username;
   String get nickname => _nickname;
   String get avater => _avater;

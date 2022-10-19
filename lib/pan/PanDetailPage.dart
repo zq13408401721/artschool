@@ -11,6 +11,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:yhschool/BaseCoustRefreshState.dart';
 import 'package:yhschool/bean/pan_file_bean.dart' as F;
 import 'package:yhschool/bean/pan_list_bean.dart';
+import 'package:yhschool/bean/pan_classify_bean.dart' as A;
 import 'package:yhschool/pan/PanImageDetail.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/EnumType.dart';
@@ -21,12 +22,14 @@ import '../bean/LocalFile.dart';
 import '../bean/pan_topping_bean.dart' as T;
 import '../utils/DataUtils.dart';
 import '../utils/HttpUtils.dart';
+import 'PanCreate.dart';
 
 class PanDetailPage extends StatefulWidget{
 
   Data panData;
   bool isself;
-  PanDetailPage({Key key,@required this.panData,@required this.isself}):super(key: key);
+  List<A.Data> tabs;
+  PanDetailPage({Key key,@required this.panData,@required this.isself,@required this.tabs}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -47,16 +50,15 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _scrollController = initScrollController();
+    _scrollController = initScrollController(isfresh: false);
 
     queryPanImageList();
   }
 
   @override
   void loadmore() {
-
+    queryPanImageList();
   }
 
   @override
@@ -74,9 +76,10 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
       "size":pagesize
     };
     httpUtil.post(DataUtils.api_queryuserpanimage,data:param).then((value){
-      filesList = [];
+      hideLoadMore();
       if(value != null){
         print("panimagelist ${value}");
+        pagenum++;
         F.PanFileBean panFileBean = F.PanFileBean.fromJson(json.decode(value));
         filesList.addAll(panFileBean.data);
         setState(() {
@@ -102,6 +105,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
    * 删除网盘
    */
   void deletePan(){
+
     var param = {
       "panid":widget.panData.panid
     };
@@ -145,6 +149,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
    * 删除网盘文件like
    */
   void deletePanFileLike(int fileid,String panid){
+
     var param = {
       "panid":panid,
       "fileid":fileid
@@ -154,17 +159,107 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
     });
   }
 
+  Future<bool> deletePanImage() async{
+    return showDialog(context: context, builder: (content){
+      return StatefulBuilder(builder: (_context,_state){
+        return UnconstrainedBox(
+          child: Card(
+            color: Colors.white,
+            child: Container(
+              width: SizeUtil.getAppWidth(500),
+              height: SizeUtil.getAppHeight(250),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10))
+              ),
+              padding: EdgeInsets.only(
+                left: SizeUtil.getAppWidth(20),
+                right: SizeUtil.getAppWidth(20),
+                top: SizeUtil.getAppHeight(20)
+              ),
+              child:Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("删除图片？",style: TextStyle(color: Colors.black54,fontSize: SizeUtil.getAppFontSize(30)),),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          Navigator.pop(context,true);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
+                            color: Colors.red
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: SizeUtil.getAppHeight(10),
+                            horizontal: SizeUtil.getAppWidth(40)
+                          ),
+                          child: Text("确定",style: TextStyle(color: Colors.white),),
+                        ),
+                      ),
+                      SizedBox(width: SizeUtil.getAppWidth(20),),
+                      InkWell(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
+                              color: Colors.grey[400]
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              vertical: SizeUtil.getAppHeight(10),
+                              horizontal: SizeUtil.getAppWidth(40)
+                          ),
+                          child: Text("取消",style: TextStyle(color: Colors.white),),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: SizeUtil.getAppHeight(20),)
+                ],
+              ),
+            ),
+          ),
+        );
+      });
+    }).then((value){
+      return value;
+    });
+  }
+
   /**
    * 删除网盘图片
    */
   void deletePanFile(int fileid,String panid){
-    var param = {
-      "panid":panid,
-      "fileid":fileid
-    };
-    httpUtil.post(DataUtils.api_deletepanfile,data: param).then((value){
-      print("deletepan file $value");
+    deletePanImage().then((value){
+      if(value != null){
+        var param = {
+          "panid":panid,
+          "fileid":fileid
+        };
+        httpUtil.post(DataUtils.api_deletepanfile,data: param).then((value){
+          print("deletepan file $value");
+          for(F.Data item in filesList){
+            if(item.id == fileid){
+              filesList.remove(item);
+              widget.panData.imagenum--;
+              break;
+            }
+          }
+          setState(() {
+          });
+        });
+      }
     });
+
   }
 
 
@@ -225,6 +320,9 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
       //上传结束直接刷新数据
       this._imgs = [];
       _files = [];
+      pagenum = 1;
+      filesList = [];
+      queryPanImageList();
     });
   }
 
@@ -282,16 +380,19 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                           child: Image.asset("image/ic_pan_top.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                         ),
                       ),
-                      InkWell(
-                        onTap: (){
-                          //点赞
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: SizeUtil.getAppWidth(10),
-                            vertical: SizeUtil.getAppHeight(10),
+                      Offstage(
+                        offstage: widget.panData.uid == m_uid,
+                        child: InkWell(
+                          onTap: (){
+                            //点赞
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: SizeUtil.getAppWidth(10),
+                              vertical: SizeUtil.getAppHeight(10),
+                            ),
+                            child: Image.asset("image/ic_pan_unlike.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                           ),
-                          child: Image.asset("image/ic_pan_unlike.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                         ),
                       ),
                       InkWell(
@@ -327,10 +428,10 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
           children: [
             InkWell(
               onTap: (){
-                Navigator.pop(context);
+                Navigator.pop(context,widget.panData.imagenum);
               },
               child: Container(
-                child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(40),),
+                child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
               ),
             ),
             Expanded(child: SizedBox()),
@@ -339,6 +440,11 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
               child: InkWell(
                 onTap: (){
                   //编辑
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> PanCreate(isCreate: false,panData: widget.panData,tabs: widget.tabs,))).then((value){
+                    if(value != null){
+
+                    }
+                  });
                 },
                 child: Container(
                   padding: EdgeInsets.all(SizeUtil.getAppWidth(20)),
@@ -465,7 +571,8 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
             },
           ),
         ),
-      )
+      ),
+      loadmoreUI()
     ];
   }
 

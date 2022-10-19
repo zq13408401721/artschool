@@ -46,20 +46,15 @@ class Data {
       String suffix, 
       String date, 
       num state, 
-      dynamic deletedate, 
-      num size, 
-      dynamic path, 
-      dynamic width, 
+      num size,
+      dynamic width,
       dynamic height,}){
     _id = id;
     _name = name;
     _url = url;
     _suffix = suffix;
     _date = date;
-    _state = state;
-    _deletedate = deletedate;
     _size = size;
-    _path = path;
     _width = width;
     _height = height;
 }
@@ -70,10 +65,7 @@ class Data {
     _url = json['url'];
     _suffix = json['suffix'];
     _date = json['date'];
-    _state = json['state'];
-    _deletedate = json['deletedate'];
     _size = json['size'];
-    _path = json['path'];
     _width = json['width'];
     _height = json['height'];
   }
@@ -82,10 +74,7 @@ class Data {
   String _url;
   String _suffix;
   String _date;
-  num _state;
-  dynamic _deletedate;
   num _size;
-  dynamic _path;
   dynamic _width;
   dynamic _height;
 
@@ -94,10 +83,7 @@ class Data {
   String get url => _url;
   String get suffix => _suffix;
   String get date => _date;
-  num get state => _state;
-  dynamic get deletedate => _deletedate;
   num get size => _size;
-  dynamic get path => _path;
   dynamic get width => _width;
   dynamic get height => _height;
 
@@ -108,10 +94,7 @@ class Data {
     map['url'] = _url;
     map['suffix'] = _suffix;
     map['date'] = _date;
-    map['state'] = _state;
-    map['deletedate'] = _deletedate;
     map['size'] = _size;
-    map['path'] = _path;
     map['width'] = _width;
     map['height'] = _height;
     return map;

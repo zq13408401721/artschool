@@ -7,8 +7,9 @@ import 'package:yhschool/utils/SizeUtil.dart';
 class PanTitle extends StatelessWidget{
 
   Function cb;
+  String title;
 
-  PanTitle({@required this.cb});
+  PanTitle({@required this.cb,@required this.title="新建网盘"});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class PanTitle extends StatelessWidget{
             },
             child: Image.asset("image/ic_arrow_left.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setHeight(80),),
           ),
-          Text("新建网盘",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+          Text("$title",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
           Text("500G超大高速空间/FREE",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(20)),color: Colors.grey),)
         ],
       ),
