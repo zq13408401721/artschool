@@ -13,6 +13,7 @@ import 'package:yhschool/bean/pan_file_bean.dart' as F;
 import 'package:yhschool/bean/pan_list_bean.dart';
 import 'package:yhschool/bean/pan_classify_bean.dart' as A;
 import 'package:yhschool/pan/PanImageDetail.dart';
+import 'package:yhschool/popwin/DialogManager.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/EnumType.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
@@ -457,7 +458,8 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
               child: InkWell(
                 onTap: (){
                   //复制网盘
-                  copyPan();
+                  //copyPan();
+                  DialogManager().showCopyPanDialog(context,widget.panData.panid);
                 },
                 child: Container(
                   padding: EdgeInsets.all(SizeUtil.getAppWidth(10)),
