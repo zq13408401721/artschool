@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yhschool/BaseDialogState.dart';
 import 'package:yhschool/bean/pan_classify_bean.dart';
+import 'package:yhschool/bean/pan_num_bean.dart' as N;
 import 'package:yhschool/pan/PanAllPage.dart';
 import 'package:yhschool/pan/PanCreate.dart';
 import 'package:yhschool/pan/PanMine.dart';
@@ -53,6 +54,7 @@ class PanPageState extends BaseDialogState<PanPage>{
   bool enable_teacher = false;
   int selectClassify = 0;
   String schoolid;
+  N.PanNumBean mPanNumbean;
 
 
   @override
@@ -60,9 +62,23 @@ class PanPageState extends BaseDialogState<PanPage>{
     super.initState();
     getSchoolid().then((value) => schoolid = value);
     this.getPanClassify();
+    //this.queryPanNum();
   }
 
-
+  //查询网盘相关数量
+  void queryPanNum(){
+    httpUtil.post(DataUtils.api_querypannum,data: {}).then((value){
+      print("pan num:${value}");
+      if(value != null){
+        N.PanNumBean panNumBean = N.PanNumBean.fromJson(json.decode(value));
+        if(panNumBean.errno == 0){
+          setState(() {
+            mPanNumbean = panNumBean;
+          });
+        }
+      }
+    });
+  }
 
   //切换顶部导航
   void changeTab(int index){
@@ -110,11 +126,15 @@ class PanPageState extends BaseDialogState<PanPage>{
       this.tabsList.clear();
       PanClassifyBean panClassify = PanClassifyBean.fromJson(json.decode(value));
       if(panClassify.errno == 0) {
+        //最开始位置加全部
+        this.tabsList.add(new Data(id:0,name: "全部"));
         this.tabsList.addAll(panClassify.data);
         selectClassify = this.tabsList[0].id;
         this.tabsList[0].select = true;
         (this.panAllPageStateKey.currentWidget as PanAllPage).tabs.addAll(panClassify.data);
         this.panAllPageStateKey.currentState.queryPanListAll(selectClassify);
+        this.panSchoolStateKey.currentState.tabs.addAll(panClassify.data);
+        this.panMineStateKey.currentState.tabs.addAll(panClassify.data);
       }
       setState(() {
       });
@@ -165,15 +185,15 @@ class PanPageState extends BaseDialogState<PanPage>{
                           children: [
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                              child: PanTopTabButton(key:allTopTabState,name: "全部", tab: "P1000", index: 0, clickCB: changeTab),
+                              child: PanTopTabButton(key:allTopTabState,name: "全部", tab: "", index: 0, clickCB: changeTab),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                              child: PanTopTabButton(key:schoolTopTabState,name: "学校", tab: "P1000", index: 1, clickCB: changeTab),
+                              child: PanTopTabButton(key:schoolTopTabState,name: "学校", tab: "", index: 1, clickCB: changeTab),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                              child: PanTopTabButton(key:mineTopTabState,name: "我的", tab: "P1000", index: 2, clickCB: changeTab),
+                              child: PanTopTabButton(key:mineTopTabState,name: "我的", tab: "", index: 2, clickCB: changeTab),
                             )
                           ],
                         ),
@@ -246,7 +266,10 @@ class PanPageState extends BaseDialogState<PanPage>{
                     children: [
                       PanAllPage(key: panAllPageStateKey,panContext: context,),
                       PanSchool(key: panSchoolStateKey,panContext: context,),
-                      PanMine(key: panMineStateKey,panContext: context,)
+                      PanMine(key: panMineStateKey,panContext: context,callback: (){
+                        //刷新pan数量
+                        queryPanNum();
+                      },)
                     ],
                   ),
                 )
@@ -257,10 +280,10 @@ class PanPageState extends BaseDialogState<PanPage>{
               bottom: ScreenUtil().setWidth(SizeUtil.getWidth(200)),
               child: InkWell(
                 onTap: (){
-                  //创建网盘
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> PanCreate(tabs: tabsList,isCreate: true,))).then((value){
-                    if(value != null){
-
+                  //创建网盘 tabslist第0个位置是全部，只在前端才有效，不作为其他接口参数
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> PanCreate(tabs: tabsList.sublist(1),isCreate: true,))).then((value){
+                    if(value){
+                      queryPanNum();
                     }
                   });
                 },

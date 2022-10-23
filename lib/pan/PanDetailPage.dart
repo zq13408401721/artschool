@@ -12,6 +12,7 @@ import 'package:yhschool/BaseCoustRefreshState.dart';
 import 'package:yhschool/bean/pan_file_bean.dart' as F;
 import 'package:yhschool/bean/pan_list_bean.dart';
 import 'package:yhschool/bean/pan_classify_bean.dart' as A;
+import 'package:yhschool/bean/user_search.dart' as S;
 import 'package:yhschool/pan/PanImageDetail.dart';
 import 'package:yhschool/popwin/DialogManager.dart';
 import 'package:yhschool/utils/Constant.dart';
@@ -24,6 +25,7 @@ import '../bean/pan_topping_bean.dart' as T;
 import '../utils/DataUtils.dart';
 import '../utils/HttpUtils.dart';
 import 'PanCreate.dart';
+import 'PanUserDetail.dart';
 
 class PanDetailPage extends StatefulWidget{
 
@@ -340,7 +342,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         onTap: (){
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
-            return PanImageDetail(panData: widget.panData);
+            return PanImageDetail(panData: widget.panData,imgUrl:item.url);
           }));
         },
         child: Column(
@@ -454,7 +456,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
               ),
             ),
             Offstage(
-              offstage: widget.isself,
+              offstage: widget.isself || widget.panData.imagenum == 0,
               child: InkWell(
                 onTap: (){
                   //复制网盘
@@ -468,11 +470,16 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
               ),
             ),
             Offstage(
-              offstage: !widget.isself,
+              offstage: !widget.isself || widget.panData.imagenum == 0,
               child: InkWell(
                 onTap: (){
                   //删除
-                  deletePan();
+                  DialogManager().showDeletePanDialog(context,type:PanDeleteType.PAN, title: "是否确定删除${widget.panData.name}网盘？", panid: widget.panData.panid).then((value){
+                    if(value){
+                      Navigator.pop(context,widget.panData.panid);
+                    }
+                  });
+                  //deletePan();
                 },
                 child: Container(
                   padding: EdgeInsets.all(SizeUtil.getAppWidth(10)),
@@ -495,25 +502,41 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         ),
       ),
       Divider(height: 1,indent: SizeUtil.getAppWidth(20),color: Colors.grey,),
-      Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: SizeUtil.getAppHeight(20),vertical: SizeUtil.getAppHeight(20)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ClipOval(
-              child: (widget.panData.avater == null || widget.panData.avater.length == 0)
-                  ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
-                  : CachedNetworkImage(imageUrl: widget.panData.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
-            ),
-            SizedBox(width: SizeUtil.getAppWidth(20),),
-            Text(widget.panData.nickname != null ? widget.panData.nickname : widget.panData.username,style: Constant.smallTitleTextStyle,),
-            Expanded(child: SizedBox()),
-            Text("${widget.panData.imagenum}张图",style: Constant.smallTitleTextStyle,),
-          ],
-        )
+      InkWell(
+        onTap: (){
+          var param = new S.Result(
+            uid: widget.panData.uid,
+            username:widget.panData.username,
+            nickname:widget.panData.nickname,
+            avater:widget.panData.avater,
+            role:widget.panData.role
+          );
+          //进入用户详情页
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return PanUserDetail(data: param,);
+          }));
+        },
+        child: Container(
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: SizeUtil.getAppHeight(20),vertical: SizeUtil.getAppHeight(20)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ClipOval(
+                  child: (widget.panData.avater == null || widget.panData.avater.length == 0)
+                      ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                      : CachedNetworkImage(imageUrl: widget.panData.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                ),
+                SizedBox(width: SizeUtil.getAppWidth(20),),
+                Text(widget.panData.nickname != null ? widget.panData.nickname : widget.panData.username,style: Constant.smallTitleTextStyle,),
+                Expanded(child: SizedBox()),
+                Text("${widget.panData.imagenum}张图",style: Constant.smallTitleTextStyle,),
+              ],
+            )
+        ),
       ),
       //自己的网盘上传图片
+      widget.panData.isself == 0 ?
       Offstage(
         offstage: !widget.isself,
         child: InkWell(
@@ -544,7 +567,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
             ),
           ),
         ),
-      ),
+      ) : "复制网盘无法上传图片",
       Expanded(
         child: Container(
           padding: EdgeInsets.only(top: SizeUtil.getHeight(20)),
@@ -564,12 +587,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
             staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
             //StaggeredTile.count(3,index==0?2:3),
             itemBuilder: (context,index){
-              return GestureDetector(
-                child: panItem(filesList[index]),
-                onTap:(){
-
-                },
-              );
+              return panItem(filesList[index]);
             },
           ),
         ),

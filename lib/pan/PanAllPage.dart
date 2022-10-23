@@ -153,7 +153,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
             (item.url != null && item.imagenum > 0) ? CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url))
             : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
               child: Center(
-                child: Text("上传图片",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
+                child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
               ),
             ),
             Padding(padding: EdgeInsets.only(
@@ -175,7 +175,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
               bottom: SizeUtil.getAppHeight(5)
             ),child: Text("P${item.imagenum}",style: TextStyle(color: Colors.grey,fontSize: ScreenUtil().setSp(30)),),),
             Offstage(
-              offstage: item.uid == m_uid,
+              offstage: item.uid == m_uid || item.imagenum == 0,
               child: Align(
                 alignment:Alignment.centerRight,
                 child: Row(

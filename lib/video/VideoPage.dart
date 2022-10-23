@@ -219,7 +219,9 @@ class VideoPageState extends VersionState<VideoPage>{
    */
   void getLiveRoom(){
     httpUtil.post(DataUtils.api_liveroom,data:{},context: context).then((value){
-       _liveRoomBean = LiveRoomBean.fromJson(json.decode(value));
+      if(value != null){
+        _liveRoomBean = LiveRoomBean.fromJson(json.decode(value));
+      }
     });
   }
 

@@ -8,11 +8,13 @@ import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/pan/PanPage.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/bean/pan_list_bean.dart';
+import 'package:yhschool/bean/pan_classify_bean.dart' as P;
 import '../BaseRefreshState.dart';
 import '../BasefulWidget.dart';
 import '../utils/Constant.dart';
 import '../utils/DataUtils.dart';
 import '../utils/HttpUtils.dart';
+import 'PanDetailPage.dart';
 
 class PanSchool extends BasefulWidget<PanPageState>{
 
@@ -36,7 +38,7 @@ class PanSchool extends BasefulWidget<PanPageState>{
 class PanSchoolState extends BaseRefreshState<PanSchool>{
 
   ScrollController _scrollController;
-
+  List<P.Data> tabs = [];
   int pagenum=1,pagesize=10;
   List<Data> panList = [];
   dynamic panParam;
@@ -99,11 +101,26 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
       child: InkWell(
         onTap: (){
           //进入网盘详情页面
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return PanDetailPage(panData: item,isself: item.uid == m_uid,tabs:tabs,);
+          })).then((value){
+            if(value != null){
+              setState(() {
+                item.imagenum = value;
+              });
+            }
+          });
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url)),
+            (item.url != null && item.imagenum > 0) ?
+            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url))
+            : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
+              child: Center(
+                child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
+              ),
+            ),
             Padding(padding: EdgeInsets.only(
               left: SizeUtil.getAppWidth(20),
               right: SizeUtil.getAppWidth(20),

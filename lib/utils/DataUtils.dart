@@ -34,12 +34,14 @@ class DataUtils{
   /********************pan******************************/
   static const String api_panclassify = "pan/panClassify"; //网盘分类
   static const String api_panmark = "pan/panMark"; //网盘分类对应的标记
+  static const String api_panmarklist = "pan/panMarkList"; //网盘对应的mark
   static const String api_pantabs = "pan/panTabs"; //获取网盘的tabs
   static const String api_pancreate = "pan/createPan"; //创建网盘
   static const String api_paneditor = "pan/editorPan"; //编辑网盘
   // schoolid uid不传 获取全部网盘数据，schoolid学校网盘数据 uid我的网盘数据
   static const String api_panlist = "pan/panlist";  // 获取网盘数据
   static const String api_querymypan = "pan/queryMyPan"; //查询我的网盘
+  static const String api_querypannum = "pan/queryPanNum"; //查询网盘，学校，我的网盘数量
   static const String api_searchpan = "pan/searchPan"; //网盘搜索
   static const String api_queryuserdetail = "pan/queryUserDetail"; //用户详情
   static const String api_queryuserpan = "pan/queryUserPan"; //查询用户网盘
@@ -52,7 +54,7 @@ class DataUtils{
   static const String api_pantopping = "pan/panTopping"; //网盘排序
   static const String api_panfiletopping = "pan/panFileTopping"; //网盘文件排序
   static const String api_pancopy = "pan/panCopy"; //复制网盘
-  static const String api_pancopyfile = "pan/copyPanFile"; //复制网盘文件
+  static const String api_pancopyfile = "pan/panCopyFile"; //复制网盘文件
   static const String api_addpanfilelike = "pan/addPanFileLike"; //添加网盘文件like
   static const String api_deletepan = "pan/deletePan"; //删除网盘
   static const String api_deletepanfile = "pan/deletePanFile"; //删除网盘文件

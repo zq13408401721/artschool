@@ -9,22 +9,25 @@ import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/BasefulWidget.dart';
 import 'package:yhschool/bean/pan_topping_bean.dart' as T;
 import 'package:yhschool/pan/PanPage.dart';
-
+import 'package:yhschool/bean/pan_classify_bean.dart' as P;
+import 'package:yhschool/popwin/DialogManager.dart';
+import 'package:yhschool/utils/EnumType.dart';
 import '../bean/pan_list_bean.dart';
 import '../utils/Constant.dart';
 import '../utils/DataUtils.dart';
 import '../utils/HttpUtils.dart';
 import '../utils/SizeUtil.dart';
+import 'PanDetailPage.dart';
 
 class PanMine extends BasefulWidget<PanPageState>{
 
   BuildContext panContext;
+  Function callback;
 
-  PanMine({Key key,@required this.panContext}):super(key: key);
+  PanMine({Key key,@required this.panContext,@required this.callback}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return PanMineState();
   }
 
@@ -38,6 +41,8 @@ class PanMine extends BasefulWidget<PanPageState>{
 class PanMineState extends BaseRefreshState<PanMine>{
 
   ScrollController _scrollController;
+
+  List<P.Data> tabs = [];
 
   int pagenum=1,pagesize=10;
   List<Data> panList = [];
@@ -108,20 +113,21 @@ class PanMineState extends BaseRefreshState<PanMine>{
   /**
    * 删除网盘
    */
-  void deletePan(String panid){
-    var param = {
-      "panid":panid
-    };
-    httpUtil.post(DataUtils.api_deletepan,data:param).then((value){
-      print("value:$value");
-      for(Data item in panList){
-        if(item.panid == panid){
-          panList.remove(item);
-          break;
+  void deletePan(String name,String panid){
+    DialogManager().showDeletePanDialog(context,type:PanDeleteType.PAN, title: "是否确定删除${name}网盘？", panid: panid).then((value){
+      if(value){
+        for(Data item in panList){
+          if(item.panid == panid){
+            panList.remove(item);
+            break;
+          }
         }
+        if(widget.callback != null){
+          widget.callback();
+        }
+        setState(() {
+        });
       }
-      setState(() {
-      });
     });
   }
 
@@ -156,11 +162,26 @@ class PanMineState extends BaseRefreshState<PanMine>{
       child: InkWell(
         onTap: (){
           //进入网盘详情页面
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return PanDetailPage(panData: item,isself: item.uid == m_uid,tabs: tabs,);
+          })).then((value){
+            if(value != null){
+              setState(() {
+                item.imagenum = value;
+              });
+            }
+          });
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url)),
+            (item.url != null && item.imagenum > 0) ?
+            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url))
+            : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
+              child: Center(
+                child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
+              ),
+            ),
             Padding(padding: EdgeInsets.only(
               left: SizeUtil.getAppWidth(20),
               right: SizeUtil.getAppWidth(20),
@@ -212,7 +233,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
                   InkWell(
                       onTap: (){
                         //删除
-                        deletePan(item.panid);
+                        deletePan(item.name,item.panid);
                       },
                       child: Container(
                         padding: EdgeInsets.only(

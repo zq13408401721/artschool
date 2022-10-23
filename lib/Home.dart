@@ -210,6 +210,9 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
     setState(() {
       barIndex = _index;
       index = _index;
+      if(_index == 3){
+        panPageStateKey.currentState.queryPanNum();
+      }
     });
   }
 

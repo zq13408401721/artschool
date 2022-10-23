@@ -8,6 +8,8 @@ import 'package:yhschool/bean/pan_bean.dart';
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
 
+import '../utils/EnumType.dart';
+
 class DialogManager{
 
   DialogManager._privateConstructor();
@@ -40,16 +42,32 @@ class DialogManager{
           });
         }
       }
-
     });
   }
 
   /**
-   * 显示复制网盘dialog
+   * 复制网盘文件
    */
-  void showCopyPanImageDialog(BuildContext context){
+  void _copyPanFile(BuildContext context,String panid,int fileid){
+    var param = {
+      "panid":panid,
+      "fileid":fileid
+    };
+    httpUtil.post(DataUtils.api_pancopyfile,data: param).then((value){
+      print("copy pan file $value");
+      if(value != null){
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  /**
+   * 显示复制网盘文件dialog
+   */
+  Future<bool> showCopyPanImageDialog(BuildContext context,String panid,int fileid) async{
     _queryPanList();
-    showDialog(context: context, builder: (context){
+    bool _bool;
+    await showDialog(context: context, builder: (context){
       return StatefulBuilder(builder: (_context,_state){
         _stateSetter = _state;
         return UnconstrainedBox(
@@ -123,6 +141,9 @@ class DialogManager{
                   GestureDetector(
                     onTap: (){
                       //保存到网盘
+                      if(selectPan != null){
+                        _copyPanFile(_context,selectPan.panid,fileid);
+                      }
                     },
                     child: Container(
                       height: SizeUtil.getAppHeight(80),
@@ -144,6 +165,7 @@ class DialogManager{
         );
       });
     });
+    return _bool;
   }
 
   void _selectVisible(value){
@@ -159,7 +181,11 @@ class DialogManager{
   void _copyPan(BuildContext context,String panid){
     if(requesting) return;
     requesting = true;
-    httpUtil.post(DataUtils.api_pancopy,data: {panid:panid,visible:visible}).then((value){
+    var param = {
+      "panid":panid,
+      "visible":visible
+    };
+    httpUtil.post(DataUtils.api_pancopy,data:param).then((value){
       print(value);
       if(value != null){
         Navigator.pop(context);
@@ -251,6 +277,110 @@ class DialogManager{
         );
       });
     });
+  }
+
+  /**
+   * 删除网盘
+   */
+  void deletePan(BuildContext context,String panid){
+    var param = {
+      "panid":panid
+    };
+    httpUtil.post(DataUtils.api_deletepan,data:param).then((value){
+      print("value:$value");
+      if(value != null){
+        Navigator.pop(context,true);
+      }
+    });
+  }
+
+  /**
+   * 删除网盘文件
+   */
+  void deletePanFile(BuildContext context,String panid,int fileid){
+    var param = {
+      "panid":panid,
+      "fileid":fileid
+    };
+    httpUtil.post(DataUtils.api_deletepanfile,data: param).then((value){
+      print("deletepan file $value");
+      if(value != null){
+        Navigator.pop(context,true);
+      }
+    });
+  }
+
+  /**
+   * 删除确认弹框
+   */
+  Future<bool> showDeletePanDialog(BuildContext context,{PanDeleteType type,String title,String panid,int fileid}) async{
+    bool _bool;
+    _bool = await showDialog(context: context, builder: (context){
+      return StatefulBuilder(builder: (_ct,_state){
+        return UnconstrainedBox(
+          child: SizedBox(
+            width: SizeUtil.getAppWidth(400),
+            height: SizeUtil.getAppHeight(300),
+            child: Card(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeUtil.getAppWidth(20),
+                    vertical: SizeUtil.getAppHeight(20)
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                    SizedBox(height: SizeUtil.getHeight(20),),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              if(type == PanDeleteType.PAN){
+                                deletePan(_ct,panid);
+                              }else if(type == PanDeleteType.FILE){
+                                deletePanFile(_ct,panid,fileid);
+                              }
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
+                              padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
+                              ),
+                              child: Text("确定",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                            ),
+                          ),
+                          InkWell(
+                              onTap: (){
+                                Navigator.pop(context,false);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
+                                padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
+                                ),
+                                child: Text("取消",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                              )
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+    });
+    return _bool;
   }
 
 }

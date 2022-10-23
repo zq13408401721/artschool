@@ -51,6 +51,7 @@ class Data {
       num visible, 
       num isself,
       num top,
+      int fileid,
       String imagename, 
       String url, 
       num width, 
@@ -58,7 +59,8 @@ class Data {
       String username,
       String nickname,
       String avater,
-      num imagenum,}){
+      num imagenum,
+      num role,}){
     _id = id;
     _panid = panid;
     _name = name;
@@ -70,6 +72,7 @@ class Data {
     _visible = visible;
     _isself = isself;
     _top = top;
+    _fileid = fileid;
     _imagename = imagename;
     _url = url;
     _width = width;
@@ -78,6 +81,7 @@ class Data {
     _username = username;
     _nickname = nickname;
     _avater = avater;
+    _role = role;
 }
 
   Data.fromJson(dynamic json) {
@@ -92,6 +96,7 @@ class Data {
     _visible = json['visible'];
     _isself = json['isself'];
     _top = json['top'];
+    _fileid = json['fileid'];
     _imagename = json['imagename'];
     _url = json['url'];
     _width = json['width'];
@@ -100,6 +105,8 @@ class Data {
     _username = json['username'];
     _nickname = json['nickname'];
     _avater = json['avater'];
+    _role = json['role'];
+
   }
   num _id;
   String _panid;
@@ -112,6 +119,7 @@ class Data {
   num _visible;
   num _isself;
   num _top;
+  int _fileid;
   String _imagename;
   String _url;
   num _width;
@@ -120,6 +128,7 @@ class Data {
   String _username;
   String _nickname;
   String _avater;
+  int _role;
 
   num get id => _id;
   String get panid => _panid;
@@ -135,6 +144,7 @@ class Data {
   void set top(int value){
     _top = value;
   }
+  int get fileid => _fileid;
   String get imagename => _imagename;
   String get url => _url;
   num get width => _width;
@@ -146,6 +156,7 @@ class Data {
   String get username => _username;
   String get nickname => _nickname;
   String get avater => _avater;
+  int get role => _role;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -159,6 +170,7 @@ class Data {
     map['schoolid'] = _schoolid;
     map['visible'] = _visible;
     map['isself'] = _isself;
+    map['fileid'] = _fileid;
     map['imagename'] = _imagename;
     map['url'] = _url;
     map['width'] = _width;
@@ -167,6 +179,7 @@ class Data {
     map['username'] = _username;
     map['nickname'] = _nickname;
     map['avater'] = _avater;
+    map['role'] = _role;
     return map;
   }
 

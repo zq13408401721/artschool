@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/bean/add_special_column_bean.dart';
+import 'package:yhschool/popwin/DialogManager.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/bean/pan_list_bean.dart' as P;
@@ -15,8 +16,9 @@ import '../utils/ImageType.dart';
 class PanImageDetail extends StatefulWidget{
 
   P.Data panData;
+  String imgUrl;
 
-  PanImageDetail({Key key,@required this.panData}):super(key: key);
+  PanImageDetail({Key key,@required this.panData,@required this.imgUrl}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -78,25 +80,32 @@ class PanImageDetailState extends BaseState<PanImageDetail>{
                     child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
                   ),
                 ),
-                InkWell(
-                  onTap: (){
-                    
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
-                      color: Colors.red
+                Offstage(
+                  offstage: widget.panData.imagenum == 0 || widget.panData.uid == m_uid,
+                  child: InkWell(
+                    onTap: (){
+                      DialogManager().showCopyPanImageDialog(context,widget.panData.panid,widget.panData.fileid).then((value){
+                        if(value){
+
+                        }
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
+                          color: Colors.red
+                      ),
+                      margin: EdgeInsets.only(
+                          right: SizeUtil.getAppWidth(20)
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: SizeUtil.getAppWidth(20),
+                          vertical: SizeUtil.getAppHeight(10)
+                      ),
+                      child: Text("存网盘",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
                     ),
-                    margin: EdgeInsets.only(
-                      right: SizeUtil.getAppWidth(20)
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: SizeUtil.getAppWidth(20),
-                      vertical: SizeUtil.getAppHeight(10)
-                    ),
-                    child: Text("存网盘",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
                   ),
-                )
+                ),
               ],
             ),
             Expanded(
@@ -107,11 +116,11 @@ class PanImageDetailState extends BaseState<PanImageDetail>{
                     InkWell(
                       onTap: (){
                         Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (BuildContext context){
-                          return GalleryBig(imgUrl: widget.panData.url,imageType: BigImageType.pan);
+                          return GalleryBig(imgUrl: widget.imgUrl,imageType: BigImageType.pan);
                         }), (route) => true);
                       },
                       child: CachedNetworkImage(
-                        imageUrl: Constant.parsePanSmallString(widget.panData.url),
+                        imageUrl: Constant.parsePanSmallString(widget.imgUrl),
                         width: double.infinity,
                         fit: BoxFit.cover,
                         progressIndicatorBuilder:(_context,_url,_progress){

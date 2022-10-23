@@ -185,7 +185,7 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                       ),
                     ),
                   ),
-                  //课件
+                  /*//课件
                   Container(
                     child: InkWell(
                       onTap: (){
@@ -201,13 +201,13 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                         ],
                       ),
                     ),
-                  ),
+                  ),*/
                   //喜欢
                   Container(
                     child: InkWell(
                       onTap: (){
                         setState(() {
-                          tabIndex = 3;
+                          tabIndex = 2;
                         });
                       },
                       child: Column(
@@ -224,7 +224,7 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                     child: InkWell(
                       onTap: (){
                         setState(() {
-                          tabIndex = 4;
+                          tabIndex = 3;
                         });
                       },
                       child: Column(
@@ -246,7 +246,7 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                   children: [
                     UserPanPage(uid: widget.data.uid),
                     UserPanImagePage(data: widget.data),
-                    UserPanCoursePage(uid: widget.data.uid),
+                    //UserPanCoursePage(uid: widget.data.uid),
                     UserPanLikePage(uid: widget.data.uid),
                     UserPanFollowPage(uid: widget.data.uid)
                   ],

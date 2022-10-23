@@ -41,6 +41,7 @@ class PanCreateState extends BaseState<PanCreate>{
   List<M.Data> panMarkListTwo;
   List<M.Data> panMarkListThree;
   int oneIndex,twoIndex,threeIndex;
+  String panmark;
 
   @override
   void initState() {
@@ -52,13 +53,15 @@ class PanCreateState extends BaseState<PanCreate>{
     panMarkListOne = [];
     panMarkListTwo = [];
     panMarkListThree = [];
+    print("tabs :${widget.tabs.length}");
     if(widget.tabs != null && widget.tabs.length > 0){
       selectItem = widget.tabs[0];
       getPanMarkList();
-      if(!widget.isCreate){
-        panName = widget.panData.name;
-        queryPanMark();
-      }
+    }
+    if(!widget.isCreate){
+      panName = widget.panData.name;
+      visible = widget.panData.visible;
+      queryPanMark();
     }
   }
 
@@ -84,6 +87,7 @@ class PanCreateState extends BaseState<PanCreate>{
       "classifyid":selectItem.id
     };
     httpUtil.get(DataUtils.api_panmark,data: option,).then((value){
+      print("pan mark:${value}");
       var markBean = M.PanMarkBean.fromJson(json.decode(value));
       if(markBean.errno == 0){
         panMarkList = markBean.data;
@@ -121,11 +125,12 @@ class PanCreateState extends BaseState<PanCreate>{
     var param = {
       "panid":widget.panData.panid
     };
-    httpUtil.post(DataUtils.api_panmark,data: param).then((value){
+    httpUtil.post(DataUtils.api_panmarklist,data: param).then((value){
       print('panmark$value');
       if(value != null){
         var result = json.decode(value);
-        String marks = result["data"];
+        String marks = result["data"]["markids"];
+        panmark = marks;
         var markids = marks.split(",");
         if(markids.length >= 2){
           for(var item in panMarkListOne){
@@ -157,14 +162,15 @@ class PanCreateState extends BaseState<PanCreate>{
   /**
    * 提交创建网盘
    */
-  void submitCreatePan(){
+  Future<bool> submitCreatePan() async{
     if(this.panName.isEmpty){
       showToast("请输入网盘名称");
-      return;
+      return true;
     }
     if(this.selectItem == null){
       showToast("请选择分类");
-      return;
+      this.ishttp = false;
+      return true;
     }
     var marks = "";
 
@@ -191,33 +197,38 @@ class PanCreateState extends BaseState<PanCreate>{
     });
     if(_bool == false){
       showToast("请选择标签");
-      return;
+      this.ishttp = false;
+      return true;
     }
     var option = {
       "panname":panName,
       "classifyid":selectItem.id,
       "marks":marks
     };
-    httpUtil.post(DataUtils.api_pancreate,data: option).then((value){
+    await httpUtil.post(DataUtils.api_pancreate,data: option).then((value){
+      print("panCreate ${value}");
       var panCreateBean = P.PanCreateBean.fromJson(json.decode(value));
       if(panCreateBean.errno == 0){
         showToast("创建网盘成功");
         Navigator.pop(context,true);
       }
     });
+    return true;
   }
 
   /**
    * 提交网盘数据
    */
-  void submitEditorPan(){
+  Future<bool> submitEditorPan() async{
     if(this.panName.isEmpty){
       showToast("请输入网盘名称");
-      return;
+      this.ishttp = false;
+      return true;
     }
     if(this.selectItem == null){
       showToast("请选择分类");
-      return;
+      this.ishttp = false;
+      return true;
     }
     var marks = "";
     //第一个tag
@@ -243,7 +254,8 @@ class PanCreateState extends BaseState<PanCreate>{
     });
     if(_bool == false){
       showToast("请选择标签");
-      return;
+      this.ishttp = false;
+      return true;
     }
     var option = {
       "panid":widget.panData.panid,
@@ -251,15 +263,16 @@ class PanCreateState extends BaseState<PanCreate>{
       "classifyid":selectItem.id,
       "visible":visible
     };
-    if(marks != widget.panData.marks){
+    if(marks != panmark){
       option["markids"] = marks;
     }
-    httpUtil.post(DataUtils.api_paneditor,data: option).then((value){
+    await httpUtil.post(DataUtils.api_paneditor,data: option).then((value){
       print("paneditor:$value");
       if(value != null){
         Navigator.pop(context,true);
       }
     });
+    return true;
   }
   
   @override
@@ -272,7 +285,7 @@ class PanCreateState extends BaseState<PanCreate>{
             children: [
               //标题
               PanTitle(cb: (){
-                Navigator.pop(context);
+                Navigator.pop(context,false);
               },title: widget.isCreate ? "新建网盘" : widget.panData.name,),
               Expanded(
                 child: SingleChildScrollView(
@@ -288,6 +301,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                 child: TextField(
                                   maxLength: 20,
                                   maxLines: 1,
+                                  controller: TextEditingController(text: widget.panData != null ? widget.panData.name : ""),
                                   decoration: InputDecoration(
                                       hintText: "网盘名称",
                                       border:InputBorder.none,
@@ -401,7 +415,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                       mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
                                       crossAxisSpacing: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
                                       crossAxisCount: 3,
-                                      childAspectRatio: Constant.isPad ? 8/1 : 6/1,
+                                      childAspectRatio: Constant.isPad ? 8/1 : 4/1,
 
                                     ), itemBuilder: (context,index){
                                       return Row(
@@ -431,7 +445,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                       mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
                                       crossAxisSpacing: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
                                       crossAxisCount: 3,
-                                      childAspectRatio: Constant.isPad ? 8/1 : 6/1,
+                                      childAspectRatio: Constant.isPad ? 8/1 : 4/1,
 
                                     ), itemBuilder: (context,index){
                                       return Row(
@@ -461,7 +475,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                       mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
                                       crossAxisSpacing: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
                                       crossAxisCount: 3,
-                                      childAspectRatio: Constant.isPad ? 8/1 : 6/1,
+                                      childAspectRatio: Constant.isPad ? 8/1 : 4/1,
 
                                     ), itemBuilder: (context,index){
                                       return Row(
@@ -483,11 +497,18 @@ class PanCreateState extends BaseState<PanCreate>{
                           SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                           InkWell(
                             onTap: (){
+                              if(this.ishttp) return;
                               //创建网盘
                               if(widget.isCreate){
-                                submitCreatePan();
+                                submitCreatePan().then((value){
+                                  print("create over");
+                                  this.ishttp = false;
+                                });
                               }else{
-                                submitEditorPan();
+                                submitEditorPan().then((value){
+                                  print("editor over");
+                                  this.ishttp = false;
+                                });
                               }
                             },
                             child: Container(

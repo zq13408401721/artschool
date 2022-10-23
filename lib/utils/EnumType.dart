@@ -52,3 +52,10 @@ enum IconType{
 enum TileType{
   IMAGE,WORD,CheckBox
 }
+
+/**
+ * 删除网盘或删除网盘图片
+ */
+enum PanDeleteType{
+  PAN,FILE
+}

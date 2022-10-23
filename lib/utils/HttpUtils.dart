@@ -278,7 +278,7 @@ class HttpUtil {
       print("$url result:${response.data.toString()}");
       return response.data.toString();
     } on DioError catch (e) {
-      print("response DioError $url :${response}");
+      print("response DioError $url :${response} ${e.error} ${e.message}");
       if(!requestSet.isEmpty){
         requestSet.clear();
       }
