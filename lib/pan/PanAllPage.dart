@@ -56,7 +56,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
       "weburl":"https://support.qq.com/products/326279/faqs/121942",
       "height":Constant.ADVERT_COLUMN_HEIGHT
     };
-    _scrollController = initScrollController();
+    _scrollController = initScrollController(isfresh: false);
   }
 
   void queryPanListAll(classifyid){
@@ -150,7 +150,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (item.url != null && item.imagenum > 0) ? CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url))
+            (item.url != null && item.imagenum > 0) ? CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url),memCacheWidth: item.width,memCacheHeight: item.height,fit: BoxFit.cover,)
             : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
               child: Center(
                 child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),

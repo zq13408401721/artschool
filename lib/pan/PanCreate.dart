@@ -406,7 +406,7 @@ class PanCreateState extends BaseState<PanCreate>{
                               children: [
                                 Container(
                                   padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                                  child: Text("标签一",style: Constant.smallTitleTextStyle,),
+                                  child: Text("标签一",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                                 ),
                                 Container(
                                   child: SingleChildScrollView(
@@ -414,7 +414,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                     child: GridView.builder(shrinkWrap:true,itemCount:panMarkListOne.length,physics:NeverScrollableScrollPhysics(),gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                       mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
                                       crossAxisSpacing: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
-                                      crossAxisCount: 3,
+                                      crossAxisCount: 2,
                                       childAspectRatio: Constant.isPad ? 8/1 : 4/1,
 
                                     ), itemBuilder: (context,index){
@@ -427,7 +427,16 @@ class PanCreateState extends BaseState<PanCreate>{
                                               panMarkListOne[index].select = _bool;
                                             });
                                           }),
-                                          Text(panMarkListOne[index].name,style: TextStyle(color: panMarkListOne[index].select?Colors.red:Colors.black87),)
+                                          InkWell(
+                                            onTap: (){
+                                              resetSellect(panMarkListOne);
+                                              oneIndex = index;
+                                              setState(() {
+                                                panMarkListOne[index].select = !panMarkListOne[index].select;
+                                              });
+                                            },
+                                            child: Text(panMarkListOne[index].name,style: TextStyle(color: panMarkListOne[index].select?Colors.red:Colors.black87),),
+                                          )
                                         ],
                                       );
                                     }),
@@ -436,7 +445,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                 SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                                 Container(
                                   padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                                  child: Text("标签二",style: Constant.smallTitleTextStyle,),
+                                  child: Text("标签二",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                                 ),
                                 Container(
                                   child: SingleChildScrollView(
@@ -444,7 +453,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                     child: GridView.builder(shrinkWrap:true,itemCount:panMarkListTwo.length,physics:NeverScrollableScrollPhysics(),gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                       mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
                                       crossAxisSpacing: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
-                                      crossAxisCount: 3,
+                                      crossAxisCount: 2,
                                       childAspectRatio: Constant.isPad ? 8/1 : 4/1,
 
                                     ), itemBuilder: (context,index){
@@ -457,7 +466,16 @@ class PanCreateState extends BaseState<PanCreate>{
                                               panMarkListTwo[index].select = _bool;
                                             });
                                           }),
-                                          Text(panMarkListTwo[index].name,style: TextStyle(color: panMarkListTwo[index].select?Colors.red:Colors.black87),)
+                                          InkWell(
+                                            onTap: (){
+                                              resetSellect(panMarkListTwo);
+                                              twoIndex = index;
+                                              setState(() {
+                                                panMarkListTwo[index].select = !panMarkListTwo[index].select;
+                                              });
+                                            },
+                                            child: Text(panMarkListTwo[index].name,style: TextStyle(color: panMarkListTwo[index].select?Colors.red:Colors.black87),),
+                                          )
                                         ],
                                       );
                                     }),
@@ -466,7 +484,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                 SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                                 Container(
                                   padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                                  child: Text("标签三",style: Constant.smallTitleTextStyle,),
+                                  child: Text("标签三",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                                 ),
                                 Container(
                                   child: SingleChildScrollView(
@@ -474,7 +492,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                     child: GridView.builder(shrinkWrap:true,itemCount:panMarkListThree.length,physics:NeverScrollableScrollPhysics(),gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                       mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
                                       crossAxisSpacing: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
-                                      crossAxisCount: 3,
+                                      crossAxisCount: 2,
                                       childAspectRatio: Constant.isPad ? 8/1 : 4/1,
 
                                     ), itemBuilder: (context,index){
@@ -485,7 +503,14 @@ class PanCreateState extends BaseState<PanCreate>{
                                               panMarkListThree[index].select = _bool;
                                             });
                                           }),
-                                          Text(panMarkListThree[index].name,style: TextStyle(color: panMarkListThree[index].select?Colors.red:Colors.black87),)
+                                          InkWell(
+                                            onTap: (){
+                                              setState(() {
+                                                panMarkListThree[index].select = !panMarkListThree[index].select;
+                                              });
+                                            },
+                                            child: Text(panMarkListThree[index].name,style: TextStyle(color: panMarkListThree[index].select?Colors.red:Colors.black87),),
+                                          )
                                         ],
                                       );
                                     }),

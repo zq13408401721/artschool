@@ -52,7 +52,7 @@ class UserPanPageState extends BaseRefreshState<UserPanPage>{
       "size":size
     };
     httpUtil.post(DataUtils.api_queryuserpan,data: param).then((value){
-      print("userpan:$value");
+      print("userpan: ${page} $value");
       if(value != null){
         PanUserBean panUserBean = PanUserBean.fromJson(json.decode(value));
         panList.addAll(panUserBean.data);
@@ -96,7 +96,7 @@ class UserPanPageState extends BaseRefreshState<UserPanPage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(imageUrl: item.url != null ? item.url : ""),
+            CachedNetworkImage(imageUrl: item.url != null ? item.url : "",memCacheWidth: item.width,memCacheHeight: item.height,fit: BoxFit.cover,),
             Padding(padding: EdgeInsets.only(
               left: SizeUtil.getAppWidth(20),
               right: SizeUtil.getAppWidth(20),
@@ -113,33 +113,38 @@ class UserPanPageState extends BaseRefreshState<UserPanPage>{
                 left: SizeUtil.getAppWidth(20),
                 right: SizeUtil.getAppWidth(20),
                 top: SizeUtil.getAppWidth(5)
-            ),child: Text("P",style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),),),
-            Align(
-              alignment:Alignment.centerRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  //copy
-                  InkWell(
-                      onTap: (){
-                        //复制网盘
-                        //copyPan(item.panid);
-                        //PanPageState _state = widget.getBaseState();
-                        //_state.changeTab(2);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            left:SizeUtil.getAppWidth(20),
-                            right: SizeUtil.getAppWidth(20),
-                            top:SizeUtil.getAppWidth(5),
-                            bottom:SizeUtil.getAppWidth(10)
-                        ),
-                        child: Image.asset("image/ic_pan_copy.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
-                      )
-                  ),
-                ],
+            ),child: Text("P${item.imagenum}",style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),),),
+            SizedBox(height: SizeUtil.getAppHeight(10),),
+            Offstage(
+              offstage: item.uid == m_uid,
+              child: Align(
+                alignment:Alignment.centerRight,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    //copy
+                    InkWell(
+                        onTap: (){
+                          //复制网盘
+                          //copyPan(item.panid);
+                          //PanPageState _state = widget.getBaseState();
+                          //_state.changeTab(2);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              left:SizeUtil.getAppWidth(20),
+                              right: SizeUtil.getAppWidth(20),
+                              top:SizeUtil.getAppWidth(5),
+                              bottom:SizeUtil.getAppWidth(10)
+                          ),
+                          child: Image.asset("image/ic_pan_copy.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                        )
+                    ),
+                  ],
+                ),
               ),
             )
+
           ],
         ),
       ),

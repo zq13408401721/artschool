@@ -49,11 +49,13 @@ class UserPanImagePageState extends BaseRefreshState<UserPanImagePage>{
       "size":size
     };
     httpUtil.post(DataUtils.api_querypanimagebyuser,data: param).then((value){
-      print("pan image:$value");
+      print("pan image: ${page} $value");
       if(value != null){
         PanFileBean panFileBean = PanFileBean.fromJson(json.decode(value));
-        filesList.addAll(panFileBean.data);
-        page ++;
+        if(panFileBean.errno == 0){
+          filesList.addAll(panFileBean.data);
+          page ++;
+        }
       }
       setState(() {
         hideLoadMore();
@@ -88,7 +90,7 @@ class UserPanImagePageState extends BaseRefreshState<UserPanImagePage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(imageUrl: item.url),
+            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url),memCacheWidth: item.width,memCacheHeight: item.height,fit: BoxFit.cover,),
             Padding(padding: EdgeInsets.only(
               left: SizeUtil.getAppWidth(20),
               right: SizeUtil.getAppWidth(20),

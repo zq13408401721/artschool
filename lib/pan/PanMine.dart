@@ -176,7 +176,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             (item.url != null && item.imagenum > 0) ?
-            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url))
+            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url),memCacheWidth: item.width,memCacheHeight: item.height,fit: BoxFit.cover,)
             : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
               child: Center(
                 child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),

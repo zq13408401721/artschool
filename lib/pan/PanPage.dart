@@ -218,16 +218,19 @@ class PanPageState extends BaseDialogState<PanPage>{
                             });
                           }),
                           //筛选
-                          ImageButton(icon: "image/ic_pan_screen.png", label: "", cb: (){
-                            //mark筛选
-                            showPanScreen(context, selectClassify).then((value){
-                              //创建网盘成功 进入我的网盘
-                              if(value != null){
-                                panAllPageStateKey.currentState.queryPanListByMark(selectClassify, value);
-                              }
+                          Offstage(
+                            offstage: selectClassify == 0,
+                            child: ImageButton(icon: "image/ic_pan_screen.png", label: "", cb: (){
+                              //mark筛选
+                              showPanScreen(context, selectClassify).then((value){
+                                //创建网盘成功 进入我的网盘
+                                if(value != null){
+                                  panAllPageStateKey.currentState.queryPanListByMark(selectClassify, value);
+                                }
 
-                            });
-                          }),
+                              });
+                            }),
+                          ),
                           //搜索
                           ImageButton(icon: "image/ic_search.png", label: "", cb: ()=>{
                             Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPanPage(callback: (){
@@ -252,7 +255,9 @@ class PanPageState extends BaseDialogState<PanPage>{
                       bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
                   ),
                   child: HorizontalListTab(datas: tabsList, click: (dynamic _data){
-                    this.selectClassify = _data.id;
+                    setState(() {
+                      this.selectClassify = _data.id;
+                    });
                     print("${_data.id}");
                     updatePanList();
                   }),

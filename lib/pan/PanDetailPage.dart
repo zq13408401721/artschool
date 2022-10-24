@@ -348,7 +348,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url)),
+            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url),memCacheWidth: item.width,memCacheHeight: item.height,fit: BoxFit.cover,),
             Padding(padding: EdgeInsets.only(
                 left: SizeUtil.getAppWidth(20),
                 right: SizeUtil.getAppWidth(20),
@@ -536,38 +536,35 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         ),
       ),
       //自己的网盘上传图片
-      widget.panData.isself == 0 ?
-      Offstage(
-        offstage: !widget.isself,
-        child: InkWell(
-          onTap: (){
-            //上传
-            _openGallery(context);
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(
+      (widget.panData.isself == 0 && widget.isself) ?
+      InkWell(
+        onTap: (){
+          //上传
+          _openGallery(context);
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(
               horizontal: SizeUtil.getAppWidth(40),
               vertical: SizeUtil.getAppWidth(20)
-            ),
-            margin: EdgeInsets.only(
+          ),
+          margin: EdgeInsets.only(
               top: SizeUtil.getAppHeight(20),
               left: SizeUtil.getAppWidth(20),
               right: SizeUtil.getAppWidth(20)
-            ),
-            decoration: BoxDecoration(
+          ),
+          decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(10)))
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("+ 上传图片",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),fontWeight: FontWeight.bold,color: Colors.red),),
-                Text("严禁上传色情、政治等不合规图片",style: Constant.smallTitleTextStyle,)
-              ],
-            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("+ 上传图片",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),fontWeight: FontWeight.bold,color: Colors.red),),
+              Text("严禁上传色情、政治等不合规图片",style: Constant.smallTitleTextStyle,)
+            ],
           ),
         ),
-      ) : "复制网盘无法上传图片",
+      ) : Text("复制网盘无法上传图片",style: Constant.smallTitleTextStyle,),
       Expanded(
         child: Container(
           padding: EdgeInsets.only(top: SizeUtil.getHeight(20)),

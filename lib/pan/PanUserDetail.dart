@@ -80,7 +80,12 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                     onTap: (){
                       Navigator.pop(context);
                     },
-                    child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        right: SizeUtil.getAppWidth(40)
+                      ),
+                      child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
+                    ),
                   ),
                   InkWell(
                     onTap: (){
@@ -146,7 +151,10 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
             //top bar
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white
+                color: Colors.white,
+              ),
+              padding: EdgeInsets.only(
+                bottom: SizeUtil.getAppHeight(20)
               ),
               child:Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -213,8 +221,8 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(panUserDetail == null ? "" : "${panUserDetail.likenum}",style: tabIndex == 3 ? selectStyle : normalStyle,),
-                          Text("喜欢",style: tabIndex == 3 ? selectStyle : normalStyle,),
+                          Text(panUserDetail == null ? "" : "${panUserDetail.likenum}",style: tabIndex == 2 ? selectStyle : normalStyle,),
+                          Text("喜欢",style: tabIndex == 2 ? selectStyle : normalStyle,),
                         ],
                       ),
                     ),
@@ -230,8 +238,8 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(panUserDetail == null ? "" : "${panUserDetail.follownum}",style: tabIndex == 4 ? selectStyle : normalStyle,),
-                          Text("关注",style: tabIndex == 4 ? selectStyle : normalStyle,),
+                          Text(panUserDetail == null ? "" : "${panUserDetail.follownum}",style: tabIndex == 3 ? selectStyle : normalStyle,),
+                          Text("关注",style: tabIndex == 3 ? selectStyle : normalStyle,),
                         ],
                       ),
                     ),
