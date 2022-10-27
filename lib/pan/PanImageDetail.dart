@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:yhschool/BaseDialogState.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/bean/add_special_column_bean.dart';
 import 'package:yhschool/popwin/DialogManager.dart';
@@ -11,7 +13,12 @@ import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/bean/pan_list_bean.dart' as P;
 
 import '../GalleryBig.dart';
+import '../bean/push_issue_bean.dart';
+import '../utils/DataUtils.dart';
+import '../utils/HttpUtils.dart';
 import '../utils/ImageType.dart';
+import '../widgets/DialogPush.dart';
+import '../widgets/PushButtonWidget.dart';
 
 class PanImageDetail extends StatefulWidget{
 
@@ -26,7 +33,7 @@ class PanImageDetail extends StatefulWidget{
   }
 }
 
-class PanImageDetailState extends BaseState<PanImageDetail>{
+class PanImageDetailState extends BaseDialogState<PanImageDetail>{
 
   double loadingProgress=-1;
   bool loadover = false;
@@ -79,6 +86,21 @@ class PanImageDetailState extends BaseState<PanImageDetail>{
                     ),
                     child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
                   ),
+                ),
+                //老师帐号可以把网盘的图片推送到课堂
+                Offstage(
+                  offstage: m_role == 1,
+                  child: PushButtonWidget(cb: (){
+                    pushGallery(context, {
+                      "name":m_username == null ? m_nickname : m_username,
+                      "url":widget.imgUrl,
+                      "from":Constant.PUSH_FROM_COLUMN,
+                      "width":widget.panData.width,
+                      "height":widget.panData.height,
+                      //"maxwidth":widget.panData.sourcewidth,
+                      //"maxheight":widget.panData.sourceheight
+                    });
+                  },title: "推送",),
                 ),
                 Offstage(
                   offstage: widget.panData.imagenum == 0 || widget.panData.uid == m_uid,
