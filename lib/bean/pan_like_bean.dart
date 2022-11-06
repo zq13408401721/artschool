@@ -1,6 +1,6 @@
-class PanFileBean {
-  PanFileBean({
-      num errno, 
+class PanLikeBean {
+  PanLikeBean({
+      int errno, 
       String errmsg, 
       List<Data> data,}){
     _errno = errno;
@@ -8,7 +8,7 @@ class PanFileBean {
     _data = data;
 }
 
-  PanFileBean.fromJson(dynamic json) {
+  PanLikeBean.fromJson(dynamic json) {
     _errno = json['errno'];
     _errmsg = json['errmsg'];
     if (json['data'] != null) {
@@ -18,11 +18,11 @@ class PanFileBean {
       });
     }
   }
-  num _errno;
+  int _errno;
   String _errmsg;
   List<Data> _data;
 
-  num get errno => _errno;
+  int get errno => _errno;
   String get errmsg => _errmsg;
   List<Data> get data => _data;
 
@@ -40,27 +40,30 @@ class PanFileBean {
 
 class Data {
   Data({
-      num id, 
+      int id, 
+      String uid, 
+      String date, 
       String name, 
       String url, 
-      String suffix, 
-      String date, 
-      num state, 
-      num size,
       num width,
       num height,
+      String username, 
+      dynamic nickname, 
+      dynamic avater,
       num maxwidth,
       num maxheight,
       String panname,
-      num imgnum,}){
+      int imgnum,}){
     _id = id;
+    _uid = uid;
+    _date = date;
     _name = name;
     _url = url;
-    _suffix = suffix;
-    _date = date;
-    _size = size;
     _width = width;
     _height = height;
+    _username = username;
+    _nickname = nickname;
+    _avater = avater;
     _maxwidth = maxwidth;
     _maxheight = maxheight;
     _panname = panname;
@@ -70,54 +73,64 @@ class Data {
 
   Data.fromJson(dynamic json) {
     _id = json['id'];
+    _uid = json['uid'];
+    _date = json['date'];
     _name = json['name'];
     _url = json['url'];
-    _suffix = json['suffix'];
-    _date = json['date'];
-    _size = json['size'];
     _width = json['width'];
     _height = json['height'];
+    _username = json['username'];
+    _nickname = json['nickname'];
+    _avater = json['avater'];
     _maxwidth = json['maxwidth'];
     _maxheight = json['maxheight'];
     _panname = json['panname'];
     _imgnum = json['imgnum'];
   }
-  num _id;
+  int _id;
+  String _uid;
+  String _date;
   String _name;
   String _url;
-  String _suffix;
-  String _date;
-  num _size;
   num _width;
   num _height;
+  String _username;
+  dynamic _nickname;
+  dynamic _avater;
   num _maxwidth;
   num _maxheight;
   String _panname;
   num _imgnum;
 
-  num get id => _id;
+
+  int get id => _id;
+  String get uid => _uid;
+  String get date => _date;
   String get name => _name;
   String get url => _url;
-  String get suffix => _suffix;
-  String get date => _date;
-  num get size => _size;
   num get width => _width;
   num get height => _height;
+  String get username => _username;
+  dynamic get nickname => _nickname;
+  dynamic get avater => _avater;
   num get maxwidth => _maxwidth;
   num get maxheight => _maxheight;
   String get panname => _panname;
   num get imgnum => _imgnum;
 
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = _id;
+    map['uid'] = _uid;
+    map['date'] = _date;
     map['name'] = _name;
     map['url'] = _url;
-    map['suffix'] = _suffix;
-    map['date'] = _date;
-    map['size'] = _size;
     map['width'] = _width;
     map['height'] = _height;
+    map['username'] = _username;
+    map['nickname'] = _nickname;
+    map['avater'] = _avater;
     map['maxwidth'] = _maxwidth;
     map['maxheight'] = _maxheight;
     map['panname'] = _panname;

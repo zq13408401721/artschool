@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/bean/pan_userdetail_bean.dart';
+import 'package:yhschool/bean/user_addfollow_bean.dart' as P;
+import 'package:yhschool/pan/UserFansDetail.dart';
 import 'package:yhschool/pan/UserPanCoursePage.dart';
 import 'package:yhschool/pan/UserPanFollowPage.dart';
 import 'package:yhschool/pan/UserPanImagePage.dart';
@@ -25,6 +27,7 @@ class PanUserDetail extends StatefulWidget{
 
   @override
   State<StatefulWidget> createState() {
+    print("create state ${data.uid}");
     return PanUserDetailState();
   }
 
@@ -36,13 +39,14 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
   TextStyle normalStyle = TextStyle(color: Colors.black54,fontSize: SizeUtil.getAppFontSize(25));
   int tabIndex = 0;
   Data panUserDetail;
+  String classname="";
 
   
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    print("user detail initState");
     queryUserDetail();
   }
 
@@ -55,6 +59,53 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
       if(value != null){
         PanUserdetailBean userdetailBean = PanUserdetailBean.fromJson(json.decode(value));
         panUserDetail = userdetailBean.data[0];
+        if(panUserDetail.classes != null && panUserDetail.classes.length > 0){
+          panUserDetail.classes.forEach((element) {
+            classname += element.name+"、";
+          });
+          classname = classname.substring(0,classname.length-1);
+        }
+        setState(() {
+        });
+      }
+    });
+  }
+
+  /**
+   * 用户关注
+   */
+  void addUserFollow(String uid){
+    var param = {
+      "followuid":uid
+    };
+    httpUtil.post(DataUtils.api_adduserfollow,data:param).then((value){
+      print("adduserfollow ${value}");
+      if(value != null){
+        P.UserAddfollowBean addfollowBean = P.UserAddfollowBean.fromJson(json.decode(value));
+        if(addfollowBean.errno == 0 && addfollowBean.data.type == "add"){
+          showToast("关注成功");
+        }else{
+          showToast("已关注");
+        }
+        panUserDetail.isfollow = 1;
+        setState(() {
+        });
+      }
+    });
+  }
+
+  /**
+   * 删除关注
+   */
+  void deleteUserFollow(String uid){
+    var param = {
+      "followuid":uid
+    };
+    httpUtil.post(DataUtils.api_deleteuserfollow,data:param).then((value){
+      print("adduserfollow ${value}");
+      if(value != null){
+        panUserDetail.isfollow = 0;
+        showToast("取消关注");
         setState(() {
         });
       }
@@ -87,20 +138,27 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                       child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
                     ),
                   ),
-                  InkWell(
-                    onTap: (){
-
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: SizeUtil.getAppHeight(10),
-                        horizontal: SizeUtil.getAppWidth(20)
+                  Offstage(
+                    offstage: m_uid == widget.data.uid,
+                    child: InkWell(
+                      onTap: (){
+                        if(panUserDetail != null && panUserDetail.isfollow == 1){
+                          deleteUserFollow(widget.data.uid);
+                        }else{
+                          addUserFollow(widget.data.uid);
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: SizeUtil.getAppHeight(10),
+                            horizontal: SizeUtil.getAppWidth(20)
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5))
+                        ),
+                        child: Text((panUserDetail != null && panUserDetail.isfollow == 1) ? "取消关注" : "+关注",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
                       ),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5))
-                      ),
-                      child: Text("+关注",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
                     ),
                   )
                 ],
@@ -137,11 +195,25 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                       ),
                       Padding(padding: EdgeInsets.symmetric(
                         horizontal: SizeUtil.getAppWidth(20)
-                      ),child: Text("色彩"),),
-                      Padding(padding: EdgeInsets.symmetric(
-                        horizontal: SizeUtil.getAppWidth(20)
-                      ),child: Text("${panUserDetail == null ? 0 : panUserDetail.fansnum} 粉丝 >",style: Constant.smallTitleTextStyle,),)
-
+                      ),child: Text("${classname}"),),
+                      InkWell(
+                        onTap: (){
+                          if(panUserDetail == null) return;
+                          print("uid:${widget.data.uid}");
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return UserFansDetail(data: {
+                              "uid":widget.data.uid,
+                              "username":panUserDetail.username,
+                              "nickname":panUserDetail.nickname,
+                              "fansnum":panUserDetail.fansnum
+                            });
+                          }));
+                        },
+                        child: Padding(padding: EdgeInsets.symmetric(
+                          horizontal: SizeUtil.getAppWidth(20),
+                          vertical: SizeUtil.getAppHeight(20)
+                        ),child: Text("${panUserDetail == null ? 0 : panUserDetail.fansnum} 粉丝 >",style: Constant.smallTitleTextStyle,),),
+                      )
                     ],
                   ),
                 ],
@@ -256,7 +328,7 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                     UserPanImagePage(data: widget.data),
                     //UserPanCoursePage(uid: widget.data.uid),
                     UserPanLikePage(uid: widget.data.uid),
-                    UserPanFollowPage(uid: widget.data.uid)
+                    UserPanFollowPage(uid: widget.data.uid,panid: widget.data.panid,)
                   ],
                 ),
               ),

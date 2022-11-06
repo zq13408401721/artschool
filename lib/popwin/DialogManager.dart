@@ -25,7 +25,7 @@ class DialogManager{
   List<Data> panList = [];
   Data selectPan;
 
-  int visible;
+  int visible=0;
 
   bool requesting;
 
@@ -170,11 +170,8 @@ class DialogManager{
 
   void _selectVisible(value){
     _stateSetter((){
-      if(visible == value){
-        visible = 0;
-      }else{
-        visible = value;
-      }
+      visible = value;
+      print("visible:${visible}");
     });
   }
 
@@ -183,7 +180,7 @@ class DialogManager{
     requesting = true;
     var param = {
       "panid":panid,
-      "visible":visible
+      "visible":visible+1
     };
     httpUtil.post(DataUtils.api_pancopy,data:param).then((value){
       print(value);
@@ -227,22 +224,26 @@ class DialogManager{
                       children: [
                         GestureDetector(
                           onTap: (){
-                            _selectVisible(1);
+                            _selectVisible(0);
                           },
                           child: Row(
                             children: [
-                              Radio(value: 1, groupValue: visible, activeColor: Colors.red,),
+                              Radio(value: 0, groupValue: visible, activeColor: Colors.red,onChanged: (value){
+                                _selectVisible(0);
+                              },),
                               Text("本校可见",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),)
                             ],
                           ),
                         ),
                         GestureDetector(
                           onTap: (){
-                            _selectVisible(2);
+                            _selectVisible(1);
                           },
                           child: Row(
                             children: [
-                              Radio(value: 2, groupValue: visible, activeColor: Colors.red,),
+                              Radio(value: 1, groupValue: visible, activeColor: Colors.red,onChanged: (value){
+                                _selectVisible(1);
+                              },),
                               Text("自己可见",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),)
                             ],
                           ),

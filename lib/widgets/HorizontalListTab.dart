@@ -29,11 +29,11 @@ class HorizontalListTabState extends BaseState<HorizontalListTab>{
     normalStyle = TextStyle(color: Colors.black87,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)));
     selectStyle = TextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)));
     if(widget.datas.length > 0) {
-      _resetSelect(widget.datas[0].id);
+      resetSelect(widget.datas[0].id);
     }
   }
 
-  void _resetSelect(int id){
+  void resetSelect(int id){
     widget.datas.forEach((element) {
       if(element.id == id){
         element.select = true;
@@ -48,7 +48,7 @@ class HorizontalListTabState extends BaseState<HorizontalListTab>{
   Widget item(dynamic _data){
     return InkWell(
       onTap: (){
-        _resetSelect(_data.id);
+        resetSelect(_data.id);
         widget.click(_data);
       },
       child: Container(

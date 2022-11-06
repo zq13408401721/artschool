@@ -37,10 +37,12 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
 
   String searchword;
   List<String> searchTypes = ["网盘","用户"];
-  String searchType;
+  String searchType = "网盘";
+  String searchReslt = "";
   int page = 1;
   int size = 10;
   int total = 0;
+  bool isShowResult;
 
   List<Result> searchList = [];
   List<String> historyList = [];
@@ -82,13 +84,16 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
           U.UserSearch userSearch = U.UserSearch.fromJson(json.decode(value));
           total = userSearch.data.total;
           searchUsers.addAll(userSearch.data.result);
+          searchReslt = "共有$total个相关网盘";
         }else{
           PanSearch panSearch = PanSearch.fromJson(json.decode(value));
           total = panSearch.data.total;
           searchList.addAll(panSearch.data.result);
+          searchReslt = "共有$total个相关用户";
         }
       }
       setState(() {
+        isShowResult = true;
       });
     });
   }
@@ -102,6 +107,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
     total = 0;
     page = 1;
     setState(() {
+      isShowResult = false;
     });
   }
 
@@ -323,6 +329,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
                     value: searchType,
                     onChanged: (item){
                       setState(() {
+                        isShowResult = false;
                         searchType = item;
                       });
                     },
@@ -390,7 +397,10 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("共有$total个相关网盘",style: Constant.smallTitleTextStyle,),
+          Offstage(
+            offstage: !isShowResult,
+            child: Text("共有$total个相关网盘",style: Constant.smallTitleTextStyle,),
+          ),
           Expanded(
             child: StaggeredGridView.countBuilder(
               crossAxisCount: Constant.isPad ? 3 : 2,

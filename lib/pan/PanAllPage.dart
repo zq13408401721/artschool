@@ -11,18 +11,23 @@ import 'package:yhschool/bean/pan_classify_bean.dart' as P;
 import 'package:yhschool/pan/PanCopyDialog.dart';
 import 'package:yhschool/pan/PanDetailPage.dart';
 import 'package:yhschool/pan/PanPage.dart';
+import 'package:yhschool/bean/user_search.dart' as S;
+import 'package:yhschool/utils/EnumType.dart';
+import 'package:yhschool/widgets/CoustSizeImage.dart';
 
 import '../utils/Constant.dart';
 import '../utils/DataUtils.dart';
 import '../utils/HttpUtils.dart';
 import '../utils/SizeUtil.dart';
+import 'PanUserDetail.dart';
 
 class PanAllPage extends BasefulWidget<PanPageState>{
 
   BuildContext panContext;
   List<P.Data> tabs = [];
+  String marknames;
 
-  PanAllPage({Key key,@required this.panContext}):super(key: key);
+  PanAllPage({Key key,@required this.panContext,@required this.marknames}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -43,6 +48,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
   int pagenum=1,pagesize=10;
   List<Data> panList = [];
   int selectClassifyid;
+  String selectClassName;
   String selectMarks;
 
 
@@ -50,29 +56,32 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
   void initState() {
     super.initState();
     print("ColumnListPage initState");
-    isShowAdvert = true;
+    /*isShowAdvert = false;
     super.advertData = {
       "url":"http://res.yimios.com:9050/videos/advert/advert_column_list.jpg",
       "weburl":"https://support.qq.com/products/326279/faqs/121942",
       "height":Constant.ADVERT_COLUMN_HEIGHT
-    };
+    };*/
     _scrollController = initScrollController(isfresh: false);
   }
 
-  void queryPanListAll(classifyid){
+  void queryPanListAll(classifyid,{String classifyname}){
     pagenum = 1;
     selectClassifyid = classifyid;
+    selectClassName = classifyname;
     panList = [];
     var param = {
       "page":pagenum,
       "size":pagesize,
       "classifyid":classifyid
     };
+    print("panlistall ${pagenum} ${selectClassifyid}");
     getPanList(param);
   }
 
-  void queryPanListByMark(classifyid,marks){
+  void queryPanListByMark(classifyid,marks,{String classifyname}){
     selectClassifyid = classifyid;
+    selectClassName = classifyname;
     selectMarks = marks;
     pagenum=1;
     panList = [];
@@ -89,12 +98,13 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
    * 获取网盘数据
    */
   void getPanList(param){
+    print("pagenum:${pagenum}");
     httpUtil.post(DataUtils.api_panlist,data: param).then((value){
       print("panlist:$value");
       hideLoadMore();
       if(value != null){
         var panListBean = PanListBean.fromJson(json.decode(value));
-        if(panListBean.errno == 0){
+        if(panListBean.errno == 0 && panListBean.data.length > 0){
           pagenum++;
           panList.addAll(panListBean.data);
           setState(() {
@@ -138,11 +148,21 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
         onTap: (){
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
-            return PanDetailPage(panData: item,isself: item.uid == m_uid,tabs: widget.tabs,);
-          })).then((value){
-            if(value != null){
+            return PanDetailPage(panData: item,isself: item.uid == m_uid,tabs: widget.tabs,classifyname:selectClassName,marknames: widget.marknames,);
+          })).then((result){
+            if(result != null){
+              PanEditor editor = result["editor"];
+              if(editor == PanEditor.EDITOR){
+                item.imagenum = result["value"];
+              }else if(editor == PanEditor.DELETE){
+                for(Data data in panList){
+                  if(data.id == item.id){
+                    panList.remove(data);
+                    break;
+                  }
+                }
+              }
               setState(() {
-                item.imagenum = value;
               });
             }
           });
@@ -150,7 +170,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (item.url != null && item.imagenum > 0) ? CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url),memCacheWidth: item.width,memCacheHeight: item.height,fit: BoxFit.cover,)
+            (item.url != null && item.imagenum > 0) ? CoustSizeImage(Constant.parsePanSmallString(item.url), width: item.width, height: item.height)
             : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
               child: Center(
                 child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
@@ -165,16 +185,42 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
             Padding(padding: EdgeInsets.only(
               left: SizeUtil.getAppWidth(20),
               right: SizeUtil.getAppWidth(20),
-              top: SizeUtil.getAppHeight(5),
-              bottom: SizeUtil.getAppHeight(5)
-            ),child: Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,),),
+              top: SizeUtil.getAppHeight(10),
+              bottom: SizeUtil.getAppHeight(10)
+            ),child: InkWell(
+              onTap: (){
+                var param = new S.Result(
+                  uid: item.uid,
+                  username:item.username,
+                  nickname:item.nickname,
+                  avater:item.avater,
+                  role:item.role,
+                );
+                param.panid = item.panid;
+                //进入用户详情页
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return PanUserDetail(data: param,);
+                }));
+              },
+              child: Row(
+                children: [
+                  ClipOval(
+                    child: (item.avater == null || item.avater.length == 0)
+                        ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                        : CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                  ),
+                  SizedBox(width: SizeUtil.getAppWidth(20),),
+                  Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,)
+                ],
+              ),
+            )),
             Padding(padding: EdgeInsets.only(
               left: SizeUtil.getAppWidth(20),
               right: SizeUtil.getAppWidth(20),
               top: SizeUtil.getAppHeight(5),
               bottom: SizeUtil.getAppHeight(5)
             ),child: Text("P${item.imagenum}",style: TextStyle(color: Colors.grey,fontSize: ScreenUtil().setSp(30)),),),
-            Offstage(
+            /*Offstage(
               offstage: item.uid == m_uid || item.imagenum == 0,
               child: Align(
                 alignment:Alignment.centerRight,
@@ -202,7 +248,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
                   ],
                 ),
               ),
-            )
+            )*/
           ],
         ),
       ),
@@ -239,6 +285,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
     if(selectMarks != null){
       param["marks"] = selectMarks.toString();
     }
+    print("loadmore");
     getPanList(param);
   }
 

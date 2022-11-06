@@ -65,15 +65,19 @@ abstract class BaseListRefresh<T extends StatefulWidget> extends BaseState<T>{
 
   //隐藏刷新
   void hideRefreshing(){
-    setState(() {
-      this.isrefreshing = false;
+    Future.delayed(new Duration(seconds: 1),(){
+      setState(() {
+        this.isrefreshing = false;
+      });
     });
   }
 
   //隐藏加载更多
   void hideLoadMore(){
-    setState(() {
-      this.isloading = false;
+    Future.delayed(new Duration(seconds: 1),(){
+      setState(() {
+        this.isloading = false;
+      });
     });
   }
 

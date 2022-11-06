@@ -12,12 +12,16 @@ import 'package:yhschool/pan/PanPage.dart';
 import 'package:yhschool/bean/pan_classify_bean.dart' as P;
 import 'package:yhschool/popwin/DialogManager.dart';
 import 'package:yhschool/utils/EnumType.dart';
+import 'package:yhschool/widgets/CoustSizeImage.dart';
 import '../bean/pan_list_bean.dart';
 import '../utils/Constant.dart';
 import '../utils/DataUtils.dart';
 import '../utils/HttpUtils.dart';
 import '../utils/SizeUtil.dart';
 import 'PanDetailPage.dart';
+import 'package:yhschool/bean/user_search.dart' as S;
+
+import 'PanUserDetail.dart';
 
 class PanMine extends BasefulWidget<PanPageState>{
 
@@ -50,6 +54,10 @@ class PanMineState extends BaseRefreshState<PanMine>{
   String _marks;
   int _classifyid;
 
+  int selectClassifyid;
+  String selectClassName;
+  String selectMarks;
+
   @override
   void initState() {
     super.initState();
@@ -60,7 +68,8 @@ class PanMineState extends BaseRefreshState<PanMine>{
   /**
    * 查询网盘列表数据
    */
-  void queryPanList({String schoolid,int classifyid,String marks}){
+  void queryPanList({int classifyid,String marks}){
+    print("panmine ${classifyid}}");
     pagenum = 1;
     this.panList = [];
     _classifyid = classifyid;
@@ -132,10 +141,28 @@ class PanMineState extends BaseRefreshState<PanMine>{
   }
 
   /**
+   * 获取标签相关的盘列表
+   */
+  void queryPanListByMark(classifyid,marks,{String classifyname}){
+    selectClassifyid = classifyid;
+    selectClassName = classifyname;
+    selectMarks = marks;
+    pagenum=1;
+    panList = [];
+    var param = {
+      "page":pagenum,
+      "size":pagesize,
+      "classifyid":classifyid,
+      "marks":marks
+    };
+    _getPanList(param);
+  }
+
+  /**
    * 获取网盘数据
    */
   void _getPanList(param){
-    httpUtil.post(DataUtils.api_panlist,data: param).then((value){
+    httpUtil.post(DataUtils.api_querymypanlist,data: param).then((value){
       print("mine panlist:$value");
       hideLoadMore();
       if(value != null){
@@ -176,7 +203,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             (item.url != null && item.imagenum > 0) ?
-            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url),memCacheWidth: item.width,memCacheHeight: item.height,fit: BoxFit.cover,)
+            CoustSizeImage(Constant.parsePanSmallString(item.url), width: item.width, height: item.height)
             : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
               child: Center(
                 child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
@@ -189,11 +216,37 @@ class PanMineState extends BaseRefreshState<PanMine>{
               bottom: SizeUtil.getAppWidth(5),
             ),child:Text(item.name),),
             Padding(padding: EdgeInsets.only(
-              left: SizeUtil.getAppWidth(20),
-              right: SizeUtil.getAppWidth(20),
-              top: SizeUtil.getAppWidth(5),
-              bottom: SizeUtil.getAppWidth(5),
-            ),child: Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,),),
+                left: SizeUtil.getAppWidth(20),
+                right: SizeUtil.getAppWidth(20),
+                top: SizeUtil.getAppHeight(10),
+                bottom: SizeUtil.getAppHeight(10)
+            ),child: InkWell(
+              onTap: (){
+                var param = new S.Result(
+                  uid: item.uid,
+                  username:item.username,
+                  nickname:item.nickname,
+                  avater:item.avater,
+                  role:item.role,
+                );
+                param.panid = item.panid;
+                //进入用户详情页
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return PanUserDetail(data: param,);
+                }));
+              },
+              child: Row(
+                children: [
+                  ClipOval(
+                    child: (item.avater == null || item.avater.length == 0)
+                        ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                        : CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                  ),
+                  SizedBox(width: SizeUtil.getAppWidth(20),),
+                  Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,)
+                ],
+              ),
+            )),
             Padding(padding: EdgeInsets.only(
                 left: SizeUtil.getAppWidth(20),
                 right: SizeUtil.getAppWidth(20),

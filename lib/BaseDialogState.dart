@@ -10,6 +10,7 @@ import 'package:yhschool/bean/issue_video_push_bean.dart';
 import 'package:yhschool/bean/teacher_classes_bean.dart';
 import 'package:yhschool/mine/PushNotice.dart';
 import 'package:yhschool/pan/PanScreen.dart';
+import 'package:yhschool/pan/PanVisible.dart';
 import 'package:yhschool/popwin/PopWinEditorColumn.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
@@ -460,12 +461,13 @@ class BaseDialogState<T extends StatefulWidget> extends BasePhotoState<T>{
    * 网盘筛选
    */
   Future<dynamic> showPanScreen(BuildContext context,int classifyid) async{
-    var result = "";
+    var result;
     await showDialog(context: context, builder: (context){
       return StatefulBuilder(builder: (_context,_state){
         return PanScreen(classifyid: classifyid);
       });
     }).then((value){
+      print("value ${value}");
       result = value;
     });
     return result;
@@ -476,77 +478,18 @@ class BaseDialogState<T extends StatefulWidget> extends BasePhotoState<T>{
    */
   Future<dynamic> showPanVisible(bool isteacher) async{
     bool select;
-    select = await getPanVisible();
-    select = select == null ? false : true;
     await showDialog(context: context, builder: (context){
       return StatefulBuilder(builder: (context,state){
         return FractionallySizedBox(
           widthFactor: 2/3,
           heightFactor: 1/5,
-            child: Card(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: SizeUtil.getAppWidth(20),
-                  vertical: SizeUtil.getAppHeight(20)
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(isteacher == true ? "只显示老师的网盘" : "显示所有网盘",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
-                  Row(
-                    children: [
-                      Checkbox(value: select, onChanged: (value){
-                        select = !select;
-                        setState(() {
-                        });
-                      }),
-                      Text("记住我的选择",style: Constant.smallTitleTextStyle,)
-                    ],
-                  ),
-                  SizedBox(height: SizeUtil.getHeight(20),),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          onTap: (){
-                            savePanVisible(select);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
-                            padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
-                            ),
-                            child: Text("确定",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
-                          ),
-                        ),
-                        InkWell(
-                            onTap: (){
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
-                              padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
-                              decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
-                              ),
-                              child: Text("取消",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
-                            )
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
+            child: PanVisible(isteacher: isteacher,),
         );
       });
+    }).then((value){
+      select = value;
     });
+    print("showPanVisible ${select}");
     return select;
   }
 

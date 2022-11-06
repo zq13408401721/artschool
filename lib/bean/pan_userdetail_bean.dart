@@ -48,7 +48,9 @@ class Data {
       String username, 
       dynamic nickname, 
       int role, 
-      dynamic avater,}){
+      dynamic avater, 
+      int isfollow, 
+      List<Classes> classes,}){
     _pannum = pannum;
     _imagenum = imagenum;
     _likenum = likenum;
@@ -58,6 +60,8 @@ class Data {
     _nickname = nickname;
     _role = role;
     _avater = avater;
+    _isfollow = isfollow;
+    _classes = classes;
 }
 
   Data.fromJson(dynamic json) {
@@ -70,6 +74,13 @@ class Data {
     _nickname = json['nickname'];
     _role = json['role'];
     _avater = json['avater'];
+    _isfollow = json['isfollow'];
+    if (json['classes'] != null) {
+      _classes = [];
+      json['classes'].forEach((v) {
+        _classes.add(Classes.fromJson(v));
+      });
+    }
   }
   int _pannum;
   int _imagenum;
@@ -80,6 +91,8 @@ class Data {
   dynamic _nickname;
   int _role;
   dynamic _avater;
+  int _isfollow;
+  List<Classes> _classes;
 
   int get pannum => _pannum;
   int get imagenum => _imagenum;
@@ -90,6 +103,11 @@ class Data {
   dynamic get nickname => _nickname;
   int get role => _role;
   dynamic get avater => _avater;
+  int get isfollow => _isfollow;
+  void set isfollow(value){
+    _isfollow = value;
+  }
+  List<Classes> get classes => _classes;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -102,6 +120,49 @@ class Data {
     map['nickname'] = _nickname;
     map['role'] = _role;
     map['avater'] = _avater;
+    map['isfollow'] = _isfollow;
+    if (_classes != null) {
+      map['classes'] = _classes.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+
+}
+
+class Classes {
+  Classes({
+      int id, 
+      String name, 
+      String date, 
+      int maxnum,}){
+    _id = id;
+    _name = name;
+    _date = date;
+    _maxnum = maxnum;
+}
+
+  Classes.fromJson(dynamic json) {
+    _id = json['id'];
+    _name = json['name'];
+    _date = json['date'];
+    _maxnum = json['maxnum'];
+  }
+  int _id;
+  String _name;
+  String _date;
+  int _maxnum;
+
+  int get id => _id;
+  String get name => _name;
+  String get date => _date;
+  int get maxnum => _maxnum;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = _id;
+    map['name'] = _name;
+    map['date'] = _date;
+    map['maxnum'] = _maxnum;
     return map;
   }
 

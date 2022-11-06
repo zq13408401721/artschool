@@ -4,10 +4,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:yhschool/BaseCoustRefreshState.dart';
 import 'package:yhschool/BaseRefreshState.dart';
+import 'package:yhschool/bean/pan_addlike_bean.dart' as A;
 import 'package:yhschool/bean/pan_list_bean.dart' as P;
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
+import 'package:yhschool/widgets/CoustSizeImage.dart';
 
 import '../GalleryBig.dart';
 import '../bean/pan_file_bean.dart';
@@ -50,16 +53,40 @@ class UserPanImagePageState extends BaseRefreshState<UserPanImagePage>{
     };
     httpUtil.post(DataUtils.api_querypanimagebyuser,data: param).then((value){
       print("pan image: ${page} $value");
+      hideLoadMore();
       if(value != null){
         PanFileBean panFileBean = PanFileBean.fromJson(json.decode(value));
-        if(panFileBean.errno == 0){
+        if(panFileBean.errno == 0 && panFileBean.data.length > 0){
           filesList.addAll(panFileBean.data);
           page ++;
         }
       }
       setState(() {
-        hideLoadMore();
       });
+    });
+  }
+
+  /**
+   * 添加喜欢的网盘图片
+   */
+  void addPanImageLike(int fileid){
+    var param = {
+      "panid":widget.data.panid,
+      "fileid":fileid
+    };
+    httpUtil.post(DataUtils.api_addpanfilelike,data: param).then((value){
+      print("pan file like:$value");
+      hideLoadMore();
+      if(value != null){
+        A.PanAddlikeBean addlikeBean = A.PanAddlikeBean.fromJson(json.decode(value));
+        if(addlikeBean.errno == 0){
+          if(addlikeBean.data.type == "add"){
+            showToast("收藏成功");
+          }else{
+            showToast("已经收藏");
+          }
+        }
+      }
     });
   }
 
@@ -79,68 +106,46 @@ class UserPanImagePageState extends BaseRefreshState<UserPanImagePage>{
             return PanImageDetail(panData: P.Data(
               id: item.id,
               date: item.date,
+              name: item.panname,
+              imagenum: item.imgnum,
               uid: widget.data.uid,
               avater: widget.data.avater,
               nickname:widget.data.nickname,
               username: widget.data.username,
               url: item.url
-            ));
-          }));
+            ),imgUrl: item.url,imgData: item,fileid: item.id,);
+          })).then((value){
+
+          });
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url),memCacheWidth: item.width,memCacheHeight: item.height,fit: BoxFit.cover,),
+            CoustSizeImage(Constant.parsePanSmallString(item.url), width: item.width, height: item.height),
             Padding(padding: EdgeInsets.only(
               left: SizeUtil.getAppWidth(20),
               right: SizeUtil.getAppWidth(20),
-              top: SizeUtil.getAppWidth(10),
-              bottom: SizeUtil.getAppWidth(5),
-            ),
-                child:widget.data.uid == m_uid ?
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text("${item.name}",style: Constant.smallTitleTextStyle,maxLines: 1,overflow: TextOverflow.ellipsis,),
-                    ),
-                    InkWell(
+              top: SizeUtil.getAppWidth(20),
+              bottom: SizeUtil.getAppWidth(20),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text("${item.name}",style: Constant.smallTitleTextStyle,maxLines: 1,overflow: TextOverflow.ellipsis,),
+                  ),
+                  /*Offstage(
+                    offstage: m_uid == widget.data.uid,
+                    child: InkWell(
                       onTap: (){
                         //点赞
+                        addPanImageLike(item.id);
                       },
                       child: Image.asset("image/ic_pan_unlike.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
-                    )
-                  ],
-                ) :
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      onTap: (){
-                        //网盘置顶
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: SizeUtil.getAppWidth(10),
-                          vertical: SizeUtil.getAppHeight(10),
-                        ),
-                        child: Image.asset("image/ic_pan_top.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
-                      ),
                     ),
-                    InkWell(
-                      onTap: (){
-                        //点赞
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: SizeUtil.getAppWidth(10),
-                          vertical: SizeUtil.getAppHeight(10),
-                        ),
-                        child: Image.asset("image/ic_pan_unlike.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
-                      ),
-                    )
-                  ],
-                )
+                  )*/
+                ],
+              ),
             )
           ],
         ),
@@ -158,6 +163,7 @@ class UserPanImagePageState extends BaseRefreshState<UserPanImagePage>{
         crossAxisSpacing: SizeUtil.getAppWidth(Constant.DIS_LIST),
         controller: _scrollController,
         addAutomaticKeepAlives: false,
+        mainAxisSpacing: SizeUtil.getAppHeight(20),
         padding: EdgeInsets.only(left: SizeUtil.getAppWidth(Constant.DIS_LIST),right: SizeUtil.getAppWidth(Constant.DIS_LIST)),
         staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
         //StaggeredTile.count(3,index==0?2:3),

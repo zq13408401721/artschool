@@ -59,3 +59,10 @@ enum TileType{
 enum PanDeleteType{
   PAN,FILE
 }
+
+/**
+ * 网盘编辑
+ */
+enum PanEditor{
+  EDITOR,DELETE
+}

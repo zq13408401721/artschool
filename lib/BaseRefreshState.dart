@@ -15,6 +15,7 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
   dynamic advertData = null;
 
   ScrollController _scrollController;
+  double oldoffset = 0;
 
   @override
   void initState() {
@@ -29,18 +30,21 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
     _scrollController.addListener(() {
       if(_scrollController.position.maxScrollExtent > 0 && _scrollController.position.pixels > _scrollController.position.maxScrollExtent-100){
         //加载更多
+        print("scrollController offset ${_scrollController.offset} pixels:${_scrollController.position.pixels} max:${_scrollController.position.maxScrollExtent}");
+        if(oldoffset == 0){
+          oldoffset = _scrollController.offset;
+          return;
+        };
+        //如果是向上的滚动就不要出现加载更多
+        if(_scrollController.offset < oldoffset){
+          oldoffset = _scrollController.offset;
+          return;
+        }
+        oldoffset = _scrollController.offset;
         if(isloading == false){
+          this.isloading = true;
           setState(() {
-            /*if(hasData){
-              loadmore();
-            }else{
-              Future.delayed(Duration(seconds: 2),(){
-                hideLoadMore();
-              });
-              showToast("没有更多数据");
-            }*/
             loadmore();
-            this.isloading = true;
           });
         }
       }else if(_scrollController.position.pixels < -100){
@@ -69,15 +73,19 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
 
   //隐藏刷新
   void hideRefreshing(){
-    setState(() {
-      this.isrefreshing = false;
+    Future.delayed(new Duration(seconds: 1),(){
+      setState(() {
+        this.isrefreshing = false;
+      });
     });
   }
 
   //隐藏加载更多
   void hideLoadMore(){
-    setState(() {
-      this.isloading = false;
+    Future.delayed(new Duration(seconds: 1),(){
+      setState(() {
+        this.isloading = false;
+      });
     });
   }
 

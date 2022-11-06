@@ -47,14 +47,24 @@ class PanPageState extends BaseDialogState<PanPage>{
   final GlobalKey<PanSchoolState> panSchoolStateKey = GlobalKey<PanSchoolState>();
   final GlobalKey<PanMineState> panMineStateKey = GlobalKey<PanMineState>();
 
+  //classify tab
+  final GlobalKey<HorizontalListTabState> horizontalListTabKey = GlobalKey<HorizontalListTabState>();
+
+  //只看老师
+  final TextStyle screenTeacherNormal = TextStyle(color: Colors.black,fontSize: SizeUtil.getAppFontSize(30));
+  final TextStyle screenTeacherSelect = TextStyle(color: Colors.red,fontSize: SizeUtil.getAppFontSize(30));
 
   int page = 0;
   List<Data> tabsList=[];
   String icon_enable_teacher = "image/ic_unenable_teacher.png";
   bool enable_teacher = false;
   int selectClassify = 0;
+  String selectClassName="";
   String schoolid;
   N.PanNumBean mPanNumbean;
+  String marks="";
+  String marknames = "";
+
 
 
   @override
@@ -93,14 +103,19 @@ class PanPageState extends BaseDialogState<PanPage>{
       allTopTabState.currentState.select(false);
       schoolTopTabState.currentState.select(true);
       mineTopTabState.currentState.select(false);
+      resetSelectTab();
+      updatePanList();
       panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: 0);
     }else if(index == 2){
       allTopTabState.currentState.select(false);
       schoolTopTabState.currentState.select(false);
       mineTopTabState.currentState.select(true);
+      resetSelectTab();
+      updatePanList();
       panMineStateKey.currentState.queryPanList(classifyid: 0);
     }
     setState(() {
+      marknames = "";
     });
   }
 
@@ -109,11 +124,24 @@ class PanPageState extends BaseDialogState<PanPage>{
    */
   void updatePanList(){
     if(page == 0){
-      this.panAllPageStateKey.currentState.queryPanListAll(selectClassify);
+      this.panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName);
     }else if(page == 1){
       panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify);
     }else if(page == 2){
       panMineStateKey.currentState.queryPanList(classifyid: selectClassify);
+    }
+  }
+
+  /**
+   * 通过标签更新网盘列表
+   */
+  void updatePanListByMarks(){
+    if(page == 0){
+      panAllPageStateKey.currentState.queryPanListByMark(selectClassify, this.marks,classifyname: selectClassName);
+    }else if(page == 1){
+      panSchoolStateKey.currentState.queryPanListByMark(selectClassify, this.marks,classifyname: selectClassName);
+    }else{
+      panMineStateKey.currentState.queryPanListByMark(selectClassify, this.marks,classifyname: selectClassName);
     }
   }
 
@@ -130,9 +158,10 @@ class PanPageState extends BaseDialogState<PanPage>{
         this.tabsList.add(new Data(id:0,name: "全部"));
         this.tabsList.addAll(panClassify.data);
         selectClassify = this.tabsList[0].id;
+        selectClassName = this.tabsList[0].name;
         this.tabsList[0].select = true;
         (this.panAllPageStateKey.currentWidget as PanAllPage).tabs.addAll(panClassify.data);
-        this.panAllPageStateKey.currentState.queryPanListAll(selectClassify);
+        this.panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName);
         this.panSchoolStateKey.currentState.tabs.addAll(panClassify.data);
         this.panMineStateKey.currentState.tabs.addAll(panClassify.data);
       }
@@ -149,6 +178,7 @@ class PanPageState extends BaseDialogState<PanPage>{
       if(i == 0){
         tabsList[i].select = true;
         selectClassify = tabsList[i].id;
+        selectClassName = tabsList[i].name;
       }else{
         tabsList[i].select = false;
       }
@@ -164,6 +194,7 @@ class PanPageState extends BaseDialogState<PanPage>{
         child: Stack(
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //顶部菜单 左右两边
                 Container(
@@ -204,16 +235,19 @@ class PanPageState extends BaseDialogState<PanPage>{
                         child: SizedBox(),
                       ),
                       //右边
-                      Row(
+                      /*Row(
                         children: [
                           //是否仅显老师
                           ImageButton(icon: icon_enable_teacher, label: "", cb: (){
                             showPanVisible(this.enable_teacher).then((value){
-                              if(value){
-                                this.enable_teacher = !this.enable_teacher;
-                                setState(() {
-                                  this.icon_enable_teacher = this.enable_teacher ? "image/ic_enable_teacher.png" : "image/ic_unenable_teacher.png";
-                                });
+                              if(value != null){
+                                if(this.enable_teacher != value){
+                                  this.enable_teacher = value;
+                                  setState(() {
+                                    this.icon_enable_teacher = this.enable_teacher ? "image/ic_enable_teacher.png" : "image/ic_unenable_teacher.png";
+                                  });
+
+                                }
                               }
                             });
                           }),
@@ -223,22 +257,35 @@ class PanPageState extends BaseDialogState<PanPage>{
                             child: ImageButton(icon: "image/ic_pan_screen.png", label: "", cb: (){
                               //mark筛选
                               showPanScreen(context, selectClassify).then((value){
+                                print("showPanScreen ${value}");
                                 //创建网盘成功 进入我的网盘
                                 if(value != null){
-                                  panAllPageStateKey.currentState.queryPanListByMark(selectClassify, value);
+                                  if(value["marks"] != null){
+                                    setState(() {
+                                      this.marks = value["marks"];
+                                      this.marknames = value["marknames"];
+                                    });
+                                    panAllPageStateKey.currentState.queryPanListByMark(selectClassify, this.marks,classifyname: selectClassName);
+                                  }else{
+                                    setState(() {
+                                      this.marks = "";
+                                      this.marknames = "";
+                                    });
+                                    panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName);
+                                  }
                                 }
-
                               });
                             }),
                           ),
-                          //搜索
-                          ImageButton(icon: "image/ic_search.png", label: "", cb: ()=>{
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPanPage(callback: (){
 
-                            })))
-                          }),
                         ],
-                      )
+                      ),*/
+                      //搜索
+                      ImageButton(icon: "image/ic_search.png", label: "", cb: ()=>{
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPanPage(callback: (){
+
+                        })))
+                      }),
                     ],
                   ),
                 ),
@@ -254,9 +301,13 @@ class PanPageState extends BaseDialogState<PanPage>{
                   margin: EdgeInsets.only(
                       bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
                   ),
-                  child: HorizontalListTab(datas: tabsList, click: (dynamic _data){
+                  child: HorizontalListTab(key:horizontalListTabKey,datas: tabsList, click: (dynamic _data){
                     setState(() {
                       this.selectClassify = _data.id;
+                      this.selectClassName = _data.name;
+                      if(_data.id == 0){
+                        marknames = "";
+                      }
                     });
                     print("${_data.id}");
                     updatePanList();
@@ -264,12 +315,95 @@ class PanPageState extends BaseDialogState<PanPage>{
                 ),
                 //广告栏
                 //CachedNetworkImage(imageUrl: ""),
+                //markname  筛选
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //markname
+                    Offstage(
+                      offstage: marknames == null  || marknames.length == 0,
+                      child: InkWell(
+                        onTap: (){
+                          setState(() {
+                            this.marks = "";
+                            this.marknames = "";
+                          });
+                          //panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName);
+                          updatePanList();
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(20)),
+                          child: Text(marknames,style: Constant.titleTextStyleNormal,),
+                        ),
+                      ),
+                    ),
+                    //筛选条件
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                            right: SizeUtil.getAppWidth(20),
+                          ),
+                          child: Row(
+                            children: [
+                              Checkbox(value: enable_teacher, onChanged: (value){
+                                setState(() {
+                                  enable_teacher = value;
+                                });
+                              },materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,),
+                              InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    enable_teacher = !enable_teacher;
+                                  });
+                                },
+                                child: Text("只看老师",style: enable_teacher ? screenTeacherSelect : screenTeacherNormal,),
+                              )
+                            ],
+                          ),
+                        ),
+                        //筛选
+                        Offstage(
+                          offstage: selectClassify == 0,
+                          child: Container(
+                            margin:EdgeInsets.only(
+                              right: SizeUtil.getAppWidth(20)
+                            ),                 
+                            child: ImageButton(icon: "image/ic_pan_screen.png", label: "精准筛选",titleStyle: TextStyle(color: Colors.black87,fontSize: SizeUtil.getAppFontSize(30)), cb: (){
+                              //mark筛选
+                              showPanScreen(context, selectClassify).then((value){
+                                print("showPanScreen ${value}");
+                                //创建网盘成功 进入我的网盘
+                                if(value != null){
+                                  if(value["marks"] != null){
+                                    setState(() {
+                                      this.marks = value["marks"];
+                                      this.marknames = value["marknames"];
+                                    });
+                                    updatePanListByMarks();
+                                  }else{
+                                    setState(() {
+                                      this.marks = "";
+                                      this.marknames = "";
+                                    });
+                                    updatePanList();
+                                  }
+                                }
+                              });
+                            }),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
                 //列表
                 Expanded(
                   child: IndexedStack(
                     index: page,
                     children: [
-                      PanAllPage(key: panAllPageStateKey,panContext: context,),
+                      PanAllPage(key: panAllPageStateKey,panContext: context,marknames: marknames,),
                       PanSchool(key: panSchoolStateKey,panContext: context,),
                       PanMine(key: panMineStateKey,panContext: context,callback: (){
                         //刷新pan数量
@@ -287,8 +421,15 @@ class PanPageState extends BaseDialogState<PanPage>{
                 onTap: (){
                   //创建网盘 tabslist第0个位置是全部，只在前端才有效，不作为其他接口参数
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> PanCreate(tabs: tabsList.sublist(1),isCreate: true,))).then((value){
-                    if(value){
-                      queryPanNum();
+                    if(value != null){
+                      //queryPanNum();
+                      selectClassify = 0;
+                      selectClassName = "全部";
+                      horizontalListTabKey.currentState.resetSelect(0);
+                      changeTab(2);
+                      //创建网盘切换我的网盘页面
+                      setState(() {
+                      });
                     }
                   });
                 },

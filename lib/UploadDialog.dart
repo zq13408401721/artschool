@@ -341,7 +341,7 @@ class UploadState extends BaseState<UploadDialog>{
         ) :Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text("图片上传$current/$total",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40))),),
+            Text("图片上传$current/$total",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),fontWeight: FontWeight.normal,decoration: TextDecoration.none),),
             Container(
               width: double.infinity,
               height: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.isPad ? 500 : 620)),
@@ -366,11 +366,11 @@ class UploadState extends BaseState<UploadDialog>{
                                 children: [
                                   Expanded(
                                     flex:2,
-                                    child:Text(_getFilename(imgs[_index].filename),style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(32)),color: Colors.black87),maxLines: 1,overflow: TextOverflow.ellipsis,),
+                                    child:Text(_getFilename(imgs[_index].filename),style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(32)),color: Colors.black87,fontWeight: FontWeight.normal,decoration: TextDecoration.none),maxLines: 1,overflow: TextOverflow.ellipsis,),
                                   ),
                                   Expanded(
                                       flex:1,
-                                      child: Text(imgs[_index].uploadState,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(32)),color:Colors.red))
+                                      child: Text(imgs[_index].uploadState,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(32)),color:Colors.red,fontWeight: FontWeight.normal,decoration: TextDecoration.none))
                                   )
                                 ]
                             ),

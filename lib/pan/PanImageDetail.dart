@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:yhschool/BaseDialogState.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/bean/add_special_column_bean.dart';
 import 'package:yhschool/popwin/DialogManager.dart';
@@ -17,8 +18,10 @@ class PanImageDetail extends StatefulWidget{
 
   P.Data panData;
   String imgUrl;
+  dynamic imgData;
+  int fileid; //对应的文件id
 
-  PanImageDetail({Key key,@required this.panData,@required this.imgUrl}):super(key: key);
+  PanImageDetail({Key key,@required this.panData,@required this.imgUrl,@required this.imgData,@required this.fileid}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -26,7 +29,7 @@ class PanImageDetail extends StatefulWidget{
   }
 }
 
-class PanImageDetailState extends BaseState<PanImageDetail>{
+class PanImageDetailState extends BaseDialogState<PanImageDetail>{
 
   double loadingProgress=-1;
   bool loadover = false;
@@ -77,34 +80,90 @@ class PanImageDetailState extends BaseState<PanImageDetail>{
                       horizontal: SizeUtil.getAppWidth(20),
                       vertical: SizeUtil.getAppHeight(40)
                     ),
-                    child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
+                    child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
                   ),
                 ),
-                Offstage(
-                  offstage: widget.panData.imagenum == 0 || widget.panData.uid == m_uid,
-                  child: InkWell(
-                    onTap: (){
-                      DialogManager().showCopyPanImageDialog(context,widget.panData.panid,widget.panData.fileid).then((value){
-                        if(value){
-
-                        }
-                      });
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
-                          color: Colors.red
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    //喜欢
+                    Offstage(
+                      offstage: widget.panData.uid == m_uid,
+                      child: InkWell(
+                        onTap: (){
+                          //喜欢
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(5)))
+                          ),
+                          margin: EdgeInsets.only(right: SizeUtil.getAppWidth(20)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: SizeUtil.getAppWidth(20),
+                              vertical: SizeUtil.getAppHeight(10)
+                          ),
+                          child: Text("喜欢",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
+                        ),
                       ),
-                      margin: EdgeInsets.only(
-                          right: SizeUtil.getAppWidth(20)
-                      ),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: SizeUtil.getAppWidth(20),
-                          vertical: SizeUtil.getAppHeight(10)
-                      ),
-                      child: Text("存网盘",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
                     ),
-                  ),
+                    //老师身份推到课堂
+                    Offstage(
+                      offstage: m_role != 1,
+                      child: InkWell(
+                        onTap: (){
+                          //推送到课堂
+                          pushGallery(context, {
+                            "name":m_username == null ? m_nickname : m_username,
+                            "url":widget.imgUrl,
+                            "width":widget.imgData.width,
+                            "height":widget.imgData.height,
+                            "maxwidth":widget.imgData.maxwidth,
+                            "maxheight":widget.imgData.maxheight
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.purple,
+                            borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(5)))
+                          ),
+                          margin: EdgeInsets.only(right: SizeUtil.getAppWidth(20)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: SizeUtil.getAppWidth(20),
+                              vertical: SizeUtil.getAppHeight(10)
+                          ),
+                          child: Text("推送到课堂",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
+                        ),
+                      ),
+                    ),
+                    //存网盘
+                    Offstage(
+                      offstage: widget.panData.imagenum == 0 || widget.panData.uid == m_uid,
+                      child: InkWell(
+                        onTap: (){
+                          DialogManager().showCopyPanImageDialog(context,widget.panData.panid,widget.fileid).then((value){
+                            if(value != null){
+
+                            }
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
+                              color: Colors.red
+                          ),
+                          margin: EdgeInsets.only(
+                              right: SizeUtil.getAppWidth(20)
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: SizeUtil.getAppWidth(20),
+                              vertical: SizeUtil.getAppHeight(10)
+                          ),
+                          child: Text("存网盘",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

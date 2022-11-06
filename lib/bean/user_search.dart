@@ -102,6 +102,7 @@ class Result {
   int _follow;
   int _fansnum;
   String _uid;
+  String _panid;
 
   String get username => _username;
   dynamic get nickname => _nickname;
@@ -110,6 +111,10 @@ class Result {
   int get follow => _follow;
   int get fansnum => _fansnum;
   String get uid => _uid;
+  String get panid => _panid;
+  void set panid(String id){
+    _panid = id;
+  }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

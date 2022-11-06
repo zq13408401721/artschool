@@ -18,9 +18,11 @@ import 'package:yhschool/popwin/DialogManager.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/EnumType.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
+import 'package:yhschool/widgets/CoustSizeImage.dart';
 
 import '../UploadDialog.dart';
 import '../bean/LocalFile.dart';
+import '../bean/pan_addlike_bean.dart' as K;
 import '../bean/pan_topping_bean.dart' as T;
 import '../utils/DataUtils.dart';
 import '../utils/HttpUtils.dart';
@@ -32,7 +34,9 @@ class PanDetailPage extends StatefulWidget{
   Data panData;
   bool isself;
   List<A.Data> tabs;
-  PanDetailPage({Key key,@required this.panData,@required this.isself,@required this.tabs}):super(key: key);
+  String marknames;
+  String classifyname;
+  PanDetailPage({Key key,@required this.panData,@required this.isself,@required this.tabs,@required this.classifyname,@required this.marknames}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -82,9 +86,11 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
       hideLoadMore();
       if(value != null){
         print("panimagelist ${value}");
-        pagenum++;
         F.PanFileBean panFileBean = F.PanFileBean.fromJson(json.decode(value));
-        filesList.addAll(panFileBean.data);
+        if(panFileBean.errno == 0){
+          pagenum++;
+          filesList.addAll(panFileBean.data);
+        }
         setState(() {
         });
       }
@@ -131,6 +137,12 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
     httpUtil.post(DataUtils.api_pantopping,data:param).then((value){
       if(value != null){
         T.PanToppingBean panToppingBean = T.PanToppingBean.fromJson(json.decode(value));
+        if(panToppingBean.errno == 0){
+          showToast("网盘置顶");
+          pagenum = 1;
+          filesList = [];
+          queryPanImageList();
+        }
       }
     });
   }
@@ -193,7 +205,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                     children: [
                       InkWell(
                         onTap: (){
-                          Navigator.pop(context,true);
+                          Navigator.pop(context);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -329,6 +341,29 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
     });
   }
 
+  /**
+   * 添加喜欢的网盘图片
+   */
+  void addPanImageLike(int fileid){
+    var param = {
+      "panid":widget.panData.panid,
+      "fileid":fileid
+    };
+    httpUtil.post(DataUtils.api_addpanfilelike,data: param).then((value){
+      print("pan file like:$value");
+      if(value != null){
+        K.PanAddlikeBean addlikeBean = K.PanAddlikeBean.fromJson(json.decode(value));
+        if(addlikeBean.errno == 0){
+          if(addlikeBean.data.type == "add"){
+            showToast("收藏成功");
+          }else{
+            showToast("已经收藏");
+          }
+        }
+      }
+    });
+  }
+
   Widget panItem(F.Data item){
     return Container(
       decoration: BoxDecoration(
@@ -342,13 +377,13 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         onTap: (){
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
-            return PanImageDetail(panData: widget.panData,imgUrl:item.url);
+            return PanImageDetail(panData: widget.panData,imgUrl:item.url,imgData: item,fileid: item.id,);
           }));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(imageUrl: Constant.parsePanSmallString(item.url),memCacheWidth: item.width,memCacheHeight: item.height,fit: BoxFit.cover,),
+            CoustSizeImage(Constant.parsePanSmallString(item.url), width: item.width, height: item.height),
             Padding(padding: EdgeInsets.only(
                 left: SizeUtil.getAppWidth(20),
                 right: SizeUtil.getAppWidth(20),
@@ -359,13 +394,21 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("1",style: Constant.smallTitleTextStyle,),
-                      InkWell(
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: SizeUtil.getAppHeight(20)
+                          ),
+                          child: Text("${item.name}",style: Constant.smallTitleTextStyle,maxLines: 1,overflow: TextOverflow.ellipsis,),
+                        ),
+                      ),
+                      /*InkWell(
                         onTap: (){
                           //点赞
+                          addPanImageLike(item.id);
                         },
                         child: Image.asset("image/ic_pan_unlike.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
-                      )
+                      )*/
                     ],
                   ) :
                   Row(
@@ -374,6 +417,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                       InkWell(
                         onTap: (){
                           //网盘置顶
+                          panTopping(1,widget.panData.panid);
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -383,11 +427,13 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                           child: Image.asset("image/ic_pan_top.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                         ),
                       ),
-                      Offstage(
+                      /*Offstage(
                         offstage: widget.panData.uid == m_uid,
                         child: InkWell(
                           onTap: (){
-                            //点赞
+                            //喜欢
+                            print("lick click${item.id}");
+                            addPanImageLike(item.id);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -397,7 +443,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                             child: Image.asset("image/ic_pan_unlike.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                           ),
                         ),
-                      ),
+                      ),*/
                       InkWell(
                         onTap: (){
                           //删除网盘图片
@@ -431,7 +477,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
           children: [
             InkWell(
               onTap: (){
-                Navigator.pop(context,widget.panData.imagenum);
+                Navigator.pop(context,{"editor":PanEditor.EDITOR,"value":widget.panData.imagenum});
               },
               child: Container(
                 child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
@@ -464,8 +510,16 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                   DialogManager().showCopyPanDialog(context,widget.panData.panid);
                 },
                 child: Container(
-                  padding: EdgeInsets.all(SizeUtil.getAppWidth(10)),
-                  child: Image.asset("image/ic_pan_copy.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40)),
+                  padding: EdgeInsets.symmetric(
+                    vertical: SizeUtil.getAppHeight(10),
+                    horizontal: SizeUtil.getAppWidth(20)
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(10)))
+                  ),
+                  //child: Image.asset("image/ic_pan_copy.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40)),
+                  child: Text("复制网盘",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.white),),
                 ),
               ),
             ),
@@ -476,7 +530,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                   //删除
                   DialogManager().showDeletePanDialog(context,type:PanDeleteType.PAN, title: "是否确定删除${widget.panData.name}网盘？", panid: widget.panData.panid).then((value){
                     if(value){
-                      Navigator.pop(context,widget.panData.panid);
+                      Navigator.pop(context,{"editor":PanEditor.DELETE});
                     }
                   });
                   //deletePan();
@@ -486,11 +540,13 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                   child: Image.asset("image/ic_pan_delete.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40)),
                 ),
               ),
-            )
+            ),
+            SizedBox(width: SizeUtil.getAppWidth(20),)
           ],
         ),
       ),
       Container(color:Colors.white,height: SizeUtil.getAppHeight(20),),
+      //网盘名
       Container(
         color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(20),vertical: SizeUtil.getAppHeight(20)),
@@ -501,6 +557,30 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
           ],
         ),
       ),
+      //网盘分类
+      Offstage(
+        offstage: widget.classifyname == null,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white
+          ),
+          padding: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(20),vertical: SizeUtil.getAppHeight(10)),
+          child: Text("分类：${widget.classifyname}",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+        ),
+      ),
+      //网盘标签
+      Offstage(
+        offstage: widget.marknames == null  || widget.marknames.length == 0,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white
+          ),
+          padding: EdgeInsets.only(left: SizeUtil.getAppWidth(20),right:SizeUtil.getAppWidth(20),top: SizeUtil.getAppHeight(10),bottom: SizeUtil.getAppHeight(10)),
+          child: Text("标签：${widget.marknames}",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+        ),
+      ),
       Divider(height: 1,indent: SizeUtil.getAppWidth(20),color: Colors.grey,),
       InkWell(
         onTap: (){
@@ -509,8 +589,9 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
             username:widget.panData.username,
             nickname:widget.panData.nickname,
             avater:widget.panData.avater,
-            role:widget.panData.role
+            role:widget.panData.role,
           );
+          param.panid = widget.panData.panid;
           //进入用户详情页
           Navigator.push(context, MaterialPageRoute(builder: (context){
             return PanUserDetail(data: param,);
@@ -556,15 +637,15 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(10)))
           ),
-          child: Row(
+          child: widget.panData.isself == 0 ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("+ 上传图片",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),fontWeight: FontWeight.bold,color: Colors.red),),
               Text("严禁上传色情、政治等不合规图片",style: Constant.smallTitleTextStyle,)
             ],
-          ),
+          ) : Padding(padding: EdgeInsets.only(top: SizeUtil.getAppHeight(20)),child: Text("复制网盘无法上传图片",style: Constant.smallTitleTextStyle,),),
         ),
-      ) : Text("复制网盘无法上传图片",style: Constant.smallTitleTextStyle,),
+      ) : SizedBox(),
       Expanded(
         child: Container(
           padding: EdgeInsets.only(top: SizeUtil.getHeight(20)),

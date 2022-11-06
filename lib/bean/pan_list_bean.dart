@@ -60,7 +60,9 @@ class Data {
       String nickname,
       String avater,
       num imagenum,
-      num role,}){
+      num role,
+      num maxwidth,
+      num maxheight,}){
     _id = id;
     _panid = panid;
     _name = name;
@@ -82,6 +84,9 @@ class Data {
     _nickname = nickname;
     _avater = avater;
     _role = role;
+    _maxwidth = maxwidth;
+    _maxheight = maxheight;
+
 }
 
   Data.fromJson(dynamic json) {
@@ -106,6 +111,8 @@ class Data {
     _nickname = json['nickname'];
     _avater = json['avater'];
     _role = json['role'];
+    _maxwidth = json['maxwidth'];
+    _maxheight = json['maxheight'];
 
   }
   num _id;
@@ -129,6 +136,8 @@ class Data {
   String _nickname;
   String _avater;
   int _role;
+  num _maxwidth;
+  num _maxheight;
 
   num get id => _id;
   String get panid => _panid;
@@ -157,6 +166,8 @@ class Data {
   String get nickname => _nickname;
   String get avater => _avater;
   int get role => _role;
+  num get maxwidth => _maxwidth;
+  num get maxheight => _maxheight;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -180,6 +191,8 @@ class Data {
     map['nickname'] = _nickname;
     map['avater'] = _avater;
     map['role'] = _role;
+    map['maxwidth'] = _maxwidth;
+    map['maxheight'] = _maxheight;
     return map;
   }
 

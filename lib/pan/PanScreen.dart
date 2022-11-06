@@ -33,6 +33,7 @@ class PanScreenState extends BaseState<PanScreen>{
   List<M.Data> panMarkListOne;
   List<M.Data> panMarkListTwo;
   List<M.Data> panMarkListThree;
+  var marknames = ["","",""];
 
   @override
   void initState() {
@@ -74,6 +75,8 @@ class PanScreenState extends BaseState<PanScreen>{
         }
         panMarkListOne[0].select = true;
         panMarkListTwo[0].select = true;
+        marknames[0] = panMarkListOne[0].name;
+        marknames[1] = panMarkListTwo[0].name;
         setState(() {
 
         });
@@ -155,7 +158,7 @@ class PanScreenState extends BaseState<PanScreen>{
                         children: [
                           Container(
                             padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                            child: Text("标签一",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+                            child: Text("标签一(单选)",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                           ),
                           Container(
                             child: SingleChildScrollView(
@@ -173,6 +176,7 @@ class PanScreenState extends BaseState<PanScreen>{
                                       resetSellect(panMarkListOne);
                                       setState(() {
                                         panMarkListOne[index].select = _bool;
+                                        marknames[0] = panMarkListOne[index].name;
                                       });
                                     }),
                                     InkWell(
@@ -180,6 +184,7 @@ class PanScreenState extends BaseState<PanScreen>{
                                         resetSellect(panMarkListOne);
                                         setState(() {
                                           panMarkListOne[index].select = !panMarkListOne[index].select;
+                                          marknames[0] = panMarkListOne[index].name;
                                         });
                                       },
                                       child: Text(panMarkListOne[index].name,style: TextStyle(color: panMarkListOne[index].select?Colors.red:Colors.black87),),
@@ -192,7 +197,7 @@ class PanScreenState extends BaseState<PanScreen>{
                           SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                           Container(
                             padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                            child: Text("标签二",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+                            child: Text("标签二(单选)",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                           ),
                           Container(
                             child: SingleChildScrollView(
@@ -210,6 +215,7 @@ class PanScreenState extends BaseState<PanScreen>{
                                       resetSellect(panMarkListTwo);
                                       setState(() {
                                         panMarkListTwo[index].select = _bool;
+                                        marknames[1] = panMarkListTwo[index].name;
                                       });
                                     }),
                                     InkWell(
@@ -217,6 +223,7 @@ class PanScreenState extends BaseState<PanScreen>{
                                         resetSellect(panMarkListTwo);
                                         setState(() {
                                           panMarkListTwo[index].select = !panMarkListTwo[index].select;
+                                          marknames[1] = panMarkListTwo[index].name;
                                         });
                                       },
                                       child: Text(panMarkListTwo[index].name,style: TextStyle(color: panMarkListTwo[index].select?Colors.red:Colors.black87),),
@@ -229,7 +236,7 @@ class PanScreenState extends BaseState<PanScreen>{
                           SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                           Container(
                             padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                            child: Text("标签三",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+                            child: Text("标签三(多选)",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                           ),
                           Container(
                             child: SingleChildScrollView(
@@ -246,12 +253,14 @@ class PanScreenState extends BaseState<PanScreen>{
                                     Checkbox(value: panMarkListThree[index].select, onChanged:(_bool){
                                       setState(() {
                                         panMarkListThree[index].select = _bool;
+                                        marknames[2] = panMarkListThree[index].name;
                                       });
                                     }),
                                     InkWell(
                                       onTap: (){
                                         setState(() {
                                           panMarkListThree[index].select = !panMarkListThree[index].select;
+                                          marknames[2] = panMarkListThree[index].name;
                                         });
                                       },
                                       child: Text(panMarkListThree[index].name,style: TextStyle(color: panMarkListThree[index].select?Colors.red:Colors.black87),),
@@ -273,7 +282,8 @@ class PanScreenState extends BaseState<PanScreen>{
                       Expanded(
                         child: InkWell(
                           onTap: (){
-                            Navigator.pop(context);
+                            //重置 返回结果参数不能为空
+                            Navigator.pop(context,{});
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -291,7 +301,13 @@ class PanScreenState extends BaseState<PanScreen>{
                         child: InkWell(
                           onTap: (){
                             var marks = getSelectMark();
-                            Navigator.pop(context,marks);
+                            if(marks.length == 0){
+                              showToast("请选择三级标签");
+                              return;
+                            }
+                            var names = "${marknames[0]} / ${marknames[1]} / ${marknames[2]}";
+                            print("names:${names}");
+                            Navigator.pop(context,{"marks":marks,"marknames":names});
                           },
                           child: Container(
                             decoration: BoxDecoration(

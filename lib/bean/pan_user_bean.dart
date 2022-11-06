@@ -59,7 +59,8 @@ class Data {
       int imagenum,
       String avater,
       String nickname,
-      String username,}){
+      String username,
+      int role,}){
     _id = id;
     _panid = panid;
     _name = name;
@@ -80,6 +81,7 @@ class Data {
     _avater = avater;
     _username = username;
     _nickname = nickname;
+    _role = role;
 }
 
   Data.fromJson(dynamic json) {
@@ -103,6 +105,7 @@ class Data {
     _avater = json['avater'];
     _username = json['username'];
     _nickname = json['nickname'];
+    _role = json['role'];
   }
   int _id;
   String _panid;
@@ -124,6 +127,7 @@ class Data {
   String _avater;
   String _nickname;
   String _username;
+  int _role;
 
   int get id => _id;
   String get panid => _panid;
@@ -145,6 +149,7 @@ class Data {
   String get avater => _avater;
   String get nickname => _nickname;
   String get username => _username;
+  int get role => _role;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -168,6 +173,7 @@ class Data {
     map['avater'] = _avater;
     map['username'] = _username;
     map['nickname'] = _nickname;
+    map['role'] = _role;
     return map;
   }
 

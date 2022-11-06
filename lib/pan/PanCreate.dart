@@ -31,7 +31,7 @@ class PanCreate extends StatefulWidget{
 class PanCreateState extends BaseState<PanCreate>{
 
   String panName;
-  int visible = 0;
+  int visible = 1;
   List types;
   List classifys;
   List categorys;
@@ -88,26 +88,28 @@ class PanCreateState extends BaseState<PanCreate>{
     };
     httpUtil.get(DataUtils.api_panmark,data: option,).then((value){
       print("pan mark:${value}");
-      var markBean = M.PanMarkBean.fromJson(json.decode(value));
-      if(markBean.errno == 0){
-        panMarkList = markBean.data;
-        panMarkListOne = [];
-        panMarkListTwo = [];
-        panMarkListThree = [];
-        for(M.Data item in panMarkList){
-          if(item.type == 1){
-            panMarkListOne.add(item);
-          }else if(item.type == 2){
-            panMarkListTwo.add(item);
-          }else{
-            panMarkListThree.add(item);
+      if(value != null){
+        var markBean = M.PanMarkBean.fromJson(json.decode(value));
+        if(markBean.errno == 0){
+          panMarkList = markBean.data;
+          panMarkListOne = [];
+          panMarkListTwo = [];
+          panMarkListThree = [];
+          for(M.Data item in panMarkList){
+            if(item.type == 1){
+              panMarkListOne.add(item);
+            }else if(item.type == 2){
+              panMarkListTwo.add(item);
+            }else{
+              panMarkListThree.add(item);
+            }
           }
-        }
-        panMarkListOne[0].select = true;
-        panMarkListTwo[0].select = true;
-        setState(() {
+          panMarkListOne[0].select = true;
+          panMarkListTwo[0].select = true;
+          setState(() {
 
-        });
+          });
+        }
       }
     });
   }
@@ -203,7 +205,8 @@ class PanCreateState extends BaseState<PanCreate>{
     var option = {
       "panname":panName,
       "classifyid":selectItem.id,
-      "marks":marks
+      "marks":marks,
+      "visible":visible
     };
     await httpUtil.post(DataUtils.api_pancreate,data: option).then((value){
       print("panCreate ${value}");
@@ -329,13 +332,40 @@ class PanCreateState extends BaseState<PanCreate>{
                               Row(
                                 children: [
                                   Radio(value: 1, groupValue: visible, activeColor: Colors.red, onChanged: selectVisible),
-                                  Text("本校可见",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),)
+                                  InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        visible = 1;
+                                      });
+                                    },
+                                    child: Text("本校可见",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Radio(value: 0, groupValue: visible, activeColor: Colors.red, onChanged: selectVisible),
+                                  InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        visible = 0;
+                                      });
+                                    },
+                                    child: Text("全网可见",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                                  )
                                 ],
                               ),
                               Row(
                                 children: [
                                   Radio(value: 2, groupValue: visible, activeColor: Colors.red, onChanged: selectVisible),
-                                  Text("自己可见",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),)
+                                  InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        visible = 2;
+                                      });
+                                    },
+                                    child: Text("自己可见",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+                                  )
                                 ],
                               )
                             ],
@@ -406,7 +436,7 @@ class PanCreateState extends BaseState<PanCreate>{
                               children: [
                                 Container(
                                   padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                                  child: Text("标签一",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+                                  child: Text("标签一(单选)",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                                 ),
                                 Container(
                                   child: SingleChildScrollView(
@@ -421,6 +451,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                       return Row(
                                         children: [
                                           Checkbox(value: panMarkListOne[index].select, onChanged:(_bool){
+                                            if(panMarkListOne[index].select) return;
                                             resetSellect(panMarkListOne);
                                             oneIndex = index;
                                             setState(() {
@@ -429,6 +460,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                           }),
                                           InkWell(
                                             onTap: (){
+                                              if(panMarkListOne[index].select) return;
                                               resetSellect(panMarkListOne);
                                               oneIndex = index;
                                               setState(() {
@@ -445,7 +477,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                 SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                                 Container(
                                   padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                                  child: Text("标签二",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+                                  child: Text("标签二(单选)",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                                 ),
                                 Container(
                                   child: SingleChildScrollView(
@@ -460,6 +492,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                       return Row(
                                         children: [
                                           Checkbox(value: panMarkListTwo[index].select, onChanged:(_bool){
+                                            if(panMarkListTwo[index].select) return;
                                             resetSellect(panMarkListTwo);
                                             twoIndex = index;
                                             setState(() {
@@ -468,6 +501,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                           }),
                                           InkWell(
                                             onTap: (){
+                                              if(panMarkListTwo[index].select) return;
                                               resetSellect(panMarkListTwo);
                                               twoIndex = index;
                                               setState(() {
@@ -484,7 +518,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                 SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                                 Container(
                                   padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                                  child: Text("标签三",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+                                  child: Text("标签三(多选)",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                                 ),
                                 Container(
                                   child: SingleChildScrollView(

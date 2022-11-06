@@ -170,7 +170,7 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
     httpUtil.post(DataUtils.api_issueclassdate,data:option).then((value){
       hideLoadMore();
       M.IssueClassDateBean classDate = M.IssueClassDateBean.fromJson(json.decode(value));
-      if(classDate.errno == 0){
+      if(classDate.errno == 0 && classDate.data.length > 0){
         olddate = classDate.data[classDate.data.length-1].date;
         setState(() {
           this.dateList.addAll(classDate.data);

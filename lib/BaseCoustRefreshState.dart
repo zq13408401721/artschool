@@ -114,15 +114,19 @@ abstract class BaseCoustRefreshState<T extends StatefulWidget> extends BaseState
 
   //隐藏刷新
   void hideRefreshing(){
-    setState(() {
-      this.isrefreshing = false;
+    Future.delayed(new Duration(seconds: 1),(){
+      setState(() {
+        this.isrefreshing = false;
+      });
     });
   }
 
   //隐藏加载更多
   void hideLoadMore(){
-    setState(() {
-      this.isloading = false;
+    Future.delayed(new Duration(seconds: 1),(){
+      setState(() {
+        this.isloading = false;
+      });
     });
   }
 
@@ -136,6 +140,7 @@ abstract class BaseCoustRefreshState<T extends StatefulWidget> extends BaseState
         child: Container(
           color: Colors.grey[100],
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: addChildren(),
           ),
         ),

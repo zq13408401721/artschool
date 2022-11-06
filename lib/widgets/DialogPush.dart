@@ -316,13 +316,13 @@ class DialogPushState extends BaseState<DialogPush>{
                       )
                     ],
                   ),
-                  Container(
-                    height: SizeUtil.getHeight(100),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
+                  SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Container(
+                      height: SizeUtil.getAppHeight(250),
                       child: GridView.builder(shrinkWrap:true,itemCount:classesList.length,gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
-                        crossAxisSpacing: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
+                        mainAxisSpacing: SizeUtil.getAppWidth(10),
+                        crossAxisSpacing: SizeUtil.getAppWidth(10),
                         crossAxisCount: 2,
                         childAspectRatio: Constant.isPad ? 10/1 : 8/1,
 
