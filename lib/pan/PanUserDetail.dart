@@ -327,7 +327,9 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                     UserPanPage(uid: widget.data.uid),
                     UserPanImagePage(data: widget.data),
                     //UserPanCoursePage(uid: widget.data.uid),
-                    UserPanLikePage(uid: widget.data.uid),
+                    UserPanLikePage(uid: widget.data.uid,callback: (){
+                      queryUserDetail();
+                    },),
                     UserPanFollowPage(uid: widget.data.uid,panid: widget.data.panid,)
                   ],
                 ),

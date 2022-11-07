@@ -17,7 +17,8 @@ import 'PanImageDetail.dart';
 class UserPanLikePage extends StatefulWidget{
 
   String uid;
-  UserPanLikePage({Key key,@required this.uid}):super(key: key);
+  Function callback;
+  UserPanLikePage({Key key,@required this.uid,@required this.callback}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -76,6 +77,7 @@ class UserPanLikePageState extends BaseRefreshState<UserPanLikePage>{
           Navigator.push(context, MaterialPageRoute(builder: (context){
             return PanImageDetail(panData: P.Data(
                 id: item.id,
+                panid: item.panid,
                 date: item.date,
                 name:item.panname,
                 imagenum:item.imgnum,
@@ -84,8 +86,22 @@ class UserPanLikePageState extends BaseRefreshState<UserPanLikePage>{
                 nickname:item.nickname,
                 username: item.username,
                 url: item.url
-            ),imgUrl: item.url,imgData: item,fileid: item.id,);
-          }));
+            ),imgUrl: item.url,imgData: item,fileid: item.id,isself: true,);
+          })).then((value){
+            if(value != null){
+              for(Data item in likeList){
+                if(item.id == value){
+                  likeList.remove(item);
+                  break;
+                }
+              }
+              if(widget.callback != null){
+                widget.callback();
+              }
+              setState(() {
+              });
+            }
+          });
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

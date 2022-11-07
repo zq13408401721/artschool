@@ -147,33 +147,6 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
     });
   }
 
-  /**
-   * 添加网盘文件like
-   */
-  void addPanFileLike(int fileid,String panid){
-    var param = {
-      "panid":panid,
-      "fileid":fileid
-    };
-    httpUtil.post(DataUtils.api_addpanfilelike,data: param).then((value){
-      print("addpanfilelike $value");
-    });
-  }
-
-  /**
-   * 删除网盘文件like
-   */
-  void deletePanFileLike(int fileid,String panid){
-
-    var param = {
-      "panid":panid,
-      "fileid":fileid
-    };
-    httpUtil.post(DataUtils.api_deletepanfilelike,data: param).then((value){
-      print("deletepanfile like $value");
-    });
-  }
-
   Future<bool> deletePanImage() async{
     return showDialog(context: context, builder: (content){
       return StatefulBuilder(builder: (_context,_state){
@@ -378,7 +351,15 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
             return PanImageDetail(panData: widget.panData,imgUrl:item.url,imgData: item,fileid: item.id,);
-          }));
+          })).then((value){
+            if(value != null){
+              if(value == 1){
+                item.like = 1;
+              }else{
+                item.like = 0;
+              }
+            }
+          });
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

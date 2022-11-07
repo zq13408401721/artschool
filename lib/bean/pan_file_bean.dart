@@ -52,7 +52,8 @@ class Data {
       num maxwidth,
       num maxheight,
       String panname,
-      num imgnum,}){
+      num imgnum,
+      num like,}){
     _id = id;
     _name = name;
     _url = url;
@@ -65,7 +66,7 @@ class Data {
     _maxheight = maxheight;
     _panname = panname;
     _imgnum = imgnum;
-
+    _like = like;
 }
 
   Data.fromJson(dynamic json) {
@@ -81,6 +82,7 @@ class Data {
     _maxheight = json['maxheight'];
     _panname = json['panname'];
     _imgnum = json['imgnum'];
+    _like = json['like'];
   }
   num _id;
   String _name;
@@ -94,6 +96,7 @@ class Data {
   num _maxheight;
   String _panname;
   num _imgnum;
+  num _like;
 
   num get id => _id;
   String get name => _name;
@@ -107,6 +110,10 @@ class Data {
   num get maxheight => _maxheight;
   String get panname => _panname;
   num get imgnum => _imgnum;
+  num get like => _like;
+  void set like(value){
+    _like = value;
+  }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -122,6 +129,7 @@ class Data {
     map['maxheight'] = _maxheight;
     map['panname'] = _panname;
     map['imgnum'] = _imgnum;
+    map['like'] = _like;
     return map;
   }
 

@@ -12,6 +12,8 @@ import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/bean/pan_list_bean.dart' as P;
 
 import '../GalleryBig.dart';
+import '../utils/DataUtils.dart';
+import '../utils/HttpUtils.dart';
 import '../utils/ImageType.dart';
 
 class PanImageDetail extends StatefulWidget{
@@ -20,8 +22,10 @@ class PanImageDetail extends StatefulWidget{
   String imgUrl;
   dynamic imgData;
   int fileid; //对应的文件id
+  bool isself;
 
-  PanImageDetail({Key key,@required this.panData,@required this.imgUrl,@required this.imgData,@required this.fileid}):super(key: key);
+  PanImageDetail({Key key,@required this.panData,@required this.imgUrl,@required this.imgData,@required this.fileid,
+  @required this.isself = false}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -59,6 +63,43 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
     });
   }
 
+  /**
+   * 添加网盘文件like
+   */
+  void addPanFileLike(int fileid,String panid){
+    var param = {
+      "panid":panid,
+      "fileid":fileid
+    };
+    httpUtil.post(DataUtils.api_addpanfilelike,data: param).then((value){
+      print("addpanfilelike $value");
+      setState(() {
+        widget.imgData.like = 1;
+      });
+    });
+  }
+
+  /**
+   * 删除网盘文件like
+   */
+  void deletePanFileLike(int fileid,String panid){
+    var param = {
+      "panid":panid,
+      "fileid":fileid
+    };
+    httpUtil.post(DataUtils.api_deletepanfilelike,data: param).then((value){
+      print("deletepanfile like $value");
+      if(widget.isself){
+        //取消喜欢退回到上一个页面
+        Navigator.pop(context,fileid);
+      }else{
+        setState(() {
+          widget.imgData.like = 0;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
@@ -92,6 +133,11 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                       child: InkWell(
                         onTap: (){
                           //喜欢
+                          if(widget.imgData.like == 0){
+                            addPanFileLike(widget.imgData.id, widget.panData.panid);
+                          }else{
+                            deletePanFileLike(widget.imgData.id, widget.panData.panid);
+                          }
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -103,7 +149,28 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                               horizontal: SizeUtil.getAppWidth(20),
                               vertical: SizeUtil.getAppHeight(10)
                           ),
-                          child: Text("喜欢",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
+                          child: Text(widget.imgData.like == 0 ? "喜欢" : "取消喜欢",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
+                        ),
+                      ),
+                    ),
+                    //自己网盘进来显示取消喜欢
+                    Offstage(
+                      offstage: !widget.isself,
+                      child: InkWell(
+                        onTap: (){
+                          deletePanFileLike(widget.imgData.id, widget.panData.panid);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(5)))
+                          ),
+                          margin: EdgeInsets.only(right: SizeUtil.getAppWidth(20)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: SizeUtil.getAppWidth(20),
+                              vertical: SizeUtil.getAppHeight(10)
+                          ),
+                          child: Text("取消喜欢",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
                         ),
                       ),
                     ),
@@ -222,12 +289,15 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: SizeUtil.getAppHeight(20),
-                        horizontal: SizeUtil.getAppWidth(20)
+                    Offstage(
+                      offstage: widget.panData.name == null,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: SizeUtil.getAppHeight(20),
+                            horizontal: SizeUtil.getAppWidth(20)
+                        ),
+                        child: Text("${widget.panData.name}${widget.panData.imagenum}张",style: Constant.smallTitleTextStyle,),
                       ),
-                      child: Text("${widget.panData.name}${widget.panData.imagenum}张",style: Constant.smallTitleTextStyle,),
                     )
                   ],
                 ),
