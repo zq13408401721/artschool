@@ -30,7 +30,7 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
     _scrollController.addListener(() {
       if(_scrollController.position.maxScrollExtent > 0 && _scrollController.position.pixels > _scrollController.position.maxScrollExtent-100){
         //加载更多
-        print("scrollController offset ${_scrollController.offset} pixels:${_scrollController.position.pixels} max:${_scrollController.position.maxScrollExtent}");
+        //print("scrollController offset ${_scrollController.offset} pixels:${_scrollController.position.pixels} max:${_scrollController.position.maxScrollExtent}");
         if(oldoffset == 0){
           oldoffset = _scrollController.offset;
           return;

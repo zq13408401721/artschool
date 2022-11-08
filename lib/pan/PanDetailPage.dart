@@ -86,6 +86,9 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
       hideLoadMore();
       if(value != null){
         print("panimagelist ${value}");
+        if(pagenum == 1){
+          filesList.clear();
+        }
         F.PanFileBean panFileBean = F.PanFileBean.fromJson(json.decode(value));
         if(panFileBean.errno == 0){
           pagenum++;
@@ -364,7 +367,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CoustSizeImage(Constant.parsePanSmallString(item.url), width: item.width, height: item.height),
+            CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height),
             Padding(padding: EdgeInsets.only(
                 left: SizeUtil.getAppWidth(20),
                 right: SizeUtil.getAppWidth(20),
@@ -397,6 +400,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                     children: [
                       InkWell(
                         onTap: (){
+                          print("top click ${widget.panData.panid}");
                           //网盘置顶
                           panTopping(1,widget.panData.panid);
                         },

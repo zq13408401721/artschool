@@ -18,6 +18,7 @@ import '../utils/HttpUtils.dart';
 import 'PanDetailPage.dart';
 import 'PanUserDetail.dart';
 import 'package:yhschool/bean/user_search.dart' as S;
+import '../bean/pan_topping_bean.dart' as T;
 
 class PanSchool extends BasefulWidget<PanPageState>{
 
@@ -49,6 +50,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
   int selectClassifyid;
   String selectClassName;
   String selectMarks;
+  bool isteacher;
 
   @override
   void initState() {
@@ -59,13 +61,15 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
   /**
    * 查询网盘列表数据
    */
-  void queryPanList({String schoolid,int classifyid,String marks}){
+  void queryPanList({String schoolid,int classifyid,String marks,bool visible}){
     pagenum = 1;
     panList.clear();
+    isteacher = visible;
     var param = {
       "page":pagenum.toString(),
       "size":pagesize.toString(),
-      "classifyid":classifyid.toString()
+      "classifyid":classifyid.toString(),
+      "isteacher":visible
     };
     if(schoolid != null){
       param["schoolid"] = schoolid;
@@ -74,6 +78,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
       param["marks"] = marks;
     }
     panParam = param;
+    print("queryPanList");
     _getPanList(param);
   }
 
@@ -90,8 +95,10 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
       "page":pagenum,
       "size":pagesize,
       "classifyid":classifyid,
-      "marks":marks
+      "marks":marks,
+      "isteacher":isteacher
     };
+    print("queryPanListByMark");
     _getPanList(param);
   }
 
@@ -105,10 +112,35 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
       if(value != null){
         var panListBean = PanListBean.fromJson(json.decode(value));
         if(panListBean.errno == 0){
+          if(pagenum == 1){
+            panList.clear();
+          }
           pagenum++;
           panList.addAll(panListBean.data);
           setState(() {
           });
+        }
+      }
+    });
+  }
+
+  /**
+   * top 1置顶 0非置顶
+   * id 列表id
+   */
+  void panTopping(int top,int id){
+    var param = {
+      "top":top,
+      "id":id
+    };
+    httpUtil.post(DataUtils.api_pantopping,data:param).then((value){
+      if(value != null){
+        T.PanToppingBean panToppingBean = T.PanToppingBean.fromJson(json.decode(value));
+        if(panToppingBean.errno == 0){
+          showToast("网盘置顶");
+          pagenum = 1;
+          panList = [];
+          _getPanList(panParam);
         }
       }
     });
@@ -140,7 +172,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             (item.url != null && item.imagenum > 0) ?
-            CoustSizeImage(Constant.parsePanSmallString(item.url), width: item.width, height: item.height)
+            CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height)
             : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
               child: Center(
                 child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
@@ -197,7 +229,8 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
                   //copy
                   InkWell(
                       onTap: (){
-                        //置顶
+                        //网盘置顶
+                        panTopping(1,item.id);
                       },
                       child: Container(
                         padding: EdgeInsets.only(
@@ -241,7 +274,12 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
 
   @override
   void loadmore() {
+    print("loadmore");
     panParam["page"] = pagenum;
+    panParam["isteacher"] = isteacher;
+    if(selectMarks != null){
+      panParam["marks"] = selectMarks;
+    }
     _getPanList(panParam);
   }
 

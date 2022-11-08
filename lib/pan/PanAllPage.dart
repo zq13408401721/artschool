@@ -50,6 +50,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
   int selectClassifyid;
   String selectClassName;
   String selectMarks;
+  bool isteacher;
 
 
   @override
@@ -65,15 +66,19 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
     _scrollController = initScrollController(isfresh: false);
   }
 
-  void queryPanListAll(classifyid,{String classifyname}){
+  void queryPanListAll(classifyid,{String classifyname,String marks,bool visible,}){
     pagenum = 1;
     selectClassifyid = classifyid;
     selectClassName = classifyname;
+    isteacher = visible;
+    selectMarks = marks;
     panList = [];
     var param = {
       "page":pagenum,
       "size":pagesize,
-      "classifyid":classifyid
+      "classifyid":classifyid,
+      "isteacher":visible,
+      "marks":marks
     };
     print("panlistall ${pagenum} ${selectClassifyid}");
     getPanList(param);
@@ -89,7 +94,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
       "page":pagenum,
       "size":pagesize,
       "classifyid":classifyid,
-      "marks":marks
+      "marks":marks,
     };
     getPanList(param);
   }
@@ -170,7 +175,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (item.url != null && item.imagenum > 0) ? CoustSizeImage(Constant.parsePanSmallString(item.url), width: item.width, height: item.height)
+            (item.url != null && item.imagenum > 0) ? CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height)
             : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
               child: Center(
                 child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
@@ -280,7 +285,8 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
     var param = {
       "page":pagenum,
       "size":pagesize,
-      "classifyid":selectClassifyid.toString()
+      "classifyid":selectClassifyid.toString(),
+      "isteacher":isteacher
     };
     if(selectMarks != null){
       param["marks"] = selectMarks.toString();

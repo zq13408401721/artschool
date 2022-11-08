@@ -124,11 +124,24 @@ class PanPageState extends BaseDialogState<PanPage>{
    */
   void updatePanList(){
     if(page == 0){
-      this.panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName);
+      this.panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName,visible: enable_teacher);
     }else if(page == 1){
       panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify);
     }else if(page == 2){
       panMineStateKey.currentState.queryPanList(classifyid: selectClassify);
+    }
+  }
+
+  /**
+   * 选择筛选网盘 仅看老师 标签
+   */
+  void selectScreenPanList({String marks}){
+    if(page == 0){
+      panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName,marks: marks,visible: enable_teacher);
+    }else if(page == 1){
+      panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify);
+    }else{
+
     }
   }
 
@@ -350,12 +363,14 @@ class PanPageState extends BaseDialogState<PanPage>{
                               Checkbox(value: enable_teacher, onChanged: (value){
                                 setState(() {
                                   enable_teacher = value;
+                                  selectScreenPanList(marks: this.marks);
                                 });
                               },materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,),
                               InkWell(
                                 onTap: (){
                                   setState(() {
                                     enable_teacher = !enable_teacher;
+                                    selectScreenPanList(marks: this.marks);
                                   });
                                 },
                                 child: Text("只看老师",style: enable_teacher ? screenTeacherSelect : screenTeacherNormal,),

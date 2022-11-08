@@ -121,7 +121,7 @@ class UserPanImagePageState extends BaseRefreshState<UserPanImagePage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CoustSizeImage(Constant.parsePanSmallString(item.url), width: item.width, height: item.height),
+            CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height),
             Padding(padding: EdgeInsets.only(
               left: SizeUtil.getAppWidth(20),
               right: SizeUtil.getAppWidth(20),

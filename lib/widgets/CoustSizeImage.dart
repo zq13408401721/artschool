@@ -7,24 +7,25 @@ import 'package:yhschool/utils/SizeUtil.dart';
 
 class CoustSizeImage extends Container{
 
-  int width,height;
+  int mWidth,mHeight;
   String url;
 
-  CoustSizeImage(@required this.url,{@required width,@required height}):super(color: Constant.getColor()){
-
+  CoustSizeImage(@required this.url,{@required mWidth,@required mHeight}):
+        super(color: Constant.getColor(),width: double.infinity,
+        height: mHeight == null ? SizeUtil.getAppHeight(500) : SizeUtil.getAppHeight(Constant.getScaleH(mWidth.toDouble(), mHeight.toDouble()))){
   }
 
   @override
-  Widget get child => (width == null || height == null) ?
+  Widget get child => (mWidth == null || mHeight == null) ?
       CachedNetworkImage(
         imageUrl: url,
         fit: BoxFit.cover,
-        memCacheWidth: 1000
+        memCacheWidth: SizeUtil.getAppWidth(1000).toInt(),
       ) :
       CachedNetworkImage(
         imageUrl: url,
         fit: BoxFit.cover,
-        memCacheWidth: width,
-        memCacheHeight: height
+        memCacheWidth: mWidth,
+        memCacheHeight: mHeight
       );
 }

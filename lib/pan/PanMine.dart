@@ -203,7 +203,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             (item.url != null && item.imagenum > 0) ?
-            CoustSizeImage(Constant.parsePanSmallString(item.url), width: item.width, height: item.height)
+            CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height)
             : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
               child: Center(
                 child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
