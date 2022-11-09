@@ -105,7 +105,7 @@ class PanPageState extends BaseDialogState<PanPage>{
       mineTopTabState.currentState.select(false);
       resetSelectTab();
       updatePanList();
-      panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: 0);
+      //panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: 0,marks:marks,visible:enable_teacher);
     }else if(index == 2){
       allTopTabState.currentState.select(false);
       schoolTopTabState.currentState.select(false);
@@ -124,9 +124,9 @@ class PanPageState extends BaseDialogState<PanPage>{
    */
   void updatePanList(){
     if(page == 0){
-      this.panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName,visible: enable_teacher);
+      this.panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName,marks:marks,visible: enable_teacher);
     }else if(page == 1){
-      panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify);
+      panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify,marks:marks,visible: enable_teacher);
     }else if(page == 2){
       panMineStateKey.currentState.queryPanList(classifyid: selectClassify);
     }
@@ -139,7 +139,7 @@ class PanPageState extends BaseDialogState<PanPage>{
     if(page == 0){
       panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName,marks: marks,visible: enable_teacher);
     }else if(page == 1){
-      panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify);
+      panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify,marks:marks,visible: enable_teacher);
     }else{
 
     }
@@ -334,7 +334,7 @@ class PanPageState extends BaseDialogState<PanPage>{
                   children: [
                     //markname
                     Offstage(
-                      offstage: marknames == null  || marknames.length == 0,
+                      offstage: marknames == null  || marknames.length == 0 || page == 2,
                       child: InkWell(
                         onTap: (){
                           setState(() {
@@ -354,33 +354,37 @@ class PanPageState extends BaseDialogState<PanPage>{
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                            right: SizeUtil.getAppWidth(20),
-                          ),
-                          child: Row(
-                            children: [
-                              Checkbox(value: enable_teacher, onChanged: (value){
-                                setState(() {
-                                  enable_teacher = value;
-                                  selectScreenPanList(marks: this.marks);
-                                });
-                              },materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,),
-                              InkWell(
-                                onTap: (){
+                        //我的页面隐藏只看老师
+                        Offstage(
+                          offstage: page == 2,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              right: SizeUtil.getAppWidth(20),
+                            ),
+                            child: Row(
+                              children: [
+                                Checkbox(value: enable_teacher, onChanged: (value){
                                   setState(() {
-                                    enable_teacher = !enable_teacher;
+                                    enable_teacher = value;
                                     selectScreenPanList(marks: this.marks);
                                   });
-                                },
-                                child: Text("只看老师",style: enable_teacher ? screenTeacherSelect : screenTeacherNormal,),
-                              )
-                            ],
+                                },materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,),
+                                InkWell(
+                                  onTap: (){
+                                    setState(() {
+                                      enable_teacher = !enable_teacher;
+                                      selectScreenPanList(marks: this.marks);
+                                    });
+                                  },
+                                  child: Text("只看老师",style: enable_teacher ? screenTeacherSelect : screenTeacherNormal,),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                        //筛选
+                        //筛选 全部分类和我的页面的时候隐藏
                         Offstage(
-                          offstage: selectClassify == 0,
+                          offstage: selectClassify == 0 || page == 2,
                           child: Container(
                             margin:EdgeInsets.only(
                               right: SizeUtil.getAppWidth(20)

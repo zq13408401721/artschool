@@ -78,7 +78,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
       param["marks"] = marks;
     }
     panParam = param;
-    print("queryPanList");
+    print("queryPanList ${marks} ${visible}");
     _getPanList(param);
   }
 
@@ -106,6 +106,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
    * 获取网盘数据
    */
   void _getPanList(param){
+    print("getpanlist param:${param.toString()}");
     httpUtil.post(DataUtils.api_panlist,data: param).then((value){
       print("school panlist:$value");
       hideLoadMore();
