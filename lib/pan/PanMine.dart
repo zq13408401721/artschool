@@ -42,7 +42,7 @@ class PanMine extends BasefulWidget<PanPageState>{
 
 }
 
-class PanMineState extends BaseRefreshState<PanMine>{
+class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderStateMixin{
 
   ScrollController _scrollController;
 
@@ -104,13 +104,14 @@ class PanMineState extends BaseRefreshState<PanMine>{
   /**
    * 网盘置顶/取消置顶
    */
-  void panTopping(int top,String panid){
+  void panTopping(int top,int id){
     pagenum = 1;
     this.panList = [];
     var param = {
       "top":top,
-      "panid":panid
+      "id":id
     };
+    print("panTopping click ${id}");
     httpUtil.post(DataUtils.api_pantopping,data:param).then((value){
       if(value != null){
         T.PanToppingBean panToppingBean = T.PanToppingBean.fromJson(json.decode(value));
@@ -124,6 +125,7 @@ class PanMineState extends BaseRefreshState<PanMine>{
    */
   void deletePan(String name,String panid){
     DialogManager().showDeletePanDialog(context,type:PanDeleteType.PAN, title: "是否确定删除${name}网盘？", panid: panid).then((value){
+      print("deletePan ${panid}");
       if(value){
         for(Data item in panList){
           if(item.panid == panid){
@@ -168,10 +170,17 @@ class PanMineState extends BaseRefreshState<PanMine>{
       if(value != null){
         var panListBean = PanListBean.fromJson(json.decode(value));
         if(panListBean.errno == 0){
-          pagenum++;
-          panList.addAll(panListBean.data);
-          setState(() {
-          });
+          if(pagenum == 1){
+            panList.clear();
+          }
+          if(panListBean.data.length > 0){
+            pagenum++;
+            panList.addAll(panListBean.data);
+            setState(() {
+            });
+          }else{
+            showToast("没有数据");
+          }
         }
       }
     });
@@ -186,123 +195,203 @@ class PanMineState extends BaseRefreshState<PanMine>{
               bottomRight: Radius.circular(SizeUtil.getAppWidth(10))
           )
       ),
-      child: InkWell(
-        onTap: (){
-          //进入网盘详情页面
-          Navigator.push(context, MaterialPageRoute(builder: (context){
-            return PanDetailPage(panData: item,isself: item.uid == m_uid,tabs: tabs,);
-          })).then((value){
-            if(value != null){
-              setState(() {
-                item.imagenum = value;
+      child: Stack(
+        children: [
+          InkWell(
+            onTap: (){
+              //进入网盘详情页面
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return PanDetailPage(panData: item,isself: item.uid == m_uid,tabs: tabs,classifyname: item.classifyname,marknames: item.marknames,);
+              })).then((value){
+                print("detailpage ${value}");
+                if(value != null){
+                  if(value["editor"] == PanEditor.EDITOR){
+                    setState(() {
+                      item.imagenum = value["value"];
+                    });
+                  }else if(value["editor"] == PanEditor.DELETE){
+                    var panid = value["value"];
+                    print("delete pan ${panid}");
+                    //删除网盘
+                    for(Data data in panList){
+                      if(data.panid == panid){
+                        panList.remove(data);
+                        break;
+                      }
+                    }
+                    setState(() {
+                    });
+                  }
+                }
               });
-            }
-          });
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            (item.url != null && item.imagenum > 0) ?
-            CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height)
-            : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
-              child: Center(
-                child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(
-              left: SizeUtil.getAppWidth(20),
-              right: SizeUtil.getAppWidth(20),
-              top: SizeUtil.getAppWidth(10),
-              bottom: SizeUtil.getAppWidth(5),
-            ),child:Text(item.name),),
-            Padding(padding: EdgeInsets.only(
-                left: SizeUtil.getAppWidth(20),
-                right: SizeUtil.getAppWidth(20),
-                top: SizeUtil.getAppHeight(10),
-                bottom: SizeUtil.getAppHeight(10)
-            ),child: InkWell(
-              onTap: (){
-                var param = new S.Result(
-                  uid: item.uid,
-                  username:item.username,
-                  nickname:item.nickname,
-                  avater:item.avater,
-                  role:item.role,
-                );
-                param.panid = item.panid;
-                //进入用户详情页
-                Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return PanUserDetail(data: param,);
-                }));
-              },
-              child: Row(
-                children: [
-                  ClipOval(
-                    child: (item.avater == null || item.avater.length == 0)
-                        ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
-                        : CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                (item.url != null && item.imagenum > 0) ?
+                CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height)
+                    : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
+                  child: Center(
+                    child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
                   ),
-                  SizedBox(width: SizeUtil.getAppWidth(20),),
-                  Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,)
-                ],
-              ),
-            )),
-            Padding(padding: EdgeInsets.only(
-                left: SizeUtil.getAppWidth(20),
-                right: SizeUtil.getAppWidth(20),
-                top: SizeUtil.getAppWidth(5)
-            ),child: Text("P${item.imagenum}",style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),),),
-            Align(
-              alignment:Alignment.centerRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  //top
-                  InkWell(
-                      onTap: (){
-                        //置顶
-                        if(item.top == 0){
-                          showPanTopping().then((value){
-                            if(value){
-                              panTopping(1, item.panid);
+                ),
+                Padding(padding: EdgeInsets.only(
+                  left: SizeUtil.getAppWidth(20),
+                  right: SizeUtil.getAppWidth(20),
+                  top: SizeUtil.getAppWidth(10),
+                  bottom: SizeUtil.getAppWidth(5),
+                ),child:Text(item.name),),
+                Padding(padding: EdgeInsets.only(
+                    left: SizeUtil.getAppWidth(20),
+                    right: SizeUtil.getAppWidth(20),
+                    top: SizeUtil.getAppHeight(10),
+                    bottom: SizeUtil.getAppHeight(10)
+                ),child: InkWell(
+                  onTap: (){
+                    var param = new S.Result(
+                      uid: item.uid,
+                      username:item.username,
+                      nickname:item.nickname,
+                      avater:item.avater,
+                      role:item.role,
+                    );
+                    param.panid = item.panid;
+                    //进入用户详情页
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return PanUserDetail(data: param,);
+                    }));
+                  },
+                  child: Row(
+                    children: [
+                      ClipOval(
+                        child: (item.avater == null || item.avater.length == 0)
+                            ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                            : CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                      ),
+                      SizedBox(width: SizeUtil.getAppWidth(20),),
+                      Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,)
+                    ],
+                  ),
+                )),
+                Padding(padding: EdgeInsets.only(
+                    left: SizeUtil.getAppWidth(20),
+                    right: SizeUtil.getAppWidth(20),
+                    top: SizeUtil.getAppWidth(5)
+                ),child: Text("P${item.imagenum}",style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),),),
+                Align(
+                  alignment:Alignment.centerRight,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      //top
+                      InkWell(
+                          onTap: (){
+                            //置顶
+                            if(item.top == 0){
+                              showPanTopping().then((value){
+                                if(value){
+                                  panTopping(1, item.id);
+                                }
+                              });
+                            }else{
+                              //取消置顶
+                              panTopping(0, item.id);
                             }
-                          });
-                        }else{
-                          //取消置顶
-                          panTopping(0, item.panid);
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            left:SizeUtil.getAppWidth(20),
-                            right:SizeUtil.getAppWidth(20),
-                            top:SizeUtil.getAppWidth(5),
-                            bottom:SizeUtil.getAppWidth(10)
-                        ),
-                        child: Image.asset(item.top == 0 ? "image/ic_pan_top.png" : "image/ic_pan_toped.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                left:SizeUtil.getAppWidth(20),
+                                right:SizeUtil.getAppWidth(20),
+                                top:SizeUtil.getAppWidth(5),
+                                bottom:SizeUtil.getAppWidth(10)
+                            ),
+                            child: Image.asset(item.top == 0 ? "image/ic_pan_top.png" : "image/ic_pan_toped.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                          )
+                      ),
+                      //delete
+                      InkWell(
+                          onTap: (){
+                            //删除
+                            deletePan(item.name,item.panid);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                left:SizeUtil.getAppWidth(20),
+                                right:SizeUtil.getAppWidth(20),
+                                top:SizeUtil.getAppWidth(5),
+                                bottom:SizeUtil.getAppWidth(10)
+                            ),
+                            child: Image.asset("image/ic_pan_delete.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                          )
                       )
+                    ],
                   ),
-                  //delete
-                  InkWell(
-                      onTap: (){
-                        //删除
-                        deletePan(item.name,item.panid);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            left:SizeUtil.getAppWidth(20),
-                            right:SizeUtil.getAppWidth(20),
-                            top:SizeUtil.getAppWidth(5),
-                            bottom:SizeUtil.getAppWidth(10)
-                        ),
-                        child: Image.asset("image/ic_pan_delete.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
-                      )
-                  )
-                ],
+                )
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              //复制
+              Offstage(
+                offstage: item.isself == 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.amber
+                  ),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: SizeUtil.getAppWidth(20),
+                      vertical: SizeUtil.getAppHeight(10)
+                  ),
+                  child: Text("复制",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                ),
               ),
-            )
-          ],
-        ),
+              //公开
+              Offstage(
+                offstage: item.visible != 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.red
+                  ),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: SizeUtil.getAppWidth(20),
+                      vertical: SizeUtil.getAppHeight(10)
+                  ),
+                  child: Text("公开",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                ),
+              ),
+              //学校
+              Offstage(
+                offstage: item.visible != 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.deepPurpleAccent
+                  ),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: SizeUtil.getAppWidth(20),
+                      vertical: SizeUtil.getAppHeight(10)
+                  ),
+                  child: Text("学校",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                ),
+              ),
+              //私人
+              Offstage(
+                offstage: item.visible != 2,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.deepPurpleAccent
+                  ),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: SizeUtil.getAppWidth(20),
+                      vertical: SizeUtil.getAppHeight(10)
+                  ),
+                  child: Text("私人",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

@@ -60,7 +60,9 @@ class Data {
       String avater,
       String nickname,
       String username,
-      int role,}){
+      int role,
+      String marknames,
+      String classifyname,}){
     _id = id;
     _panid = panid;
     _name = name;
@@ -82,6 +84,8 @@ class Data {
     _username = username;
     _nickname = nickname;
     _role = role;
+    _marknames = marknames;
+    _classifyname = classifyname;
 }
 
   Data.fromJson(dynamic json) {
@@ -106,6 +110,8 @@ class Data {
     _username = json['username'];
     _nickname = json['nickname'];
     _role = json['role'];
+    _marknames = json['marknames'];
+    _classifyname = json['classifyname'];
   }
   int _id;
   String _panid;
@@ -128,6 +134,8 @@ class Data {
   String _nickname;
   String _username;
   int _role;
+  String _marknames;
+  String _classifyname;
 
   int get id => _id;
   String get panid => _panid;
@@ -150,6 +158,8 @@ class Data {
   String get nickname => _nickname;
   String get username => _username;
   int get role => _role;
+  String get marknames => _marknames;
+  String get classifyname => _classifyname;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -174,6 +184,8 @@ class Data {
     map['username'] = _username;
     map['nickname'] = _nickname;
     map['role'] = _role;
+    map['marknames'] = _marknames;
+    map['classifyname'] = _classifyname;
     return map;
   }
 

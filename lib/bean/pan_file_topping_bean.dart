@@ -1,5 +1,5 @@
-class PanDeleteFile {
-  PanDeleteFile({
+class PanFileToppingBean {
+  PanFileToppingBean({
       int errno, 
       String errmsg, 
       int data,}){
@@ -8,7 +8,7 @@ class PanDeleteFile {
     _data = data;
 }
 
-  PanDeleteFile.fromJson(dynamic json) {
+  PanFileToppingBean.fromJson(dynamic json) {
     _errno = json['errno'];
     _errmsg = json['errmsg'];
     _data = json['data'];

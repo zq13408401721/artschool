@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yhschool/utils/SizeUtil.dart';
 
 class ImageButton extends StatelessWidget{
 
@@ -21,14 +22,13 @@ class ImageButton extends StatelessWidget{
         cb();
       },
       child: RichText(
+        textAlign: TextAlign.center,
         text: TextSpan(
           children: [
-            WidgetSpan(child: Container(
-              margin: EdgeInsets.only(
-                right: ScreenUtil().setWidth(20)
-              ),
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
               child: Image.asset(icon,width: ScreenUtil().setWidth(40),height: ScreenUtil().setHeight(40),),
-            )),
+            ),
             TextSpan(
               text: label,style: titleStyle == null ? TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.black87) : titleStyle
             )

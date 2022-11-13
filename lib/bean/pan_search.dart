@@ -79,7 +79,9 @@ class Result {
       String uid,
       String avater,
       String date,
-      int num,}){
+      int num,
+      String marknames,
+      String classifyname,}){
     _panid = panid;
     _name = name;
     _url = url;
@@ -91,6 +93,8 @@ class Result {
     _avater = avater;
     _num = num;
     _date = date;
+    _marknames = marknames;
+    _classifyname = classifyname;
 }
 
   Result.fromJson(dynamic json) {
@@ -105,6 +109,8 @@ class Result {
     _avater = json['avater'];
     _num = json['num'];
     _date = json['date'];
+    _marknames = json['marknames'];
+    _classifyname = json['classifyname'];
   }
   String _panid;
   String _name;
@@ -117,6 +123,8 @@ class Result {
   String _avater;
   String _date;
   int _num;
+  String _marknames;
+  String _classifyname;
 
   String get panid => _panid;
   String get name => _name;
@@ -129,6 +137,8 @@ class Result {
   String get avater => _avater;
   int get num => _num;
   String get date => _date;
+  String get marknames => _marknames;
+  String get classifyname => _classifyname;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -143,6 +153,8 @@ class Result {
     map['avater'] = _avater;
     map['num'] = _num;
     map['date'] = _date;
+    map['marknames'] = _marknames;
+    map['classifyname'] = _classifyname;
     return map;
   }
 

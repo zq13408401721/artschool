@@ -24,7 +24,6 @@ import 'PanUserDetail.dart';
 class PanAllPage extends BasefulWidget<PanPageState>{
 
   BuildContext panContext;
-  List<P.Data> tabs = [];
   String marknames;
 
   PanAllPage({Key key,@required this.panContext,@required this.marknames}):super(key: key);
@@ -41,10 +40,10 @@ class PanAllPage extends BasefulWidget<PanPageState>{
 
 }
 
-class PanAllPageState extends BaseRefreshState<PanAllPage>{
+class PanAllPageState extends BaseRefreshState<PanAllPage> with SingleTickerProviderStateMixin{
 
   ScrollController _scrollController;
-
+  List<P.Data> tabs = [];
   int pagenum=1,pagesize=10;
   List<Data> panList = [];
   int selectClassifyid;
@@ -109,12 +108,16 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
       hideLoadMore();
       if(value != null){
         var panListBean = PanListBean.fromJson(json.decode(value));
-        if(panListBean.errno == 0 && panListBean.data.length > 0){
-          pagenum++;
-          panList.addAll(panListBean.data);
-          setState(() {
+        if(panListBean.errno == 0){
+          if(panListBean.data.length > 0){
+            pagenum++;
+            panList.addAll(panListBean.data);
+            setState(() {
 
-          });
+            });
+          }else{
+            showToast("没有数据");
+          }
         }
       }
     });
@@ -153,7 +156,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
         onTap: (){
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
-            return PanDetailPage(panData: item,isself: item.uid == m_uid,tabs: widget.tabs,classifyname:selectClassName,marknames: widget.marknames,);
+            return PanDetailPage(panData: item,isself: item.uid == m_uid,tabs: tabs,classifyname:item.classifyname,marknames: item.marknames,);
           })).then((result){
             if(result != null){
               PanEditor editor = result["editor"];
@@ -176,22 +179,22 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             (item.url != null && item.imagenum > 0) ? CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height)
-            : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
+                : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
               child: Center(
                 child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
               ),
             ),
             Padding(padding: EdgeInsets.only(
-              left: SizeUtil.getAppWidth(20),
-              right: SizeUtil.getAppWidth(20),
-              top: SizeUtil.getAppHeight(20),
-              bottom: SizeUtil.getAppHeight(5)
+                left: SizeUtil.getAppWidth(20),
+                right: SizeUtil.getAppWidth(20),
+                top: SizeUtil.getAppHeight(20),
+                bottom: SizeUtil.getAppHeight(5)
             ),child:Text(item.name),),
             Padding(padding: EdgeInsets.only(
-              left: SizeUtil.getAppWidth(20),
-              right: SizeUtil.getAppWidth(20),
-              top: SizeUtil.getAppHeight(10),
-              bottom: SizeUtil.getAppHeight(10)
+                left: SizeUtil.getAppWidth(20),
+                right: SizeUtil.getAppWidth(20),
+                top: SizeUtil.getAppHeight(10),
+                bottom: SizeUtil.getAppHeight(10)
             ),child: InkWell(
               onTap: (){
                 var param = new S.Result(
@@ -220,40 +223,11 @@ class PanAllPageState extends BaseRefreshState<PanAllPage>{
               ),
             )),
             Padding(padding: EdgeInsets.only(
-              left: SizeUtil.getAppWidth(20),
-              right: SizeUtil.getAppWidth(20),
-              top: SizeUtil.getAppHeight(5),
-              bottom: SizeUtil.getAppHeight(5)
+                left: SizeUtil.getAppWidth(20),
+                right: SizeUtil.getAppWidth(20),
+                top: SizeUtil.getAppHeight(5),
+                bottom: SizeUtil.getAppHeight(5)
             ),child: Text("P${item.imagenum}",style: TextStyle(color: Colors.grey,fontSize: ScreenUtil().setSp(30)),),),
-            /*Offstage(
-              offstage: item.uid == m_uid || item.imagenum == 0,
-              child: Align(
-                alignment:Alignment.centerRight,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    //copy
-                    InkWell(
-                        onTap: (){
-                          //复制网盘
-                          //copyPan(item.panid);
-                          PanPageState _state = widget.getBaseState();
-                          _state.changeTab(2);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              left:ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-                              right:ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-                              top:ScreenUtil().setWidth(SizeUtil.getWidth(5)),
-                              bottom:ScreenUtil().setWidth(SizeUtil.getWidth(10))
-                          ),
-                          child: Image.asset("image/ic_pan_copy.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(40)),height: ScreenUtil().setWidth(SizeUtil.getWidth(40)),),
-                        )
-                    ),
-                  ],
-                ),
-              ),
-            )*/
           ],
         ),
       ),

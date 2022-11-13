@@ -54,7 +54,9 @@ class DataUtils{
   static const String api_adduserfollow = "pan/addUserFollow"; //添加关注数据
   static const String api_deleteuserfollow = "pan/deleteUserFollow"; //删除关注数据
   static const String api_pantopping = "pan/panTopping"; //网盘排序
+  static const String api_deletepantopping = "pan/deletePanTopping"; //删除网盘置顶
   static const String api_panfiletopping = "pan/panFileTopping"; //网盘文件排序
+  static const String api_deletepanfiletopping = "pan/deletePanFileTopping"; //删除网盘文件topping
   static const String api_pancopy = "pan/panCopy"; //复制网盘
   static const String api_pancopyfile = "pan/panCopyFile"; //复制网盘文件
   static const String api_addpanfilelike = "pan/addPanFileLike"; //添加网盘文件like

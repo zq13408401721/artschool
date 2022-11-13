@@ -39,7 +39,7 @@ class PanSchool extends BasefulWidget<PanPageState>{
 }
 
 
-class PanSchoolState extends BaseRefreshState<PanSchool>{
+class PanSchoolState extends BaseRefreshState<PanSchool> with SingleTickerProviderStateMixin{
 
   ScrollController _scrollController;
   List<P.Data> tabs = [];
@@ -61,10 +61,11 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
   /**
    * 查询网盘列表数据
    */
-  void queryPanList({String schoolid,int classifyid,String marks,bool visible}){
+  void queryPanList({String schoolid,int classifyid,String marks,bool visible,String classifyname}){
     pagenum = 1;
     panList.clear();
     isteacher = visible;
+    selectClassName = classifyname;
     var param = {
       "page":pagenum.toString(),
       "size":pagesize.toString(),
@@ -116,10 +117,14 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
           if(pagenum == 1){
             panList.clear();
           }
-          pagenum++;
-          panList.addAll(panListBean.data);
-          setState(() {
-          });
+          if(panListBean.data.length > 0){
+            pagenum++;
+            panList.addAll(panListBean.data);
+            setState(() {
+            });
+          }else{
+            showToast("没有数据");
+          }
         }
       }
     });
@@ -141,6 +146,28 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
           showToast("网盘置顶");
           pagenum = 1;
           panList = [];
+          panParam["page"] = pagenum;
+          _getPanList(panParam);
+        }
+      }
+    });
+  }
+
+  /**
+   * 删除网盘topping
+   */
+  void deletePanTopping(int id){
+    var param = {
+      "id":id
+    };
+    httpUtil.post(DataUtils.api_deletepantopping,data:param).then((value){
+      if(value != null){
+        T.PanToppingBean panToppingBean = T.PanToppingBean.fromJson(json.decode(value));
+        if(panToppingBean.errno == 0){
+          showToast("取消置顶");
+          pagenum = 1;
+          panList = [];
+          panParam["page"] = pagenum;
           _getPanList(panParam);
         }
       }
@@ -160,7 +187,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
         onTap: (){
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
-            return PanDetailPage(panData: item,isself: item.uid == m_uid,tabs:tabs,);
+            return PanDetailPage(panData: item,isself: item.uid == m_uid,tabs:tabs,marknames: item.marknames,classifyname: item.classifyname,);
           })).then((value){
             if(value != null && value["editor"] == PanEditor.EDITOR){
               setState(() {
@@ -174,7 +201,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
           children: [
             (item.url != null && item.imagenum > 0) ?
             CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height)
-            : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
+                : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
               child: Center(
                 child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
               ),
@@ -231,7 +258,11 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
                   InkWell(
                       onTap: (){
                         //网盘置顶
-                        panTopping(1,item.id);
+                        if(item.top == 0){
+                          panTopping(1,item.id);
+                        }else{
+                          deletePanTopping(item.id);
+                        }
                       },
                       child: Container(
                         padding: EdgeInsets.only(
@@ -240,7 +271,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool>{
                             top:SizeUtil.getAppWidth(5),
                             bottom:SizeUtil.getAppWidth(10)
                         ),
-                        child: Image.asset("image/ic_pan_top.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                        child: Image.asset(item.top == 1 ? "image/ic_pan_toped.png" : "image/ic_pan_top.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                       )
                   ),
                 ],

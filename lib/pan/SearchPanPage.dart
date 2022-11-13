@@ -42,7 +42,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
   int page = 1;
   int size = 10;
   int total = 0;
-  bool isShowResult;
+  bool isShowResult = false;
 
   List<Result> searchList = [];
   List<String> historyList = [];
@@ -59,6 +59,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
    */
   void search(){
     if(searchword != null){
+      page=1;
       searchList = [];
       querySearch();
     }
@@ -84,12 +85,12 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
           U.UserSearch userSearch = U.UserSearch.fromJson(json.decode(value));
           total = userSearch.data.total;
           searchUsers.addAll(userSearch.data.result);
-          searchReslt = "共有$total个相关网盘";
+          searchReslt = "共有$total个相关用户";
         }else{
           PanSearch panSearch = PanSearch.fromJson(json.decode(value));
           total = panSearch.data.total;
           searchList.addAll(panSearch.data.result);
-          searchReslt = "共有$total个相关用户";
+          searchReslt = "共有$total个相关网盘";
         }
       }
       setState(() {
@@ -126,9 +127,10 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
           date: data.date,
           url: data.url
         );
+        print("marknames:${item.marknames}");
         //进入网盘详情页面
         Navigator.push(context, MaterialPageRoute(builder: (context){
-          return PanDetailPage(panData: item,isself: item.uid == m_uid,);
+          return PanDetailPage(panData: item,isself: item.uid == m_uid,marknames: data.marknames,classifyname: data.classifyname,fromSreach: true,);
         }));
       },
       child: Container(
@@ -161,46 +163,6 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
               ),
               child: Text("P${data.num}",style: TextStyle(color: Colors.grey[300],fontSize: SizeUtil.getAppFontSize(36),fontWeight: FontWeight.bold),),
             ),
-            Align(
-              alignment:Alignment.centerRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  //copy
-                  Offstage(
-                    offstage: m_uid == data.uid,
-                    child: InkWell(
-                      onTap: (){
-
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: SizeUtil.getAppWidth(20),
-                            vertical: SizeUtil.getAppHeight(10)
-                        ),
-                        child: Image.asset("image/ic_pan_copy.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
-                      ),
-                    ),
-                  ),
-                  //关注
-                  Offstage(
-                    offstage: m_uid == data.uid,
-                    child: InkWell(
-                      onTap: (){
-
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: SizeUtil.getAppWidth(20),
-                            vertical: SizeUtil.getAppHeight(10)
-                        ),
-                        child: Image.asset("image/ic_pan_like.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppHeight(40),),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
           ],
         ),
       ),
@@ -338,6 +300,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
               ),
               InkWell(
                 onTap: (){
+                  FocusScope.of(context).unfocus();
                   //搜索
                   search();
                 },
@@ -399,7 +362,12 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
         children: [
           Offstage(
             offstage: !isShowResult,
-            child: Text("共有$total个相关网盘",style: Constant.smallTitleTextStyle,),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: SizeUtil.getAppHeight(20)
+              ),
+              child: Text("共有$total个相关网盘",style: Constant.smallTitleTextStyle,),
+            )
           ),
           Expanded(
             child: StaggeredGridView.countBuilder(

@@ -112,7 +112,7 @@ class PanPageState extends BaseDialogState<PanPage>{
       mineTopTabState.currentState.select(true);
       resetSelectTab();
       updatePanList();
-      panMineStateKey.currentState.queryPanList(classifyid: 0);
+      //panMineStateKey.currentState.queryPanList(classifyid: 0);
     }
     setState(() {
       marknames = "";
@@ -126,7 +126,7 @@ class PanPageState extends BaseDialogState<PanPage>{
     if(page == 0){
       this.panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName,marks:marks,visible: enable_teacher);
     }else if(page == 1){
-      panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify,marks:marks,visible: enable_teacher);
+      panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify,marks:marks,visible: enable_teacher,classifyname: selectClassName);
     }else if(page == 2){
       panMineStateKey.currentState.queryPanList(classifyid: selectClassify);
     }
@@ -139,7 +139,7 @@ class PanPageState extends BaseDialogState<PanPage>{
     if(page == 0){
       panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName,marks: marks,visible: enable_teacher);
     }else if(page == 1){
-      panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify,marks:marks,visible: enable_teacher);
+      panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: selectClassify,marks:marks,visible: enable_teacher,classifyname: selectClassName);
     }else{
 
     }
@@ -173,7 +173,7 @@ class PanPageState extends BaseDialogState<PanPage>{
         selectClassify = this.tabsList[0].id;
         selectClassName = this.tabsList[0].name;
         this.tabsList[0].select = true;
-        (this.panAllPageStateKey.currentWidget as PanAllPage).tabs.addAll(panClassify.data);
+        this.panAllPageStateKey.currentState.tabs.addAll(panClassify.data);
         this.panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName);
         this.panSchoolStateKey.currentState.tabs.addAll(panClassify.data);
         this.panMineStateKey.currentState.tabs.addAll(panClassify.data);
@@ -218,6 +218,7 @@ class PanPageState extends BaseDialogState<PanPage>{
                       vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20))
                   ),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       //左边
                       Container(
@@ -226,6 +227,7 @@ class PanPageState extends BaseDialogState<PanPage>{
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
@@ -247,58 +249,17 @@ class PanPageState extends BaseDialogState<PanPage>{
                         flex: 1,
                         child: SizedBox(),
                       ),
-                      //右边
-                      /*Row(
-                        children: [
-                          //是否仅显老师
-                          ImageButton(icon: icon_enable_teacher, label: "", cb: (){
-                            showPanVisible(this.enable_teacher).then((value){
-                              if(value != null){
-                                if(this.enable_teacher != value){
-                                  this.enable_teacher = value;
-                                  setState(() {
-                                    this.icon_enable_teacher = this.enable_teacher ? "image/ic_enable_teacher.png" : "image/ic_unenable_teacher.png";
-                                  });
-
-                                }
-                              }
-                            });
-                          }),
-                          //筛选
-                          Offstage(
-                            offstage: selectClassify == 0,
-                            child: ImageButton(icon: "image/ic_pan_screen.png", label: "", cb: (){
-                              //mark筛选
-                              showPanScreen(context, selectClassify).then((value){
-                                print("showPanScreen ${value}");
-                                //创建网盘成功 进入我的网盘
-                                if(value != null){
-                                  if(value["marks"] != null){
-                                    setState(() {
-                                      this.marks = value["marks"];
-                                      this.marknames = value["marknames"];
-                                    });
-                                    panAllPageStateKey.currentState.queryPanListByMark(selectClassify, this.marks,classifyname: selectClassName);
-                                  }else{
-                                    setState(() {
-                                      this.marks = "";
-                                      this.marknames = "";
-                                    });
-                                    panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName);
-                                  }
-                                }
-                              });
-                            }),
-                          ),
-
-                        ],
-                      ),*/
                       //搜索
-                      ImageButton(icon: "image/ic_search.png", label: "", cb: ()=>{
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPanPage(callback: (){
+                      Container(
+                        padding: EdgeInsets.only(
+                          right: SizeUtil.getAppWidth(20)
+                        ),
+                        child: ImageButton(icon: "image/ic_search.png", label: "", cb: ()=>{
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPanPage(callback: (){
 
-                        })))
-                      }),
+                          })))
+                        }),
+                      ),
                     ],
                   ),
                 ),
@@ -319,6 +280,7 @@ class PanPageState extends BaseDialogState<PanPage>{
                       this.selectClassify = _data.id;
                       this.selectClassName = _data.name;
                       if(_data.id == 0){
+                        marks = "";
                         marknames = "";
                       }
                     });
@@ -399,14 +361,14 @@ class PanPageState extends BaseDialogState<PanPage>{
                                     setState(() {
                                       this.marks = value["marks"];
                                       this.marknames = value["marknames"];
+                                      updatePanListByMarks();
                                     });
-                                    updatePanListByMarks();
                                   }else{
                                     setState(() {
                                       this.marks = "";
                                       this.marknames = "";
+                                      updatePanList();
                                     });
-                                    updatePanList();
                                   }
                                 }
                               });

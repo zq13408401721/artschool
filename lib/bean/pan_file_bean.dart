@@ -40,7 +40,8 @@ class PanFileBean {
 
 class Data {
   Data({
-      num id, 
+      num id,
+      num fileid,
       String name, 
       String url, 
       String suffix, 
@@ -53,8 +54,10 @@ class Data {
       num maxheight,
       String panname,
       num imgnum,
-      num like,}){
+      num like,
+      num top,}){
     _id = id;
+    _fileid = fileid;
     _name = name;
     _url = url;
     _suffix = suffix;
@@ -67,6 +70,7 @@ class Data {
     _panname = panname;
     _imgnum = imgnum;
     _like = like;
+    _top = top;
 }
 
   Data.fromJson(dynamic json) {
@@ -83,8 +87,11 @@ class Data {
     _panname = json['panname'];
     _imgnum = json['imgnum'];
     _like = json['like'];
+    _top = json['top'];
+    _fileid = json['fileid'];
   }
   num _id;
+  num _fileid;
   String _name;
   String _url;
   String _suffix;
@@ -97,8 +104,10 @@ class Data {
   String _panname;
   num _imgnum;
   num _like;
+  num _top;
 
   num get id => _id;
+  num get fileid => _fileid;
   String get name => _name;
   String get url => _url;
   String get suffix => _suffix;
@@ -114,10 +123,12 @@ class Data {
   void set like(value){
     _like = value;
   }
+  num get top => _top;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = _id;
+    map['fileid'] = _fileid;
     map['name'] = _name;
     map['url'] = _url;
     map['suffix'] = _suffix;
@@ -130,6 +141,7 @@ class Data {
     map['panname'] = _panname;
     map['imgnum'] = _imgnum;
     map['like'] = _like;
+    map['top'] = _top;
     return map;
   }
 

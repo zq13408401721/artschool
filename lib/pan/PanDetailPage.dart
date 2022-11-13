@@ -9,7 +9,9 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:yhschool/BaseCoustRefreshState.dart';
+import 'package:yhschool/bean/pan_delete_file.dart';
 import 'package:yhschool/bean/pan_file_bean.dart' as F;
+import 'package:yhschool/bean/pan_file_topping_bean.dart';
 import 'package:yhschool/bean/pan_list_bean.dart';
 import 'package:yhschool/bean/pan_classify_bean.dart' as A;
 import 'package:yhschool/bean/user_search.dart' as S;
@@ -36,7 +38,10 @@ class PanDetailPage extends StatefulWidget{
   List<A.Data> tabs;
   String marknames;
   String classifyname;
-  PanDetailPage({Key key,@required this.panData,@required this.isself,@required this.tabs,@required this.classifyname,@required this.marknames}):super(key: key);
+  bool fromSreach; //是否来自搜索页面
+  PanDetailPage({Key key,@required this.panData,@required this.isself,@required this.tabs,@required this.classifyname,@required this.marknames,
+    @required this.fromSreach=false
+  }):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -114,7 +119,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
   }
 
   /**
-   * 删除网盘
+   * 删除网盘 废弃的方法
    */
   void deletePan(){
 
@@ -131,17 +136,62 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
 
   /**
    * top 1置顶 0非置顶
+   * id 网盘对应的id
    */
-  void panTopping(int top,String panid){
+  void panTopping(int top,int id){
     var param = {
       "top":top,
-      "panid":panid
+      "id":id
     };
     httpUtil.post(DataUtils.api_pantopping,data:param).then((value){
       if(value != null){
         T.PanToppingBean panToppingBean = T.PanToppingBean.fromJson(json.decode(value));
         if(panToppingBean.errno == 0){
           showToast("网盘置顶");
+          pagenum = 1;
+          filesList = [];
+          queryPanImageList();
+        }
+      }
+    });
+  }
+
+  /**
+   * 网盘图片置顶
+   */
+  void panFileTopping(int id){
+    var param = {
+      "id":id
+    };
+    httpUtil.post(DataUtils.api_panfiletopping,data:param).then((value){
+      print('panfiletopping ${value}');
+      if(value != null){
+        PanFileToppingBean bean = PanFileToppingBean.fromJson(json.decode(value));
+        if(bean.errno == 0){
+          //置顶重新获取网盘文件数据
+          showToast("文件置顶");
+          pagenum = 1;
+          filesList = [];
+          queryPanImageList();
+        }
+      }
+    });
+  }
+
+  /**
+   * 删除盘文件置顶
+   */
+  void deletePanFileTopping(int id){
+    var param = {
+      "id":id,
+    };
+    httpUtil.post(DataUtils.api_deletepanfiletopping,data:param).then((value){
+      print('deletepanfiletopping ${value}');
+      if(value != null){
+        PanFileToppingBean bean = PanFileToppingBean.fromJson(json.decode(value));
+        if(bean.errno == 0){
+          //置顶重新获取网盘文件数据
+          showToast("取消置顶");
           pagenum = 1;
           filesList = [];
           queryPanImageList();
@@ -181,7 +231,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                     children: [
                       InkWell(
                         onTap: (){
-                          Navigator.pop(context);
+                          Navigator.pop(context,true);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -229,24 +279,31 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
   /**
    * 删除网盘图片
    */
-  void deletePanFile(int fileid,String panid){
+  void deletePanFile(int folderid,String panid){
+    print("deletePanFile ${folderid} ${panid}");
     deletePanImage().then((value){
+      print("deletePanImage ${value}");
       if(value != null){
         var param = {
           "panid":panid,
-          "fileid":fileid
+          "folderid":folderid
         };
         httpUtil.post(DataUtils.api_deletepanfile,data: param).then((value){
           print("deletepan file $value");
-          for(F.Data item in filesList){
-            if(item.id == fileid){
-              filesList.remove(item);
-              widget.panData.imagenum--;
-              break;
+          if(value != null){
+            PanDeleteFile bean = PanDeleteFile.fromJson(json.decode(value));
+            if(bean.errno == 0){
+              for(F.Data item in filesList){
+                if(item.id == folderid){
+                  filesList.remove(item);
+                  widget.panData.imagenum--;
+                  break;
+                }
+              }
+              setState(() {
+              });
             }
           }
-          setState(() {
-          });
         });
       }
     });
@@ -353,7 +410,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         onTap: (){
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
-            return PanImageDetail(panData: widget.panData,imgUrl:item.url,imgData: item,fileid: item.id,);
+            return PanImageDetail(panData: widget.panData,imgUrl:item.url,imgData: item,fileid: item.fileid,);
           })).then((value){
             if(value != null){
               if(value == 1){
@@ -374,76 +431,51 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                 top: SizeUtil.getAppWidth(10),
                 bottom: SizeUtil.getAppWidth(5),
               ),
-              child:!widget.isself ?
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: SizeUtil.getAppHeight(20)
-                          ),
-                          child: Text("${item.name}",style: Constant.smallTitleTextStyle,maxLines: 1,overflow: TextOverflow.ellipsis,),
-                        ),
+              child:(!widget.isself || widget.panData.isself == 1 || widget.fromSreach) ?
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: SizeUtil.getAppHeight(20)
+                  ),
+                  child: Text("${item.name}",style: Constant.smallTitleTextStyle,maxLines: 1,overflow: TextOverflow.ellipsis,),
+                ),
+              ) :
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: (){
+                      print("top click ${widget.panData.panid}");
+                      //网盘图片置顶
+                      if(item.top == 0){
+                        panFileTopping(item.id);
+                      }else{
+                        deletePanFileTopping(item.id);
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: SizeUtil.getAppWidth(10),
+                        vertical: SizeUtil.getAppHeight(10),
                       ),
-                      /*InkWell(
-                        onTap: (){
-                          //点赞
-                          addPanImageLike(item.id);
-                        },
-                        child: Image.asset("image/ic_pan_unlike.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
-                      )*/
-                    ],
-                  ) :
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: (){
-                          print("top click ${widget.panData.panid}");
-                          //网盘置顶
-                          panTopping(1,widget.panData.panid);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: SizeUtil.getAppWidth(10),
-                            vertical: SizeUtil.getAppHeight(10),
-                          ),
-                          child: Image.asset("image/ic_pan_top.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
-                        ),
+                      child: Image.asset(item.top == 0 ? "image/ic_pan_top.png" : "image/ic_pan_toped.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: (){
+                      //删除网盘图片
+                      deletePanFile(item.id, widget.panData.panid);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: SizeUtil.getAppWidth(10),
+                        vertical: SizeUtil.getAppHeight(10),
                       ),
-                      /*Offstage(
-                        offstage: widget.panData.uid == m_uid,
-                        child: InkWell(
-                          onTap: (){
-                            //喜欢
-                            print("lick click${item.id}");
-                            addPanImageLike(item.id);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: SizeUtil.getAppWidth(10),
-                              vertical: SizeUtil.getAppHeight(10),
-                            ),
-                            child: Image.asset("image/ic_pan_unlike.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
-                          ),
-                        ),
-                      ),*/
-                      InkWell(
-                        onTap: (){
-                          //删除网盘图片
-                          deletePanFile(item.id, widget.panData.panid);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: SizeUtil.getAppWidth(10),
-                            vertical: SizeUtil.getAppHeight(10),
-                          ),
-                          child: Image.asset("image/ic_pan_delete.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
-                        ),
-                      )
-                    ],
+                      child: Image.asset("image/ic_pan_delete.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                    ),
                   )
+                ],
+              )
             )
           ],
         ),
@@ -470,7 +502,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
             ),
             Expanded(child: SizedBox()),
             Offstage(
-              offstage: !widget.isself,
+              offstage: !widget.isself || widget.panData.isself != 0,
               child: InkWell(
                 onTap: (){
                   //编辑
@@ -487,7 +519,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
               ),
             ),
             Offstage(
-              offstage: widget.isself || widget.panData.imagenum == 0,
+              offstage: widget.isself || widget.panData.isself != 0 || widget.panData.imagenum == 0,
               child: InkWell(
                 onTap: (){
                   //复制网盘
@@ -514,8 +546,8 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                 onTap: (){
                   //删除
                   DialogManager().showDeletePanDialog(context,type:PanDeleteType.PAN, title: "是否确定删除${widget.panData.name}网盘？", panid: widget.panData.panid).then((value){
-                    if(value){
-                      Navigator.pop(context,{"editor":PanEditor.DELETE});
+                    if(value != null){
+                      Navigator.pop(context,{"editor":PanEditor.DELETE,"value":widget.panData.panid});
                     }
                   });
                   //deletePan();

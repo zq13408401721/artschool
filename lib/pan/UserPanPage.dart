@@ -96,7 +96,7 @@ class UserPanPageState extends BaseRefreshState<UserPanPage>{
               nickname: item.nickname,
               imagenum: item.imagenum
             );
-            return PanDetailPage(panData: bean,isself: item.uid == m_uid,);
+            return PanDetailPage(panData: bean,isself: item.uid == m_uid,classifyname:item.classifyname,marknames: item.marknames,);
           }));
         },
         child: Column(

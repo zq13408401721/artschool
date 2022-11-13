@@ -154,7 +154,7 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                       ),
                     ),
                     //自己网盘进来显示取消喜欢
-                    Offstage(
+                    /*Offstage(
                       offstage: !widget.isself,
                       child: InkWell(
                         onTap: (){
@@ -173,7 +173,7 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                           child: Text("取消喜欢",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
                         ),
                       ),
-                    ),
+                    ),*/
                     //老师身份推到课堂
                     Offstage(
                       offstage: m_role != 1,

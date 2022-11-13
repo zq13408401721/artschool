@@ -62,7 +62,9 @@ class Data {
       num imagenum,
       num role,
       num maxwidth,
-      num maxheight,}){
+      num maxheight,
+      String marknames,
+      String classifyname,}){
     _id = id;
     _panid = panid;
     _name = name;
@@ -86,7 +88,8 @@ class Data {
     _role = role;
     _maxwidth = maxwidth;
     _maxheight = maxheight;
-
+    _marknames = marknames;
+    _classifyname = classifyname;
 }
 
   Data.fromJson(dynamic json) {
@@ -113,7 +116,8 @@ class Data {
     _role = json['role'];
     _maxwidth = json['maxwidth'];
     _maxheight = json['maxheight'];
-
+    _marknames = json['marknames'];
+    _classifyname = json['classifyname'];
   }
   num _id;
   String _panid;
@@ -138,6 +142,8 @@ class Data {
   int _role;
   num _maxwidth;
   num _maxheight;
+  String _marknames;
+  String _classifyname;
 
   num get id => _id;
   String get panid => _panid;
@@ -168,6 +174,8 @@ class Data {
   int get role => _role;
   num get maxwidth => _maxwidth;
   num get maxheight => _maxheight;
+  String get marknames => _marknames;
+  String get classifyname => _classifyname;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -193,6 +201,8 @@ class Data {
     map['role'] = _role;
     map['maxwidth'] = _maxwidth;
     map['maxheight'] = _maxheight;
+    map['marknames'] = _marknames;
+    map['classifyname'] = _classifyname;
     return map;
   }
 
