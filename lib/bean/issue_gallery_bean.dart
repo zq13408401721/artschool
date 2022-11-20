@@ -104,6 +104,7 @@ class Gallery {
   String _markname;
   String _comments;
   String _editorurl;
+  String _avater;
 
   int get id => _id;
   int get dateId => _dateId;
@@ -142,6 +143,8 @@ class Gallery {
     _comments = value;
   }
 
+  String get avater => _avater;
+
   Gallery({
       int id, 
       int dateId, 
@@ -160,7 +163,8 @@ class Gallery {
       int mark, 
       String markname, 
       String comments,
-      String editorurl}){
+      String editorurl,
+      String avater,}){
     _id = id;
     _dateId = dateId;
     _name = name;
@@ -179,6 +183,7 @@ class Gallery {
     _markname = markname;
     _comments = comments;
     _editorurl = editorurl;
+    _avater = avater;
 }
 
   Gallery.fromJson(dynamic json) {
@@ -200,6 +205,7 @@ class Gallery {
     _markname = json['markname'];
     _comments = json['comments'];
     _editorurl = json['editorurl'];
+    _avater = json['avater'];
   }
 
   Map<String, dynamic> toJson() {
@@ -222,6 +228,7 @@ class Gallery {
     map['markname'] = _markname;
     map['comments'] = _comments;
     map['editorurl'] = _editorurl;
+    map['avater'] = _avater;
     return map;
   }
 

@@ -20,7 +20,7 @@ class HeadTile extends StatelessWidget{
             child: (avater == null || avater.length == 0) ? Image.asset("image/ic_head.png",width: ScreenUtil().setWidth(40),height: ScreenUtil().setHeight(40),)
                 : CachedNetworkImage(imageUrl: avater,width: ScreenUtil().setWidth(40),height: ScreenUtil().setHeight(40)),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20),),
+          SizedBox(width: ScreenUtil().setWidth(10),),
           Text(label,style: TextStyle(fontSize: ScreenUtil().setSp(30)),)
         ],
       ),

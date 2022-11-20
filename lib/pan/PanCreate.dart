@@ -138,13 +138,15 @@ class PanCreateState extends BaseState<PanCreate>{
           for(var item in panMarkListOne){
             if(item.id == int.parse(markids[0])){
               item.select = true;
-              break;
+            }else{
+              item.select = false;
             }
           }
           for(var item in panMarkListTwo){
             if(item.id == int.parse(markids[1])){
               item.select = true;
-              break;
+            }else{
+              item.select = false;
             }
           }
           for(var markid in markids.getRange(2, markids.length)){
@@ -296,7 +298,7 @@ class PanCreateState extends BaseState<PanCreate>{
                       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(50))),
                       child: Column(
                         children: [
-                          SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(20)),),
+                          SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -304,9 +306,11 @@ class PanCreateState extends BaseState<PanCreate>{
                                 child: TextField(
                                   maxLength: 20,
                                   maxLines: 1,
-                                  controller: TextEditingController(text: widget.panData != null ? widget.panData.name : ""),
+                                  style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color:Colors.grey),
+                                  controller: TextEditingController(text: panName != null ? panName : ""),
                                   decoration: InputDecoration(
                                       hintText: "网盘名称",
+                                      hintStyle: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),
                                       border:InputBorder.none,
                                       fillColor: Colors.white,
                                       filled: true,
@@ -372,7 +376,6 @@ class PanCreateState extends BaseState<PanCreate>{
                           ),
                           SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(10)),),
                           Container(
-                            padding: const EdgeInsets.all(8.0),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -383,6 +386,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                         Center(
                                           child: Container(
                                             width: ScreenUtil().setWidth(SizeUtil.getWidth(400)),
+                                            height: SizeUtil.getAppHeight(120),
                                             padding: EdgeInsets.only(
                                                 left:ScreenUtil().setWidth(SizeUtil.getWidth(20)),
                                                 top:ScreenUtil().setWidth(SizeUtil.getWidth(10))
@@ -399,9 +403,9 @@ class PanCreateState extends BaseState<PanCreate>{
                                               isExpanded: true,
                                               hint: Text("分类"),
                                               underline: Container(),
-                                              icon: Icon(Icons.arrow_right),
+                                              icon: Icon(Icons.keyboard_arrow_down,color: Colors.grey,),
                                               items: widget.tabs.map((e) => DropdownMenuItem(
-                                                child: Text(e.name),
+                                                child: Text(e.name,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.black87),),
                                                 value: e,
                                               )).toList(),
                                               value: selectItem,
@@ -435,8 +439,11 @@ class PanCreateState extends BaseState<PanCreate>{
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                                  child: Text("标签一(单选)",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+                                  padding:EdgeInsets.symmetric(
+                                    horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+                                    vertical: SizeUtil.getAppHeight(20)
+                                  ),
+                                  child: Text("标签一（单选）",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                                 ),
                                 Container(
                                   child: SingleChildScrollView(
@@ -477,7 +484,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                 SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                                 Container(
                                   padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                                  child: Text("标签二(单选)",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+                                  child: Text("标签二（单选）",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                                 ),
                                 Container(
                                   child: SingleChildScrollView(
@@ -518,7 +525,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                 SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                                 Container(
                                   padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                                  child: Text("标签三(多选)",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+                                  child: Text("标签三（多选）",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
                                 ),
                                 Container(
                                   child: SingleChildScrollView(

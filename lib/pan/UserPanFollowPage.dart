@@ -76,7 +76,7 @@ class UserPanFollowPageState extends BaseRefreshState<UserPanFollowPage>{
                 vertical: SizeUtil.getAppHeight(80)
             ),
             child: ClipOval(
-                child: item.avater != null ? CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(100),height: SizeUtil.getAppWidth(100),)
+                child: item.avater != null ? CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(100),height: SizeUtil.getAppWidth(100),fit: BoxFit.cover,)
                     : Image.asset("image/ic_head.png",height: SizeUtil.getAppWidth(100),width: SizeUtil.getAppWidth(100),fit:BoxFit.cover)
             ),
           ),

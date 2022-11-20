@@ -124,9 +124,11 @@ abstract class BaseCoustRefreshState<T extends StatefulWidget> extends BaseState
   //隐藏加载更多
   void hideLoadMore(){
     Future.delayed(new Duration(seconds: 1),(){
-      setState(() {
-        this.isloading = false;
-      });
+      if(mounted){
+        setState(() {
+          this.isloading = false;
+        });
+      }
     });
   }
 

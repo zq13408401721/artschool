@@ -233,6 +233,9 @@ flutter:
     - image/ic_pan_editor.png
     - image/ic_pan_unlike.png
     - image/ic_pan_like.png
+    - image/ic_btn_close.png
+    - image/ic_checkbox_normal.png
+    - image/ic_checkbox_select.png
     - videos/login_page.mp4
     - videos/x2/login_page_x2.mp4
     - videos/x2/login_page_android_x2.mp4

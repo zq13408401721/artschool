@@ -136,15 +136,15 @@ class PanScreenState extends BaseState<PanScreen>{
                         },
                         child: Container(
                           padding: EdgeInsets.all(ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                          child: Image.asset("image/ic_fork.png",width:SizeUtil.getAppWidth(40),height:SizeUtil.getAppWidth(40),),
+                          child: Image.asset("image/ic_btn_close.png",width:SizeUtil.getAppWidth(40),height:SizeUtil.getAppWidth(40),),
                         ),
                       ),
                     )
                 ),
-                Container(
+                /*Container(
                   padding: EdgeInsets.only(left: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
                   child: Text("按类型筛选",style:TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
-                ),
+                ),*/
                 Expanded(
                   child: SingleChildScrollView(
                     child: Container(
@@ -308,7 +308,7 @@ class PanScreenState extends BaseState<PanScreen>{
                             var names = "${marknames[0]} / ${marknames[1]}";
                             if(marks.length == 0){
 
-                            }else{
+                            }else if(marknames[2] != null && marknames[2].length > 0){
                               names += " / ${marknames[2]}";
                             }
 

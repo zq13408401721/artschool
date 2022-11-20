@@ -57,8 +57,8 @@ class HorizontalListTabState extends BaseState<HorizontalListTab>{
           horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
           vertical: ScreenUtil().setHeight(SizeUtil.getHeight(10))
         ),
-        margin: EdgeInsets.only(
-          right: ScreenUtil().setWidth(SizeUtil.getWidth(20))
+        margin: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(10))
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -83,10 +83,12 @@ class HorizontalListTabState extends BaseState<HorizontalListTab>{
     // TODO: implement build
     return Container(
       color: Colors.white,
-      height: ScreenUtil().setHeight(SizeUtil.getHeight(100)),
+      height: ScreenUtil().setHeight(SizeUtil.getHeight(115)),
       alignment: Alignment(-1,0),
       padding: EdgeInsets.only(
-        bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20))
+        left:SizeUtil.getAppWidth(20),
+        right: SizeUtil.getAppWidth(20),
+        bottom: ScreenUtil().setHeight(SizeUtil.getHeight(30))
       ),
       child: ListView.builder(
         shrinkWrap: true,

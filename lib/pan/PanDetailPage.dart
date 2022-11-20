@@ -406,7 +406,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
               bottomRight: Radius.circular(SizeUtil.getAppWidth(10))
           )
       ),
-      child: InkWell(
+      child: GestureDetector(
         onTap: (){
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
@@ -428,17 +428,15 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
             Padding(padding: EdgeInsets.only(
                 left: SizeUtil.getAppWidth(20),
                 right: SizeUtil.getAppWidth(20),
-                top: SizeUtil.getAppWidth(10),
+                top: SizeUtil.getAppWidth(20),
                 bottom: SizeUtil.getAppWidth(5),
               ),
               child:(!widget.isself || widget.panData.isself == 1 || widget.fromSreach) ?
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: SizeUtil.getAppHeight(20)
-                  ),
-                  child: Text("${item.name}",style: Constant.smallTitleTextStyle,maxLines: 1,overflow: TextOverflow.ellipsis,),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: SizeUtil.getAppHeight(20)
                 ),
+                child: Text("${item.name}",style: Constant.smallTitleTextStyle,maxLines: 1,overflow: TextOverflow.ellipsis,),
               ) :
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -446,19 +444,28 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                   InkWell(
                     onTap: (){
                       print("top click ${widget.panData.panid}");
-                      //网盘图片置顶
-                      if(item.top == 0){
-                        panFileTopping(item.id);
-                      }else{
-                        deletePanFileTopping(item.id);
-                      }
+                      DialogManager().showPanDialogTitle(context,title: item.top == 0 ? "置顶网盘？" : "取消置顶？").then((value){
+                        //确定
+                        if(value == true){
+                          //网盘图片置顶
+                          if(item.top == 0){
+                            panFileTopping(item.id);
+                          }else{
+                            deletePanFileTopping(item.id);
+                          }
+                        }
+                      });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: SizeUtil.getAppWidth(10),
-                        vertical: SizeUtil.getAppHeight(10),
+                      padding: EdgeInsets.only(
+                        left: SizeUtil.getAppWidth(10),
+                        right: SizeUtil.getAppWidth(10),
+                        top: SizeUtil.getAppHeight(10),
+                        bottom: SizeUtil.getAppHeight(20)
                       ),
-                      child: Image.asset(item.top == 0 ? "image/ic_pan_top.png" : "image/ic_pan_toped.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                      child: Text("${item.top == 0 ? '置顶图片' : '取消置顶'}",style: item.top == 0 ? TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.black54) :
+                        TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.deepOrangeAccent),)
+                      //Image.asset(item.top == 0 ? "image/ic_pan_top.png" : "image/ic_pan_toped.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                     ),
                   ),
                   InkWell(
@@ -467,15 +474,18 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                       deletePanFile(item.id, widget.panData.panid);
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: SizeUtil.getAppWidth(10),
-                        vertical: SizeUtil.getAppHeight(10),
+                      padding: EdgeInsets.only(
+                        left: SizeUtil.getAppWidth(10),
+                        right: SizeUtil.getAppWidth(10),
+                        top: SizeUtil.getAppHeight(10),
+                        bottom: SizeUtil.getAppHeight(20)
                       ),
-                      child: Image.asset("image/ic_pan_delete.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                      child: Text("删除图片",style: TextStyle(color:Colors.black54,fontSize: SizeUtil.getAppFontSize(30)),)
+                      //Image.asset("image/ic_pan_delete.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                     ),
                   )
                 ],
-              )
+              ),
             )
           ],
         ),
@@ -570,7 +580,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(widget.panData.name)
+            Text(widget.panData.name,style: TextStyle(fontSize: SizeUtil.getAppFontSize(40),fontWeight: FontWeight.bold,color: Colors.black87),)
           ],
         ),
       ),
@@ -583,7 +593,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
             color: Colors.white
           ),
           padding: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(20),vertical: SizeUtil.getAppHeight(10)),
-          child: Text("分类：${widget.classifyname}",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+          child: Text("分类：${widget.classifyname}",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.grey),),
         ),
       ),
       //网盘标签
@@ -595,10 +605,10 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
             color: Colors.white
           ),
           padding: EdgeInsets.only(left: SizeUtil.getAppWidth(20),right:SizeUtil.getAppWidth(20),top: SizeUtil.getAppHeight(10),bottom: SizeUtil.getAppHeight(10)),
-          child: Text("标签：${widget.marknames}",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+          child: Text("标签：${widget.marknames}",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.grey),),
         ),
       ),
-      Divider(height: 1,indent: SizeUtil.getAppWidth(20),color: Colors.grey,),
+      Divider(height: 1,indent: SizeUtil.getAppWidth(20),endIndent: SizeUtil.getAppWidth(20),color: Colors.grey[100],),
       InkWell(
         onTap: (){
           var param = new S.Result(
@@ -625,7 +635,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                       ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
                       : CachedNetworkImage(imageUrl: widget.panData.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
                 ),
-                SizedBox(width: SizeUtil.getAppWidth(20),),
+                SizedBox(width: SizeUtil.getAppWidth(10),),
                 Text(widget.panData.nickname != null ? widget.panData.nickname : widget.panData.username,style: Constant.smallTitleTextStyle,),
                 Expanded(child: SizedBox()),
                 Text("${widget.panData.imagenum}张图",style: Constant.smallTitleTextStyle,),

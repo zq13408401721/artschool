@@ -52,7 +52,7 @@ class PanPageState extends BaseDialogState<PanPage>{
 
   //只看老师
   final TextStyle screenTeacherNormal = TextStyle(color: Colors.black,fontSize: SizeUtil.getAppFontSize(30));
-  final TextStyle screenTeacherSelect = TextStyle(color: Colors.red,fontSize: SizeUtil.getAppFontSize(30));
+  final TextStyle screenTeacherSelect = TextStyle(color: Colors.redAccent,fontSize: SizeUtil.getAppFontSize(30));
 
   int page = 0;
   List<Data> tabsList=[];
@@ -93,6 +93,8 @@ class PanPageState extends BaseDialogState<PanPage>{
   //切换顶部导航
   void changeTab(int index){
     page = index;
+    marks = "";
+    marknames = "";
     if(index == 0){
       allTopTabState.currentState.select(true);
       schoolTopTabState.currentState.select(false);
@@ -115,7 +117,6 @@ class PanPageState extends BaseDialogState<PanPage>{
       //panMineStateKey.currentState.queryPanList(classifyid: 0);
     }
     setState(() {
-      marknames = "";
     });
   }
 
@@ -152,7 +153,7 @@ class PanPageState extends BaseDialogState<PanPage>{
     if(page == 0){
       panAllPageStateKey.currentState.queryPanListByMark(selectClassify, this.marks,classifyname: selectClassName);
     }else if(page == 1){
-      panSchoolStateKey.currentState.queryPanListByMark(selectClassify, this.marks,classifyname: selectClassName);
+      panSchoolStateKey.currentState.queryPanListByMark(selectClassify, this.marks,classifyname: selectClassName,schoolid:schoolid);
     }else{
       panMineStateKey.currentState.queryPanListByMark(selectClassify, this.marks,classifyname: selectClassName);
     }
@@ -211,38 +212,33 @@ class PanPageState extends BaseDialogState<PanPage>{
               children: [
                 //顶部菜单 左右两边
                 Container(
+                  height: SizeUtil.getAppHeight(Constant.SIZE_TOP_BAR_HEIGHT),
                   decoration: BoxDecoration(
                     color: Colors.white
                   ),
                   padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20))
+                      horizontal: SizeUtil.getAppWidth(20)
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       //左边
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(10))
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                              child: PanTopTabButton(key:allTopTabState,name: "全部", tab: "", index: 0, clickCB: changeTab),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                              child: PanTopTabButton(key:schoolTopTabState,name: "学校", tab: "", index: 1, clickCB: changeTab),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                              child: PanTopTabButton(key:mineTopTabState,name: "我的", tab: "", index: 2, clickCB: changeTab),
-                            )
-                          ],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: SizeUtil.getAppWidth(30)),
+                            child: PanTopTabButton(key:allTopTabState,name: "全部", tab: "", index: 0, clickCB: changeTab),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: SizeUtil.getAppWidth(30)),
+                            child: PanTopTabButton(key:schoolTopTabState,name: "学校", tab: "", index: 1, clickCB: changeTab),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: SizeUtil.getAppWidth(30)),
+                            child: PanTopTabButton(key:mineTopTabState,name: "我的", tab: "", index: 2, clickCB: changeTab),
+                          )
+                        ],
                       ),
                       //中间
                       Expanded(
@@ -268,13 +264,6 @@ class PanPageState extends BaseDialogState<PanPage>{
                   decoration: BoxDecoration(
                       color: Colors.white
                   ),
-                  padding: EdgeInsets.only(
-                      left:ScreenUtil().setWidth(SizeUtil.getWidth(30)),
-                      right: ScreenUtil().setWidth(SizeUtil.getWidth(30))
-                  ),
-                  margin: EdgeInsets.only(
-                      bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
-                  ),
                   child: HorizontalListTab(key:horizontalListTabKey,datas: tabsList, click: (dynamic _data){
                     setState(() {
                       this.selectClassify = _data.id;
@@ -291,93 +280,133 @@ class PanPageState extends BaseDialogState<PanPage>{
                 //广告栏
                 //CachedNetworkImage(imageUrl: ""),
                 //markname  筛选
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    //markname
-                    Offstage(
-                      offstage: marknames == null  || marknames.length == 0 || page == 2,
-                      child: InkWell(
-                        onTap: (){
-                          setState(() {
-                            this.marks = "";
-                            this.marknames = "";
-                          });
-                          //panAllPageStateKey.currentState.queryPanListAll(selectClassify,classifyname: selectClassName);
-                          updatePanList();
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(20)),
-                          child: Text(marknames,style: Constant.titleTextStyleNormal,),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: SizeUtil.getAppHeight(20),
+                    horizontal: SizeUtil.getAppWidth(20)
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Offstage(
+                        offstage: this.marks == null || this.marks.length == 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                setState(() {
+                                  this.marks = "";
+                                  this.marknames = "";
+                                  updatePanList();
+                                });
+                              },
+                              child: RichText(
+                                text: TextSpan(
+                                    children: [
+                                      WidgetSpan(
+                                          child: Image.asset("image/ic_btn_close.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),)
+                                      ),
+                                      TextSpan(
+                                          text: "取消筛选",style: TextStyle(color: Colors.orange,fontSize: SizeUtil.getAppFontSize(30))
+                                      )
+                                    ]
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                    ),
-                    //筛选条件
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        //我的页面隐藏只看老师
-                        Offstage(
-                          offstage: page == 2,
-                          child: Container(
-                            margin: EdgeInsets.only(
-                              right: SizeUtil.getAppWidth(20),
-                            ),
-                            child: Row(
-                              children: [
-                                Checkbox(value: enable_teacher, onChanged: (value){
+                      //筛选条件
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          //我的页面隐藏只看老师
+                          Offstage(
+                            offstage: page == 2,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                right: SizeUtil.getAppWidth(20),
+                              ),
+                              child: InkWell(
+                                onTap: (){
                                   setState(() {
-                                    enable_teacher = value;
+                                    enable_teacher = !enable_teacher;
                                     selectScreenPanList(marks: this.marks);
                                   });
-                                },materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,),
-                                InkWell(
-                                  onTap: (){
-                                    setState(() {
-                                      enable_teacher = !enable_teacher;
-                                      selectScreenPanList(marks: this.marks);
-                                    });
-                                  },
-                                  child: Text("只看老师",style: enable_teacher ? screenTeacherSelect : screenTeacherNormal,),
-                                )
-                              ],
+                                },
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      enable_teacher ? "image/ic_checkbox_select.png" : "image/ic_checkbox_normal.png",
+                                      width: SizeUtil.getAppWidth(40),
+                                      height: SizeUtil.getAppWidth(40),
+                                    ),
+                                    SizedBox(width: SizeUtil.getAppWidth(10),),
+                                    Text("只看老师",style: enable_teacher ? screenTeacherSelect : screenTeacherNormal,),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                        //筛选 全部分类和我的页面的时候隐藏
-                        Offstage(
-                          offstage: selectClassify == 0 || page == 2,
-                          child: Container(
-                            margin:EdgeInsets.only(
-                              right: SizeUtil.getAppWidth(20)
-                            ),                 
-                            child: ImageButton(icon: "image/ic_pan_screen.png", label: "精准筛选",titleStyle: TextStyle(color: Colors.black87,fontSize: SizeUtil.getAppFontSize(30)), cb: (){
-                              //mark筛选
-                              showPanScreen(context, selectClassify).then((value){
-                                print("showPanScreen ${value}");
-                                //创建网盘成功 进入我的网盘
-                                if(value != null){
-                                  if(value["marks"] != null){
-                                    setState(() {
-                                      this.marks = value["marks"];
-                                      this.marknames = value["marknames"];
-                                      updatePanListByMarks();
-                                    });
-                                  }else{
-                                    setState(() {
-                                      this.marks = "";
-                                      this.marknames = "";
-                                      updatePanList();
-                                    });
+                          //筛选 全部分类和我的页面的时候隐藏
+                          Offstage(
+                            offstage: selectClassify == 0 || page == 2,
+                            child: Container(
+                              child: ImageButton(icon: "image/ic_pan_screen.png", label: "精准筛选",titleStyle: TextStyle(color: Colors.black87,fontSize: SizeUtil.getAppFontSize(30)), cb: (){
+                                //mark筛选
+                                showPanScreen(context, selectClassify).then((value){
+                                  print("showPanScreen ${value}");
+                                  //创建网盘成功 进入我的网盘
+                                  if(value != null){
+                                    if(value["marks"] != null){
+                                      setState(() {
+                                        this.marks = value["marks"];
+                                        this.marknames = value["marknames"];
+                                        updatePanListByMarks();
+                                      });
+                                    }else{
+                                      setState(() {
+                                        this.marks = "";
+                                        this.marknames = "";
+                                        updatePanList();
+                                      });
+                                    }
                                   }
-                                }
-                              });
-                            }),
+                                });
+                              }),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                //筛选标签名
+                Offstage(
+                  offstage: marknames == null  || marknames.length == 0 || page == 2,
+                  child: Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: SizeUtil.getAppWidth(20),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10))
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: SizeUtil.getAppWidth(20),
+                      vertical: SizeUtil.getAppHeight(10)
+                    ),
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(text:"你的筛选项目：",style:TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.deepOrangeAccent),),
+                          TextSpan(text: marknames,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.black87))
+                        ]
+                      ),
                     )
-                  ],
+                  ),
                 ),
                 //列表
                 Expanded(
@@ -396,8 +425,8 @@ class PanPageState extends BaseDialogState<PanPage>{
               ],
             ),
             Positioned(
-              right: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
-              bottom: ScreenUtil().setWidth(SizeUtil.getWidth(200)),
+              right: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
+              bottom: ScreenUtil().setHeight(SizeUtil.getHeight(100)),
               child: InkWell(
                 onTap: (){
                   //创建网盘 tabslist第0个位置是全部，只在前端才有效，不作为其他接口参数
@@ -414,7 +443,7 @@ class PanPageState extends BaseDialogState<PanPage>{
                     }
                   });
                 },
-                child: Image.asset("image/ic_pan_create.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(148)),height: ScreenUtil().setWidth(SizeUtil.getWidth(148)),),
+                child: Image.asset("image/ic_pan_create.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(150)),height: ScreenUtil().setWidth(SizeUtil.getWidth(150)),),
               ),
             )
           ],

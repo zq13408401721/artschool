@@ -19,10 +19,11 @@ class TeachTile extends StatefulWidget {
   String author = '';
   int role;
   Gallery gallery;
+  String avater;
   Function cb;
 
   TeachTile({Key key, @required this.smallurl, @required this.title, @required this.author,
-    @required this.role,@required this.gallery,@required this.cb}) :super(key: key);
+    @required this.role,@required this.gallery,@required this.avater,@required this.cb}) :super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -31,6 +32,7 @@ class TeachTile extends StatefulWidget {
     ..title=title
     ..author=author
     ..role = role
+    ..avater = avater
     ..gallery = gallery;
   }
 }
@@ -42,6 +44,7 @@ class TeachTileState extends BaseState<TeachTile>{
   String author = '';
   int role;
   String uid;
+  String avater;
   Gallery gallery;
   @override
   void initState() {
@@ -134,12 +137,23 @@ class TeachTileState extends BaseState<TeachTile>{
                     )
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                  child: Text(
-                    '$author',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Constant.titleTextStyleNormal,
+                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ClipOval(
+                        child: (avater == null || avater.length == 0)
+                            ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                            : CachedNetworkImage(imageUrl: avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                      ),
+                      SizedBox(width: SizeUtil.getAppWidth(10),),
+                      Text(
+                        '$author',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Constant.titleTextStyleNormal,
+                      )
+                    ],
                   ),
                 ),
                 Offstage(

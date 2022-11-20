@@ -15,8 +15,9 @@ class WorkTile extends StatelessWidget{
   Function clickDelete;
   bool isself;
   bool isInClass;
+  String avater;
 
-  WorkTile({@required this.data,@required this.ismark=false,@required this.clickMark,@required this.clickDelete,@required this.isself,@required this.isInClass}){
+  WorkTile({@required this.data,@required this.ismark=false,@required this.clickMark,@required this.clickDelete,@required this.isself,@required this.isInClass,@required this.avater}){
     smallUrl = Constant.parseNewWorkListIconString(data.url,data.width,data.height);
   }
 
@@ -69,12 +70,23 @@ class WorkTile extends StatelessWidget{
               ),
               Padding(
                 padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
-                child: Text(
-                  '${data.author}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Constant.titleTextStyleNormal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ClipOval(
+                      child: (avater == null || avater.length == 0)
+                          ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                          : CachedNetworkImage(imageUrl: avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                    ),
+                    SizedBox(width: SizeUtil.getAppWidth(10),),
+                    Text(
+                      '${data.author}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Constant.titleTextStyleNormal,
 
+                    )
+                  ],
                 ),
               ),
               Padding(

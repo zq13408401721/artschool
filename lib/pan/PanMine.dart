@@ -228,12 +228,15 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                (item.url != null && item.imagenum > 0) ?
-                CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height)
-                    : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
-                  child: Center(
-                    child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
-                  ),
+                Container(
+                  color: Colors.grey[200],
+                  child: (item.url != null && item.imagenum > 0) ?
+                    CoustSizeImage(Constant.parsePanSmallString(item.url), mWidth: item.width, mHeight: item.height)
+                        : Padding(padding: EdgeInsets.symmetric(horizontal: 0,vertical: SizeUtil.getAppHeight(100)),
+                      child: Center(
+                        child: Text(item.uid == m_uid ? "上传图片" : "无图",style: Constant.titleTextStyleNormal,textAlign: TextAlign.center,),
+                      ),
+                    ),
                 ),
                 Padding(padding: EdgeInsets.only(
                   left: SizeUtil.getAppWidth(20),
@@ -268,7 +271,7 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                             ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
                             : CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
                       ),
-                      SizedBox(width: SizeUtil.getAppWidth(20),),
+                      SizedBox(width: SizeUtil.getAppWidth(10),),
                       Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,)
                     ],
                   ),
@@ -305,7 +308,9 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                                 top:SizeUtil.getAppWidth(5),
                                 bottom:SizeUtil.getAppWidth(10)
                             ),
-                            child: Image.asset(item.top == 0 ? "image/ic_pan_top.png" : "image/ic_pan_toped.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                            child: Text("${item.top == 0 ? '置顶图片' : '取消置顶'}",style: item.top == 0 ? TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.black54) :
+                              TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.deepOrangeAccent),)
+                            //Image.asset(item.top == 0 ? "image/ic_pan_top.png" : "image/ic_pan_toped.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                           )
                       ),
                       //delete
@@ -321,7 +326,8 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                                 top:SizeUtil.getAppWidth(5),
                                 bottom:SizeUtil.getAppWidth(10)
                             ),
-                            child: Image.asset("image/ic_pan_delete.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                            child: Text("删除图片",style: TextStyle(color:Colors.black54,fontSize: SizeUtil.getAppFontSize(30)),)
+                            //Image.asset("image/ic_pan_delete.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                           )
                       )
                     ],

@@ -11,7 +11,7 @@ class PanNumBean {
   PanNumBean.fromJson(dynamic json) {
     _errno = json['errno'];
     _errmsg = json['errmsg'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       _data = [];
       json['data'].forEach((v) {
         _data.add(Data.fromJson(v));

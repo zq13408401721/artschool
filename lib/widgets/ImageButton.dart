@@ -27,7 +27,12 @@ class ImageButton extends StatelessWidget{
           children: [
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
-              child: Image.asset(icon,width: ScreenUtil().setWidth(40),height: ScreenUtil().setHeight(40),),
+              child: Container(
+                padding: EdgeInsets.only(
+                  right: SizeUtil.getAppWidth(10)
+                ),
+                child: Image.asset(icon,width: ScreenUtil().setWidth(40),height: ScreenUtil().setHeight(40),),
+              ),
             ),
             TextSpan(
               text: label,style: titleStyle == null ? TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.black87) : titleStyle

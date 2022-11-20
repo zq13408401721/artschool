@@ -42,7 +42,9 @@ import 'package:yhschool/widgets/RoundedButton.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:yhschool/widgets/ClickCallback.dart';
+import 'package:yhschool/bean/user_search.dart' as S;
 
+import '../pan/PanUserDetail.dart';
 import 'UserInfoDetail.dart';
 import 'package:yhschool/bean/help_bean.dart';
 
@@ -82,7 +84,7 @@ class MineState extends BaseDialogState{
     //{"id":1,"name":"我的老师","icon":"image/ic_myteacher.png"},
     {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
     {"id":4,"name":"我的网盘","icon":"image/ic_column.png"},
-    {"id":11,"name":"收藏的网盘","icon":"image/ic_column.png"},
+    /*{"id":11,"name":"收藏的网盘","icon":"image/ic_column.png"},*/
     {"id":5,"name":"我的作业","icon":"image/ic_mywork.png"},
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
@@ -97,7 +99,7 @@ class MineState extends BaseDialogState{
     {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
     {"id":3,"name":"我的课件","icon":"image/ic_mycourse.png"},
     {"id":4,"name":"我的网盘","icon":"image/ic_column.png"},
-    {"id":11,"name":"收藏的网盘","icon":"image/ic_column.png"},
+    /*{"id":11,"name":"收藏的网盘","icon":"image/ic_column.png"},*/
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
     {"id":9,"name":"听歌","icon":"image/ic_music.png"},
@@ -136,6 +138,7 @@ class MineState extends BaseDialogState{
                   m_nickname = value["nickname"];
                   mark = value["schoolname"]+"   "+value["classes"];
                   role = value["role"];
+                  m_uid = value["uid"];
                 });
               }
             });
@@ -155,6 +158,7 @@ class MineState extends BaseDialogState{
               m_nickname = value["nickname"];
               mark = value["schoolname"] == null ? "" : value["schoolname"]+"   "+value["classes"] == null ? "" : value["classes"];
               role = value["role"];
+              m_uid = value["uid"];
             });
           }
         })
@@ -262,60 +266,75 @@ class MineState extends BaseDialogState{
 
   //个人信息
   Widget _userInfo(){
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white
-      ),
-      padding: EdgeInsets.only(
-        left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
-        top: ScreenUtil().setHeight(SizeUtil.getHeight(40)),
-        bottom: ScreenUtil().setHeight(SizeUtil.getHeight(40))
-      ),
-      margin: EdgeInsets.only(
-        bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                ClipOval(
-                  child: avater != null ? CachedNetworkImage(imageUrl: avater,height: ScreenUtil().setWidth(SizeUtil.getWidth(100)),width: ScreenUtil().setWidth(SizeUtil.getWidth(100)),fit: BoxFit.cover,) :
-                  Image.asset("image/ic_head.png",height: ScreenUtil().setWidth(SizeUtil.getWidth(100)),width: ScreenUtil().setWidth(SizeUtil.getWidth(100)),fit:BoxFit.cover),
-                ),
-                SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    (m_nickname == null && m_username == null) ? Text("") :
-                    Text(m_nickname != null ? m_nickname : m_username,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),fontWeight: FontWeight.bold),),
-                    SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(5)),),
-                    Text(mark != null ? mark : "",style:Constant.smallTitleTextStyle)
-                  ],
-                )
-              ],
+    return InkWell(
+      onTap: (){
+        //关注列表进入个人详情
+        var param = new S.Result(
+          uid: m_uid,
+          username:m_username,
+          nickname:m_nickname,
+          avater:avater,
+          role:role,
+        );
+        param.panid = "";
+        //进入用户详情页
+        Navigator.of(context).push(MaterialPageRoute(builder: (_cxt) => PanUserDetail(data: param)));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white
+        ),
+        padding: EdgeInsets.only(
+            left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+            top: ScreenUtil().setHeight(SizeUtil.getHeight(40)),
+            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(40))
+        ),
+        margin: EdgeInsets.only(
+            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  ClipOval(
+                    child: avater != null ? CachedNetworkImage(imageUrl: avater,height: ScreenUtil().setWidth(SizeUtil.getWidth(100)),width: ScreenUtil().setWidth(SizeUtil.getWidth(100)),fit: BoxFit.cover,) :
+                    Image.asset("image/ic_head.png",height: ScreenUtil().setWidth(SizeUtil.getWidth(100)),width: ScreenUtil().setWidth(SizeUtil.getWidth(100)),fit:BoxFit.cover),
+                  ),
+                  SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      (m_nickname == null && m_username == null) ? Text("") :
+                      Text(m_nickname != null ? m_nickname : m_username,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),fontWeight: FontWeight.bold),),
+                      SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(5)),),
+                      Text(mark != null ? mark : "",style:Constant.smallTitleTextStyle)
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-          InkWell(
-            onTap: (){
-              //设置
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>UserInfoDetail())).then((value){
-                getUserInfo().then((value){
-                  setState(() {
-                    m_nickname = value["nickname"];
-                    avater = value["avater"];
+            InkWell(
+              onTap: (){
+                //设置
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>UserInfoDetail())).then((value){
+                  getUserInfo().then((value){
+                    setState(() {
+                      m_nickname = value["nickname"];
+                      avater = value["avater"];
+                    });
                   });
                 });
-              });
-            },
-            child: Container(
-              margin: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
-              child: Image.asset("image/ic_setting.png",height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
-            ),
-          )
-        ],
+              },
+              child: Container(
+                margin: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
+                child: Image.asset("image/ic_setting.png",height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

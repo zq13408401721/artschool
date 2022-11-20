@@ -174,6 +174,7 @@ class TodayTeachGalleryState extends BaseRefreshState<TodayTeachGallery>{
             //child: TileCard(key:GlobalObjectKey(list[index].id),url: list[index].url,title: list[index].name,imgtype: ImageType.issue,width: list[index].width,height: list[index].height,),
             child: TeachTile(smallurl: Constant.parseNewIssueSmallString(list[index].url,list[index].width,list[index].height,scale: 50),
               title: Constant.getFileNameByUrl(list[index].url,list[index].filename),author: list[index].name,role: this.role,
+              avater: list[index].avater,
               gallery: list[index],cb: (){
                 //删除图片资料
                 showAlertTips(context, "确定删除？", (){

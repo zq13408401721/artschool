@@ -11,7 +11,8 @@ class CoustSizeImage extends Container{
   String url;
 
   CoustSizeImage(@required this.url,{@required mWidth,@required mHeight}):
-        super(color: Constant.getColor(),width: double.infinity,
+        super(color: Constant.getColor(),
+        width: mWidth == null ? SizeUtil.getAppWidth(500) : double.infinity,
         height: mHeight == null ? SizeUtil.getAppHeight(500) : SizeUtil.getAppHeight(Constant.getScaleH(mWidth.toDouble(), mHeight.toDouble()))){
   }
 
@@ -20,7 +21,7 @@ class CoustSizeImage extends Container{
       CachedNetworkImage(
         imageUrl: url,
         fit: BoxFit.cover,
-        memCacheWidth: SizeUtil.getAppWidth(1000).toInt(),
+        memCacheWidth: SizeUtil.getAppWidth(1000).toInt()
       ) :
       CachedNetworkImage(
         imageUrl: url,

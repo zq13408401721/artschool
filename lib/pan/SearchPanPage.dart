@@ -179,8 +179,9 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
       },
       child: Container(
         decoration: BoxDecoration(
+            color: Colors.white,
             borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
-            border: Border.all(color: Colors.grey[400],width: SizeUtil.getAppWidth(1))
+            //border: Border.all(color: Colors.grey[400],width: SizeUtil.getAppWidth(1))
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,18 +199,27 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
                 )
             ),
             Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: SizeUtil.getAppWidth(20),
-                  vertical: SizeUtil.getAppHeight(10)
+              padding: EdgeInsets.only(
+                  left: SizeUtil.getAppWidth(20),
+                  right: SizeUtil.getAppWidth(20),
+                  top: SizeUtil.getAppHeight(10),
+                  bottom: SizeUtil.getAppHeight(5)
               ),
               child: Text(data.nickname != null ? data.nickname : data.username,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),fontWeight: FontWeight.bold),),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: SizeUtil.getAppWidth(20),
-                  vertical: SizeUtil.getAppHeight(10)
+              padding: EdgeInsets.only(
+                  left: SizeUtil.getAppWidth(20),
+                  right: SizeUtil.getAppWidth(20),
+                  bottom: SizeUtil.getAppHeight(10)
               ),
-              child: Text("${data.fansnum}粉丝",style: Constant.smallTitleTextStyle,),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("${data.fansnum == null ? 0 : data.fansnum}粉丝",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.black54),),
+                  Text("查看主页",style: Constant.smallTitleTextStyle,)
+                ],
+              ),
             )
           ],
         ),
@@ -220,8 +230,9 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
   @override
   Widget addHeaderWidget() {
     return Container(
+      color: Colors.white,
       padding: EdgeInsets.symmetric(
-        horizontal: SizeUtil.getAppWidth(40),
+        horizontal: SizeUtil.getAppWidth(20),
         vertical: SizeUtil.getAppHeight(40)
       ),
       child: Column(
@@ -233,47 +244,60 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
             },
             child: Container(
               padding: EdgeInsets.symmetric(
-                vertical: SizeUtil.getAppHeight(20)
+                vertical: SizeUtil.getAppHeight(40)
               ),
-              child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+              child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppWidth(60),),
             ),
           ),
           //搜索框
           Row(
             children: [
               Expanded(
-                child: TextField(
-                  maxLength: 20,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                      hintText: "输入搜索词",
-                      counterText: "",
-                      border:InputBorder.none,
-                      fillColor: Colors.white,
-                      filled: true,
-                      contentPadding: EdgeInsets.all( ScreenUtil().setHeight(SizeUtil.getHeight(20))),
-                      enabledBorder:OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black12)
-                      )
+                child: Container(
+                  height: SizeUtil.getAppHeight(100),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(10)))
                   ),
-                  onChanged: (value){
-                    searchword = value;
-                    if(searchword.length == 0){
-                      clearList();
-                    }
-                  },
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: SizeUtil.getAppWidth(20)
+                  ),
+                  child: TextField(
+                    maxLength: 20,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      hintText: "请输入关键字",
+                      hintStyle: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),
+                      counterText: "",
+                      labelStyle: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),
+                      border:InputBorder.none,
+                      isCollapsed: true
+                      //contentPadding: EdgeInsets.all( ScreenUtil().setHeight(SizeUtil.getHeight(20))),
+                      /*enabledBorder:OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black12)
+                      )*/
+                    ),
+                    onChanged: (value){
+                      searchword = value;
+                      if(searchword.length == 0){
+                        clearList();
+                      }
+                    },
+                  ),
                 ),
               ),
               SizedBox(width: SizeUtil.getAppWidth(20),),
               Center(
                 child: Container(
+                  height: SizeUtil.getAppHeight(100),
                   width: ScreenUtil().setWidth(SizeUtil.getWidth(200)),
                   padding: EdgeInsets.only(
                       left:ScreenUtil().setWidth(SizeUtil.getWidth(20))
                   ),
                   decoration: BoxDecoration(
-                      color:Colors.white,
-                      border: Border.all(color: Colors.black12,width: 1),
+                      color:Colors.grey[100],
+                      //border: Border.all(color: Colors.black12,width: 1),
                       borderRadius: BorderRadius.vertical(
                           top: Radius.elliptical(4,4,),
                           bottom: Radius.elliptical(4, 4)
@@ -281,11 +305,11 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
                   ),
                   child: DropdownButton(
                     isExpanded: true,
-                    hint: Text("搜索项"),
+                    hint: Text("搜索项",style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),),
                     underline: Container(),
-                    icon: Icon(Icons.arrow_right),
+                    icon: Icon(Icons.keyboard_arrow_down,color: Colors.grey,),
                     items: searchTypes.map((e) => DropdownMenuItem(
-                      child: Text(e),
+                      child: Text(e,style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),),
                       value: e,
                     )).toList(),
                     value: searchType,
@@ -307,9 +331,10 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     vertical: SizeUtil.getAppHeight(10),
-                    horizontal: SizeUtil.getAppWidth(20)
+                    horizontal: SizeUtil.getAppWidth(40)
                   ),
-                  child: Image.asset("image/ic_search.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
+                  child: Text("搜索",style: TextStyle(color: Colors.black87,fontSize: SizeUtil.getAppFontSize(36)),)
+                  //Image.asset("image/ic_search.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
                 ),
               )
             ],
@@ -364,7 +389,8 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
             offstage: !isShowResult,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                vertical: SizeUtil.getAppHeight(20)
+                vertical: SizeUtil.getAppHeight(20),
+                horizontal: SizeUtil.getAppWidth(20)
               ),
               child: Text("共有$total个相关网盘",style: Constant.smallTitleTextStyle,),
             )

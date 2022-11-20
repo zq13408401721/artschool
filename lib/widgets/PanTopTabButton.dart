@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yhschool/utils/SizeUtil.dart';
 
 class PanTopTabButton extends StatefulWidget{
 
@@ -33,9 +34,9 @@ class PanTopTabButtonState extends State<PanTopTabButton>{
   void initState() {
     // TODO: implement initState
     super.initState();
-    nameSelect = new TextStyle(color: Colors.red,fontSize: ScreenUtil().setSp(36));
-    nameStyle = new TextStyle(color: Colors.grey,fontSize: ScreenUtil().setSp(30),);
-    tabStyle = new TextStyle(color: Colors.grey,fontSize: ScreenUtil().setSp(25));
+    nameSelect = new TextStyle(color: Colors.red,fontSize: SizeUtil.getAppFontSize(40),fontWeight: FontWeight.bold);
+    nameStyle = new TextStyle(color: Colors.black87,fontSize:SizeUtil.getAppFontSize(30),fontWeight: FontWeight.normal);
+    tabStyle = new TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(25));
     if(widget.index == 0){
       select(true);
     }
@@ -53,7 +54,6 @@ class PanTopTabButtonState extends State<PanTopTabButton>{
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
       child: InkWell(
         onTap: (){
           if(widget.clickCB != null){
@@ -65,7 +65,9 @@ class PanTopTabButtonState extends State<PanTopTabButton>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(widget.name,style: _select ? nameSelect : nameStyle,textAlign: TextAlign.center,),
-            Text(widget.tab,style: tabStyle,textAlign: TextAlign.center,)
+            (widget.tab != null && widget.tab.length > 0) ?
+            Text(widget.tab,style: tabStyle,textAlign: TextAlign.center,) :
+            SizedBox()
           ],
         ),
       ),

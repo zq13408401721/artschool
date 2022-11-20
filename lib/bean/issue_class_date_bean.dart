@@ -140,7 +140,7 @@ class Recommend {
       String category, 
       int categoryid, 
       int dateid,
-      String description}){
+      String description,}){
     _id = id;
     _classify = classify;
     _section = section;
@@ -190,6 +190,7 @@ class Groups {
   String _url;
   int _width;
   int _height;
+  String _avater;
 
   int get id => _id;
   int get dateId => _dateId;
@@ -199,6 +200,7 @@ class Groups {
   String get url => _url;
   int get width => _width;
   int get height => _height;
+  String get avater => _avater;
 
   Groups({
       int id, 
@@ -208,7 +210,8 @@ class Groups {
       String date, 
       String url,
       int width,
-      int height}){
+      int height,
+      String avater,}){
     _id = id;
     _dateId = dateId;
     _name = name;
@@ -217,6 +220,7 @@ class Groups {
     _url = url;
     _width = width;
     _height = height;
+    _avater = avater;
 }
 
   Groups.fromJson(dynamic json) {
@@ -228,6 +232,7 @@ class Groups {
     _url = json['url'];
     _width = json['width'];
     _height = json['height'];
+    _avater = json['avater'];
   }
 
   Map<String, dynamic> toJson() {
@@ -240,6 +245,7 @@ class Groups {
     map['url'] = _url;
     map['width'] = _width;
     map['height'] = _height;
+    map['avater'] = _avater;
     return map;
   }
 

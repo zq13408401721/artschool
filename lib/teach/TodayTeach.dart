@@ -140,6 +140,7 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
     });
     httpUtil.post(DataUtils.api_issueclassdate,data: option).then((value){
       if(mounted){
+        print("classData:${value}");
         hideRefreshing();
         if(value != null){
           M.IssueClassDateBean classDate = M.IssueClassDateBean.fromJson(json.decode(value));
@@ -260,16 +261,27 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
                                   )),
                             ),
                             Padding(padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),right:ScreenUtil().setWidth(SizeUtil.getWidth(40))),
-                              child: Container(
-                                alignment: Alignment(-1,0),
-                                color: Colors.white,
-                                child: Text(
-                                  _data[index].name,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ClipOval(
+                                    child: (_data[index].avater == null || _data[index].avater.length == 0)
+                                        ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                                        : CachedNetworkImage(imageUrl: _data[index].avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                                  ),
+                                  SizedBox(width: SizeUtil.getAppWidth(10),),
+                                  Container(
+                                    alignment: Alignment(-1,0),
+                                    color: Colors.white,
+                                    child: Text(
+                                      _data[index].name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),
 
-                                ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                             Padding(padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),right:ScreenUtil().setWidth(SizeUtil.getWidth(40))),

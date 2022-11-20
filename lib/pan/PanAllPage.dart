@@ -190,11 +190,17 @@ class PanAllPageState extends BaseRefreshState<PanAllPage> with SingleTickerProv
                 top: SizeUtil.getAppHeight(20),
                 bottom: SizeUtil.getAppHeight(5)
             ),child:Text(item.name),),
+            //图片数量
             Padding(padding: EdgeInsets.only(
                 left: SizeUtil.getAppWidth(20),
                 right: SizeUtil.getAppWidth(20),
-                top: SizeUtil.getAppHeight(10),
-                bottom: SizeUtil.getAppHeight(10)
+                top: SizeUtil.getAppHeight(5)
+            ),child: Text("共计${item.imagenum}张图片",style: TextStyle(color: Colors.grey[400],fontSize: SizeUtil.getAppFontSize(30)),),),
+            Padding(padding: EdgeInsets.only(
+                left: SizeUtil.getAppWidth(20),
+                right: SizeUtil.getAppWidth(20),
+                top: SizeUtil.getAppHeight(20),
+                bottom: SizeUtil.getAppHeight(20)
             ),child: InkWell(
               onTap: (){
                 var param = new S.Result(
@@ -217,17 +223,11 @@ class PanAllPageState extends BaseRefreshState<PanAllPage> with SingleTickerProv
                         ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
                         : CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
                   ),
-                  SizedBox(width: SizeUtil.getAppWidth(20),),
-                  Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,)
+                  SizedBox(width: SizeUtil.getAppWidth(10),),
+                  Text(item.nickname != null ? item.nickname : item.username,style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),)
                 ],
               ),
             )),
-            Padding(padding: EdgeInsets.only(
-                left: SizeUtil.getAppWidth(20),
-                right: SizeUtil.getAppWidth(20),
-                top: SizeUtil.getAppHeight(5),
-                bottom: SizeUtil.getAppHeight(5)
-            ),child: Text("P${item.imagenum}",style: TextStyle(color: Colors.grey,fontSize: ScreenUtil().setSp(30)),),),
           ],
         ),
       ),

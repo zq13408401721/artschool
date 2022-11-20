@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yhschool/utils/Constant.dart';
@@ -320,7 +321,7 @@ class DialogManager{
       return StatefulBuilder(builder: (_ct,_state){
         return UnconstrainedBox(
           child: SizedBox(
-            width: SizeUtil.getAppWidth(400),
+            width: SizeUtil.getAppWidth(window.physicalSize.width-100),
             height: SizeUtil.getAppHeight(300),
             child: Card(
               child: Container(
@@ -345,6 +346,75 @@ class DialogManager{
                               }else if(type == PanDeleteType.FILE){
                                 deletePanFile(_ct,panid,fileid);
                               }
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
+                              padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
+                              ),
+                              child: Text("确定",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                            ),
+                          ),
+                          InkWell(
+                              onTap: (){
+                                Navigator.pop(context,false);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
+                                padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
+                                ),
+                                child: Text("取消",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                              )
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+    });
+    return _bool;
+  }
+
+  /**
+   * 确认弹框
+   */
+  Future<bool> showPanDialogTitle(BuildContext context,{String title}) async{
+    bool _bool;
+    _bool = await showDialog(context: context, builder: (context){
+      return StatefulBuilder(builder: (_ct,_state){
+        return UnconstrainedBox(
+          child: SizedBox(
+            width: SizeUtil.getAppWidth(window.physicalSize.width-100),
+            height: SizeUtil.getAppHeight(300),
+            child: Card(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeUtil.getAppWidth(20),
+                    vertical: SizeUtil.getAppHeight(20)
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                    SizedBox(height: SizeUtil.getHeight(20),),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              Navigator.pop(context,true);
                             },
                             child: Container(
                               margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),

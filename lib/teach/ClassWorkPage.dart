@@ -247,7 +247,7 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
             //StaggeredTile.count(3,index==0?2:3),
             itemBuilder: (context,index){
               return GestureDetector(
-                child: WorkTile(data: _data.works[index],ismark: m_role == 1,isInClass:isShowDeleteButton(_data.classid),clickMark: (){
+                child: WorkTile(data: _data.works[index],ismark: m_role == 1,isInClass:isShowDeleteButton(_data.classid),avater:_data.works[index].avater,clickMark: (){
                   //给作业打标记
                   _markWork(_data.works[index],_data.classid);
                 },clickDelete: (){

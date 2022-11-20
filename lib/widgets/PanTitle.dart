@@ -27,7 +27,8 @@ class PanTitle extends StatelessWidget{
             child: Image.asset("image/ic_arrow_left.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setHeight(80),),
           ),
           Text("$title",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
-          Text("500G超大高速空间/FREE",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(20)),color: Colors.grey),)
+          SizedBox(width: SizeUtil.getAppWidth(20),),
+          Text("无限容量高速空间",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25)),color: Colors.grey),)
         ],
       ),
     );

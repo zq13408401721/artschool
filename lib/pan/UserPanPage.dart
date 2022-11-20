@@ -136,7 +136,7 @@ class UserPanPageState extends BaseRefreshState<UserPanPage>{
                         ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
                         : CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
                   ),
-                  SizedBox(width: SizeUtil.getAppWidth(20),),
+                  SizedBox(width: SizeUtil.getAppWidth(10),),
                   Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,)
                 ],
               ),

@@ -7,7 +7,7 @@ class PanClassifyBean {
 
     factory PanClassifyBean.fromJson(Map<String, dynamic> json) {
         return PanClassifyBean(
-            data: json['data'] != null ? (json['data'] as List).map((i) => Data.fromJson(i)).toList() : null,
+            data: json['data'] != null ? ((json['data'] is List) ? (json['data'] as List).map((i) => Data.fromJson(i)).toList() : null ) : null,
             errmsg: json['errmsg'],
             errno: json['errno'],
         );

@@ -86,7 +86,7 @@ class PanSchoolState extends BaseRefreshState<PanSchool> with SingleTickerProvid
   /**
    * 获取标签相关的盘列表
    */
-  void queryPanListByMark(classifyid,marks,{String classifyname}){
+  void queryPanListByMark(classifyid,marks,{String classifyname,String schoolid}){
     selectClassifyid = classifyid;
     selectClassName = classifyname;
     selectMarks = marks;
@@ -99,6 +99,9 @@ class PanSchoolState extends BaseRefreshState<PanSchool> with SingleTickerProvid
       "marks":marks,
       "isteacher":isteacher
     };
+    if(schoolid != null){
+      param["schoolid"] = schoolid;
+    }
     print("queryPanListByMark");
     _getPanList(param);
   }
@@ -211,12 +214,18 @@ class PanSchoolState extends BaseRefreshState<PanSchool> with SingleTickerProvid
               right: SizeUtil.getAppWidth(20),
               top: SizeUtil.getAppWidth(10),
               bottom: SizeUtil.getAppWidth(5),
-            ),child:Text(item.name),),
+            ),child:Text(item.name,style: Constant.titleTextStyleNormal,),),
+            //图片数量
             Padding(padding: EdgeInsets.only(
                 left: SizeUtil.getAppWidth(20),
                 right: SizeUtil.getAppWidth(20),
-                top: SizeUtil.getAppHeight(10),
-                bottom: SizeUtil.getAppHeight(10)
+                top: SizeUtil.getAppWidth(5)
+            ),child: Text("共计${item.imagenum}张图片",style: TextStyle(color: Colors.grey[400],fontSize: SizeUtil.getAppFontSize(30)),),),
+            Padding(padding: EdgeInsets.only(
+                left: SizeUtil.getAppWidth(20),
+                right: SizeUtil.getAppWidth(20),
+                top: SizeUtil.getAppHeight(20),
+                bottom: SizeUtil.getAppHeight(20)
             ),child: InkWell(
               onTap: (){
                 var param = new S.Result(
@@ -239,16 +248,11 @@ class PanSchoolState extends BaseRefreshState<PanSchool> with SingleTickerProvid
                         ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
                         : CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
                   ),
-                  SizedBox(width: SizeUtil.getAppWidth(20),),
-                  Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,)
+                  SizedBox(width: SizeUtil.getAppWidth(10),),
+                  Text(item.nickname != null ? item.nickname : item.username,style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),)
                 ],
               ),
             )),
-            Padding(padding: EdgeInsets.only(
-                left: SizeUtil.getAppWidth(20),
-                right: SizeUtil.getAppWidth(20),
-                top: SizeUtil.getAppWidth(5)
-            ),child: Text("P${item.imagenum}",style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),),),
             Align(
               alignment:Alignment.centerRight,
               child: Row(

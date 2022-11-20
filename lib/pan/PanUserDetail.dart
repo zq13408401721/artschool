@@ -35,8 +35,8 @@ class PanUserDetail extends StatefulWidget{
 
 class PanUserDetailState extends BaseState<PanUserDetail>{
 
-  TextStyle selectStyle = TextStyle(color: Colors.red,fontSize: SizeUtil.getAppFontSize(25));
-  TextStyle normalStyle = TextStyle(color: Colors.black54,fontSize: SizeUtil.getAppFontSize(25));
+  TextStyle selectStyle = TextStyle(color: Colors.red,fontSize: SizeUtil.getAppFontSize(30));
+  TextStyle normalStyle = TextStyle(color: Colors.black54,fontSize: SizeUtil.getAppFontSize(30));
   int tabIndex = 0;
   Data panUserDetail;
   String classname="";
@@ -54,6 +54,7 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
     var param = {
       "uid":widget.data.uid
     };
+    print("queryuserdetail uid:${widget.data.uid}");
     httpUtil.post(DataUtils.api_queryuserdetail,data: param).then((value){
       print("user $value");
       if(value != null){
@@ -185,12 +186,16 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                         children: [
                           Padding(padding: EdgeInsets.symmetric(
                               vertical: SizeUtil.getAppHeight(5),
-                            horizontal: SizeUtil.getAppWidth(20)
-                          ),child:Text(widget.data.nickname != null ? widget.data.nickname : widget.data.username,style: Constant.titleTextStyleNormal,),),
+                            horizontal: SizeUtil.getAppWidth(10)
+                          ),child:Text(widget.data.nickname != null ? widget.data.nickname : widget.data.username,style:TextStyle(
+                            fontSize: SizeUtil.getAppFontSize(40),color: Colors.black87,fontWeight: FontWeight.bold
+                          ),),),
                           Padding(padding: EdgeInsets.symmetric(
-                              vertical: SizeUtil.getAppHeight(5),
-                            horizontal: SizeUtil.getAppWidth(20)
-                          ),child: Text(Constant.parseRole(widget.data.role),style: Constant.smallTitleTextStyle,),)
+                            vertical: SizeUtil.getAppHeight(5),
+                            horizontal: SizeUtil.getAppWidth(10)
+                          ),child: Text(" / ${Constant.parseRole(widget.data.role)}",style: TextStyle(
+                            fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey
+                          ),),)
                         ],
                       ),
                       Padding(padding: EdgeInsets.symmetric(
@@ -212,7 +217,9 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                         child: Padding(padding: EdgeInsets.symmetric(
                           horizontal: SizeUtil.getAppWidth(20),
                           vertical: SizeUtil.getAppHeight(20)
-                        ),child: Text("${panUserDetail == null ? 0 : panUserDetail.fansnum} 粉丝 >",style: Constant.smallTitleTextStyle,),),
+                        ),child: Text("${panUserDetail == null ? 0 : panUserDetail.fansnum} 粉丝 >",style: TextStyle(
+                          fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey
+                        ),),),
                       )
                     ],
                   ),

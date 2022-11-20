@@ -10,11 +10,13 @@ import 'package:yhschool/popwin/DialogManager.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/bean/pan_list_bean.dart' as P;
+import 'package:yhschool/bean/user_search.dart' as S;
 
 import '../GalleryBig.dart';
 import '../utils/DataUtils.dart';
 import '../utils/HttpUtils.dart';
 import '../utils/ImageType.dart';
+import 'PanUserDetail.dart';
 
 class PanImageDetail extends StatefulWidget{
 
@@ -271,22 +273,39 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                       ),
                       child: Text("${widget.panData.date}",style: Constant.smallTitleTextStyle,),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: SizeUtil.getAppHeight(20),
-                        horizontal: SizeUtil.getAppWidth(20)
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ClipOval(
-                            child: (widget.panData.avater == null || widget.panData.avater.length == 0)
-                                ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
-                                : CachedNetworkImage(imageUrl: widget.panData.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
-                          ),
-                          SizedBox(width: SizeUtil.getAppWidth(20),),
-                          Text(widget.panData.nickname != null ? widget.panData.nickname : widget.panData.username,style: Constant.smallTitleTextStyle,),
-                        ],
+                    InkWell(
+                      onTap: (){
+                        //用户详情
+                        var param = new S.Result(
+                          uid: widget.panData.uid,
+                          username:widget.panData.username,
+                          nickname:widget.panData.nickname,
+                          avater:widget.panData.avater,
+                          role:widget.panData.role,
+                        );
+                        param.panid = widget.panData.panid;
+                        //进入用户详情页
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return PanUserDetail(data: param,);
+                        }));
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: SizeUtil.getAppHeight(20),
+                            horizontal: SizeUtil.getAppWidth(20)
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            ClipOval(
+                              child: (widget.panData.avater == null || widget.panData.avater.length == 0)
+                                  ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                                  : CachedNetworkImage(imageUrl: widget.panData.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                            ),
+                            SizedBox(width: SizeUtil.getAppWidth(10),),
+                            Text(widget.panData.nickname != null ? widget.panData.nickname : widget.panData.username,style: Constant.smallTitleTextStyle,),
+                          ],
+                        ),
                       ),
                     ),
                     Offstage(
@@ -296,7 +315,7 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                             vertical: SizeUtil.getAppHeight(20),
                             horizontal: SizeUtil.getAppWidth(20)
                         ),
-                        child: Text("${widget.panData.name}${widget.panData.imagenum}张",style: Constant.smallTitleTextStyle,),
+                        child: Text("网盘名称：${widget.panData.name}，共计${widget.panData.name}${widget.panData.imagenum}张图片，同时点击这里的头像和用户名，可以进入个人空间",style: Constant.smallTitleTextStyle,),
                       ),
                     )
                   ],
