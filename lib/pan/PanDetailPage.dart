@@ -16,6 +16,7 @@ import 'package:yhschool/bean/pan_list_bean.dart';
 import 'package:yhschool/bean/pan_classify_bean.dart' as A;
 import 'package:yhschool/bean/user_search.dart' as S;
 import 'package:yhschool/pan/PanImageDetail.dart';
+import 'package:yhschool/pan/PanImageDetailViewPager.dart';
 import 'package:yhschool/popwin/DialogManager.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/EnumType.dart';
@@ -410,7 +411,8 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         onTap: (){
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
-            return PanImageDetail(panData: widget.panData,imgUrl:item.url,imgData: item,fileid: item.fileid,);
+            //return PanImageDetail(panData: widget.panData,imgUrl:item.url,imgData: item,fileid: item.fileid,);
+            return PanImageDetailViewPager(panData: widget.panData,);
           })).then((value){
             if(value != null){
               if(value == 1){

@@ -40,6 +40,11 @@ abstract class BaseViewPagerState<T,P extends StatefulWidget> extends BaseDialog
       physics = BouncingScrollPhysics();
     }
     _pageController = PageController(initialPage: start);
+    _pageController.addListener(() {
+      if(_pageController.position.maxScrollExtent > 0 && _pageController.position.pixels > _pageController.position.maxScrollExtent-100){
+        print("horizontal scroll:${_pageController.position.maxScrollExtent} ${_pageController.position.pixels}");
+      }
+    });
     curSelect = data[start];
   }
 
