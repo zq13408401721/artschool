@@ -208,6 +208,9 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                   if(value["editor"] == PanEditor.EDITOR){
                     setState(() {
                       item.imagenum = value["value"];
+                      if(value["url"] != null){
+                        item.url = value["url"];
+                      }
                     });
                   }else if(value["editor"] == PanEditor.DELETE){
                     var panid = value["value"];
@@ -244,11 +247,17 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                   top: SizeUtil.getAppWidth(10),
                   bottom: SizeUtil.getAppWidth(5),
                 ),child:Text(item.name),),
+                //图片数量
                 Padding(padding: EdgeInsets.only(
                     left: SizeUtil.getAppWidth(20),
                     right: SizeUtil.getAppWidth(20),
-                    top: SizeUtil.getAppHeight(10),
-                    bottom: SizeUtil.getAppHeight(10)
+                    top: SizeUtil.getAppWidth(5)
+                ),child: Text("共计${item.imagenum}张图片",style: TextStyle(color: Colors.grey[400],fontSize: SizeUtil.getAppFontSize(30)),),),
+                Padding(padding: EdgeInsets.only(
+                    left: SizeUtil.getAppWidth(20),
+                    right: SizeUtil.getAppWidth(20),
+                    top: SizeUtil.getAppHeight(20),
+                    bottom: SizeUtil.getAppHeight(20)
                 ),child: InkWell(
                   onTap: (){
                     var param = new S.Result(
@@ -276,11 +285,6 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                     ],
                   ),
                 )),
-                Padding(padding: EdgeInsets.only(
-                    left: SizeUtil.getAppWidth(20),
-                    right: SizeUtil.getAppWidth(20),
-                    top: SizeUtil.getAppWidth(5)
-                ),child: Text("P${item.imagenum}",style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),),),
                 Align(
                   alignment:Alignment.centerRight,
                   child: Row(
@@ -291,14 +295,18 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                           onTap: (){
                             //置顶
                             if(item.top == 0){
-                              showPanTopping().then((value){
+                              showPanTopping("是否置顶本网盘?").then((value){
                                 if(value){
                                   panTopping(1, item.id);
                                 }
                               });
                             }else{
                               //取消置顶
-                              panTopping(0, item.id);
+                              showPanTopping("是否取消置顶本网盘?").then((value){
+                                if(value){
+                                  panTopping(0, item.id);
+                                }
+                              });
                             }
                           },
                           child: Container(
@@ -308,7 +316,7 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                                 top:SizeUtil.getAppWidth(5),
                                 bottom:SizeUtil.getAppWidth(10)
                             ),
-                            child: Text("${item.top == 0 ? '置顶图片' : '取消置顶'}",style: item.top == 0 ? TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.black54) :
+                            child: Text("${item.top == 0 ? '置顶' : '取消置顶'}",style: item.top == 0 ? TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.black54) :
                               TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.deepOrangeAccent),)
                             //Image.asset(item.top == 0 ? "image/ic_pan_top.png" : "image/ic_pan_toped.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                           )
@@ -326,7 +334,7 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                                 top:SizeUtil.getAppWidth(5),
                                 bottom:SizeUtil.getAppWidth(10)
                             ),
-                            child: Text("删除图片",style: TextStyle(color:Colors.black54,fontSize: SizeUtil.getAppFontSize(30)),)
+                            child: Text("删除",style: TextStyle(color:Colors.black54,fontSize: SizeUtil.getAppFontSize(30)),)
                             //Image.asset("image/ic_pan_delete.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                           )
                       )
@@ -386,7 +394,7 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                 offstage: item.visible != 2,
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.deepPurpleAccent
+                      color: Colors.greenAccent
                   ),
                   padding: EdgeInsets.symmetric(
                       horizontal: SizeUtil.getAppWidth(20),

@@ -164,7 +164,7 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
   }
 
   //置顶网盘
-  Future<bool> showPanTopping() async{
+  Future<bool> showPanTopping(String title) async{
     bool _bool = false;
     await showDialog(context: context, builder: (context){
       return StatefulBuilder(builder: (context,state){
@@ -180,7 +180,7 @@ abstract class BaseRefreshState<T extends StatefulWidget> extends BaseState<T>{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("是否置顶本网盘?",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                  Text("$title",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
                   SizedBox(height: SizeUtil.getHeight(20),),
                   Expanded(
                     child: Row(

@@ -16,6 +16,7 @@ import '../GalleryBig.dart';
 import '../utils/DataUtils.dart';
 import '../utils/HttpUtils.dart';
 import '../utils/ImageType.dart';
+import '../widgets/BackButtonWidget.dart';
 import 'PanUserDetail.dart';
 
 class PanImageDetail extends StatefulWidget{
@@ -114,7 +115,7 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(
+                /*InkWell(
                   onTap: (){
                     Navigator.pop(context);
                   },
@@ -125,7 +126,10 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                     ),
                     child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
                   ),
-                ),
+                ),*/
+                BackButtonWidget(cb: (){
+                  Navigator.pop(context);
+                }, title:""),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -143,7 +147,7 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: widget.imgData.like == 0 ? Colors.amberAccent : Colors.red,
                               borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(5)))
                           ),
                           margin: EdgeInsets.only(right: SizeUtil.getAppWidth(20)),
@@ -201,7 +205,7 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                               horizontal: SizeUtil.getAppWidth(20),
                               vertical: SizeUtil.getAppHeight(10)
                           ),
-                          child: Text("推送到课堂",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
+                          child: Text("推送到班级",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
                         ),
                       ),
                     ),
@@ -219,7 +223,7 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(5)),
-                              color: Colors.red
+                              color: Colors.blueAccent
                           ),
                           margin: EdgeInsets.only(
                               right: SizeUtil.getAppWidth(20)
@@ -315,7 +319,7 @@ class PanImageDetailState extends BaseDialogState<PanImageDetail>{
                             vertical: SizeUtil.getAppHeight(20),
                             horizontal: SizeUtil.getAppWidth(20)
                         ),
-                        child: Text("网盘名称：${widget.panData.name}，共计${widget.panData.name}${widget.panData.imagenum}张图片，同时点击这里的头像和用户名，可以进入个人空间",style: Constant.smallTitleTextStyle,),
+                        child: Text("网盘名称：${widget.panData.name}，共计${widget.panData.imagenum}张图片",style: Constant.smallTitleTextStyle,),
                       ),
                     )
                   ],

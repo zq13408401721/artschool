@@ -319,63 +319,61 @@ class DialogManager{
     bool _bool;
     _bool = await showDialog(context: context, builder: (context){
       return StatefulBuilder(builder: (_ct,_state){
-        return UnconstrainedBox(
-          child: SizedBox(
-            width: SizeUtil.getAppWidth(window.physicalSize.width-100),
-            height: SizeUtil.getAppHeight(300),
-            child: Card(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: SizeUtil.getAppWidth(20),
-                    vertical: SizeUtil.getAppHeight(20)
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
-                    SizedBox(height: SizeUtil.getHeight(20),),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          InkWell(
+        return FractionallySizedBox(
+          widthFactor: 2/3,
+          heightFactor: 1/6,
+          child: Card(
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeUtil.getAppWidth(20),
+                  vertical: SizeUtil.getAppHeight(20)
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                  SizedBox(height: SizeUtil.getHeight(20),),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            if(type == PanDeleteType.PAN){
+                              deletePan(_ct,panid);
+                            }else if(type == PanDeleteType.FILE){
+                              deletePanFile(_ct,panid,fileid);
+                            }
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
+                            padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
+                            ),
+                            child: Text("确定",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                          ),
+                        ),
+                        InkWell(
                             onTap: (){
-                              if(type == PanDeleteType.PAN){
-                                deletePan(_ct,panid);
-                              }else if(type == PanDeleteType.FILE){
-                                deletePanFile(_ct,panid,fileid);
-                              }
+                              Navigator.pop(context,false);
                             },
                             child: Container(
                               margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
                               padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
                               decoration: BoxDecoration(
-                                  color: Colors.red,
+                                  color: Colors.grey,
                                   borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
                               ),
-                              child: Text("确定",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
-                            ),
-                          ),
-                          InkWell(
-                              onTap: (){
-                                Navigator.pop(context,false);
-                              },
-                              child: Container(
-                                margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
-                                padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
-                                decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
-                                ),
-                                child: Text("取消",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
-                              )
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                              child: Text("取消",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                            )
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -394,7 +392,7 @@ class DialogManager{
       return StatefulBuilder(builder: (_ct,_state){
         return UnconstrainedBox(
           child: SizedBox(
-            width: SizeUtil.getAppWidth(window.physicalSize.width-100),
+            width: SizeUtil.getAppWidth(600),
             height: SizeUtil.getAppHeight(300),
             child: Card(
               child: Container(

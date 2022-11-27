@@ -190,18 +190,23 @@ class CollectButtonState extends BaseState<CollectButton>{
           left: ScreenUtil().setWidth(widget.margin_left),
           right: ScreenUtil().setWidth(widget.margin_right)
         ),
-        padding: EdgeInsets.only(
-            top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(30))
+        decoration: BoxDecoration(
+            color: this.iscollect ? Colors.red : Colors.amberAccent,
+            borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(5)))
         ),
-        child: Row(
+        padding: EdgeInsets.symmetric(
+            horizontal: SizeUtil.getAppWidth(20),
+            vertical: SizeUtil.getAppHeight(10)
+        ),
+        child: Text(this.iscollect ? "取消收藏" : "收藏",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),)
+        /*Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(this.iscollect ? "image/ic_collect_select.png" : "image/ic_collect_normal.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(40)),height: ScreenUtil().setHeight(SizeUtil.getWidth(40)),),
             SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(8)),),
             Text(this.iscollect ? "取消收藏" : "收藏",style: TextStyle(color: this.iscollect ? Colors.red : Colors.black,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))))
           ],
-        ),
+        ),*/
       ),
     );
   }

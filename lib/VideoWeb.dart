@@ -17,6 +17,7 @@ import 'package:yhschool/utils/BaseParam.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
+import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/widgets/BackButtonWidget.dart';
 import 'package:yhschool/widgets/PushButtonWidget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -373,11 +374,28 @@ class VideoWebState extends BaseDialogState{
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                CollectVideoButton(margin_right: 40,categoryid: categoryid,subject: classify,section: section,),
-                                m_role == 1 ?
+                                CollectVideoButton(margin_right: 20,categoryid: categoryid,subject: classify,section: section,),
+                                InkWell(
+                                  onTap: (){
+                                    pushVideo();
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.purple,
+                                        borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(5)))
+                                    ),
+                                    margin: EdgeInsets.only(right: SizeUtil.getAppWidth(20)),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: SizeUtil.getAppWidth(20),
+                                        vertical: SizeUtil.getAppHeight(10)
+                                    ),
+                                    child: Text("推送到班级",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
+                                  ),
+                                )
+                                /* m_role == 1 ?
                                 PushButtonWidget(cb: (){
                                   pushVideo();
-                                }, title: "推送") : SizedBox()
+                                }, title: "推送") : SizedBox()*/
                               ],
                             ),
                           ) : SizedBox()

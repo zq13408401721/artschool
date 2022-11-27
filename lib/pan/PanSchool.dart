@@ -133,6 +133,72 @@ class PanSchoolState extends BaseRefreshState<PanSchool> with SingleTickerProvid
     });
   }
 
+  /*//置顶网盘
+  Future<bool> showPanTopping(String title) async{
+    bool _bool = false;
+    await showDialog(context: context, builder: (context){
+      return StatefulBuilder(builder: (context,state){
+        return FractionallySizedBox(
+          widthFactor: 2/3,
+          heightFactor: 1/6,
+          child: Card(
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeUtil.getAppWidth(20),
+                  vertical: SizeUtil.getAppHeight(20)
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("$title",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                  SizedBox(height: SizeUtil.getHeight(20),),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            _bool = true;
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
+                            padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
+                            ),
+                            child: Text("确定",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                          ),
+                        ),
+                        InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: SizeUtil.getAppWidth(10)),
+                              padding: EdgeInsets.symmetric(vertical: SizeUtil.getAppWidth(10),horizontal: SizeUtil.getAppWidth(20)),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(5)))
+                              ),
+                              child: Text("取消",style: TextStyle(color: Colors.white,fontSize: SizeUtil.getAppFontSize(30)),),
+                            )
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      });
+    });
+    return _bool;
+  }*/
+
   /**
    * top 1置顶 0非置顶
    * id 列表id
@@ -194,6 +260,9 @@ class PanSchoolState extends BaseRefreshState<PanSchool> with SingleTickerProvid
           })).then((value){
             if(value != null && value["editor"] == PanEditor.EDITOR){
               setState(() {
+                if(value["value"] == 0){
+                  panList.remove(item);
+                }
                 item.imagenum = value["value"];
               });
             }
@@ -263,9 +332,17 @@ class PanSchoolState extends BaseRefreshState<PanSchool> with SingleTickerProvid
                       onTap: (){
                         //网盘置顶
                         if(item.top == 0){
-                          panTopping(1,item.id);
+                          showPanTopping("是否置顶本网盘?").then((value){
+                            if(value){
+                              panTopping(1, item.id);
+                            }
+                          });
                         }else{
-                          deletePanTopping(item.id);
+                          showPanTopping("是否取消置顶本网盘?").then((value){
+                            if(value){
+                              deletePanTopping(item.id);
+                            }
+                          });
                         }
                       },
                       child: Container(
@@ -275,7 +352,9 @@ class PanSchoolState extends BaseRefreshState<PanSchool> with SingleTickerProvid
                             top:SizeUtil.getAppWidth(5),
                             bottom:SizeUtil.getAppWidth(10)
                         ),
-                        child: Image.asset(item.top == 1 ? "image/ic_pan_toped.png" : "image/ic_pan_top.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
+                        child: Text("${item.top == 0 ? '置顶' : '取消置顶'}",style: item.top == 0 ? TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.black54) :
+                        TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.deepOrangeAccent),)
+                        //Image.asset(item.top == 1 ? "image/ic_pan_toped.png" : "image/ic_pan_top.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40),),
                       )
                   ),
                 ],

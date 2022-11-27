@@ -8,6 +8,9 @@ import 'package:yhschool/bean/issue_gallery_bean.dart';
 import 'package:yhschool/popwin/PopWindowMark.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
+import 'package:yhschool/bean/user_search.dart' as S;
+
+import '../pan/PanUserDetail.dart';
 
 /**
  * 新版的瀑布流列表条目
@@ -18,12 +21,17 @@ class TeachTile extends StatefulWidget {
   String title = '';
   String author = '';
   int role;
+  String tileuid = '';
+  String username = '';
+  String nickname = '';
+  int tilerole;
   Gallery gallery;
   String avater;
   Function cb;
 
   TeachTile({Key key, @required this.smallurl, @required this.title, @required this.author,
-    @required this.role,@required this.gallery,@required this.avater,@required this.cb}) :super(key: key);
+    @required this.role,@required this.gallery,@required this.avater,@required this.cb,
+    @required this.username,@required this.nickname,@required this.tilerole,@required this.tileuid}) :super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -33,7 +41,11 @@ class TeachTile extends StatefulWidget {
     ..author=author
     ..role = role
     ..avater = avater
-    ..gallery = gallery;
+    ..gallery = gallery
+    ..username = username
+    ..nickname = nickname
+    ..tilerole  = tilerole
+    ..tileuid = tileuid;
   }
 }
 
@@ -42,6 +54,10 @@ class TeachTileState extends BaseState<TeachTile>{
   String smallurl = '';
   String title = '';
   String author = '';
+  String username = '';
+  String nickname = '';
+  int tilerole;
+  String tileuid = '';
   int role;
   String uid;
   String avater;
@@ -89,7 +105,8 @@ class TeachTileState extends BaseState<TeachTile>{
     }else{
       //如果没有标签作品发布者不是自己，就不显示
       if(uid == gallery.tid){
-        return "写要求";
+        //return "写要求";
+        return "对图片打标注";
       }else{
         return "";
       }
@@ -136,24 +153,40 @@ class TeachTileState extends BaseState<TeachTile>{
                       fit: BoxFit.cover,
                     )
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ClipOval(
-                        child: (avater == null || avater.length == 0)
-                            ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
-                            : CachedNetworkImage(imageUrl: avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
-                      ),
-                      SizedBox(width: SizeUtil.getAppWidth(10),),
-                      Text(
-                        '$author',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Constant.titleTextStyleNormal,
-                      )
-                    ],
+                InkWell(
+                  onTap: (){
+                    var param = new S.Result(
+                      uid: tileuid,
+                      username:username,
+                      nickname:nickname,
+                      avater:avater,
+                      role:tilerole,
+                    );
+                    param.panid = "";
+                    //进入用户详情页
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return PanUserDetail(data: param,);
+                    }));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ClipOval(
+                          child: (avater == null || avater.length == 0)
+                              ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                              : CachedNetworkImage(imageUrl: avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                        ),
+                        SizedBox(width: SizeUtil.getAppWidth(10),),
+                        Text(
+                          '$author',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Constant.titleTextStyleNormal,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Offstage(
@@ -176,10 +209,10 @@ class TeachTileState extends BaseState<TeachTile>{
                             ),
                             child: Row(
                               children: [
-                                Image.asset("image/ic_work_mark.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(24)),height: ScreenUtil().setWidth(SizeUtil.getWidth(24)),),
+                                //Image.asset("image/ic_work_mark.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(24)),height: ScreenUtil().setWidth(SizeUtil.getWidth(24)),),
                                 Text(getMarkWord(),style: gallery.markname != null ? TextStyle(
                                     fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),fontWeight: FontWeight.bold,color: Colors.red
-                                ) : TextStyle( fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),fontWeight: FontWeight.bold,color:Color(0xFF3d5afe)),),
+                                ) : TextStyle( fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),fontWeight: FontWeight.bold,color:Colors.orange),),
                               ],
                             )
                           ),

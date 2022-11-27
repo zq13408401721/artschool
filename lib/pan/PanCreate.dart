@@ -285,7 +285,7 @@ class PanCreateState extends BaseState<PanCreate>{
     return Scaffold(
       body: SafeArea(
         child: Container(
-          color: Colors.grey[100],
+          color: Colors.white,
           child: Column(
             children: [
               //标题

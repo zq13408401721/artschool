@@ -191,6 +191,9 @@ class Groups {
   int _width;
   int _height;
   String _avater;
+  String _username;
+  String _nickname;
+  int _role;
 
   int get id => _id;
   int get dateId => _dateId;
@@ -201,6 +204,9 @@ class Groups {
   int get width => _width;
   int get height => _height;
   String get avater => _avater;
+  String get username => _username;
+  String get nickname => _nickname;
+  int get role => _role;
 
   Groups({
       int id, 
@@ -211,7 +217,10 @@ class Groups {
       String url,
       int width,
       int height,
-      String avater,}){
+      String avater,
+      String username,
+      String nickname,
+      int role,}){
     _id = id;
     _dateId = dateId;
     _name = name;
@@ -221,6 +230,9 @@ class Groups {
     _width = width;
     _height = height;
     _avater = avater;
+    _username = username;
+    _nickname = nickname;
+    _role = role;
 }
 
   Groups.fromJson(dynamic json) {
@@ -233,6 +245,9 @@ class Groups {
     _width = json['width'];
     _height = json['height'];
     _avater = json['avater'];
+    _username = json['username'];
+    _nickname = json['nickname'];
+    _role = json['role'];
   }
 
   Map<String, dynamic> toJson() {
@@ -246,6 +261,9 @@ class Groups {
     map['width'] = _width;
     map['height'] = _height;
     map['avater'] = _avater;
+    map['username'] = _username;
+    map['nickname'] = _nickname;
+    map['role'] = _role;
     return map;
   }
 

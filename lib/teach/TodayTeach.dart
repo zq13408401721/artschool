@@ -17,9 +17,11 @@ import 'package:yhschool/utils/HttpUtils.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/widgets/ClassTab.dart';
 import 'package:yhschool/widgets/ClickCallback.dart';
+import 'package:yhschool/bean/user_search.dart' as S;
 
 import '../BaseCoustRefreshState.dart';
 import '../VideoWeb.dart';
+import '../pan/PanUserDetail.dart';
 
 /****************参数****************/
 class _MoreParam extends BaseParam{
@@ -261,27 +263,43 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
                                   )),
                             ),
                             Padding(padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),right:ScreenUtil().setWidth(SizeUtil.getWidth(40))),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  ClipOval(
-                                    child: (_data[index].avater == null || _data[index].avater.length == 0)
-                                        ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
-                                        : CachedNetworkImage(imageUrl: _data[index].avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
-                                  ),
-                                  SizedBox(width: SizeUtil.getAppWidth(10),),
-                                  Container(
-                                    alignment: Alignment(-1,0),
-                                    color: Colors.white,
-                                    child: Text(
-                                      _data[index].name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),
-
+                              child: InkWell(
+                                onTap: (){
+                                  var param = new S.Result(
+                                    uid: _data[index].tid,
+                                    username:_data[index].username,
+                                    nickname:_data[index].nickname,
+                                    avater:_data[index].avater,
+                                    role:_data[index].role,
+                                  );
+                                  param.panid = "";
+                                  //进入用户详情页
+                                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                                    return PanUserDetail(data: param,);
+                                  }));
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    ClipOval(
+                                      child: (_data[index].avater == null || _data[index].avater.length == 0)
+                                          ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                                          : CachedNetworkImage(imageUrl: _data[index].avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
                                     ),
-                                  )
-                                ],
+                                    SizedBox(width: SizeUtil.getAppWidth(10),),
+                                    Container(
+                                      alignment: Alignment(-1,0),
+                                      color: Colors.white,
+                                      child: Text(
+                                        _data[index].name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),
+
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                             Padding(padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),right:ScreenUtil().setWidth(SizeUtil.getWidth(40))),

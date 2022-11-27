@@ -105,6 +105,9 @@ class Gallery {
   String _comments;
   String _editorurl;
   String _avater;
+  String _username;
+  String _nickname;
+  int _role;
 
   int get id => _id;
   int get dateId => _dateId;
@@ -144,6 +147,10 @@ class Gallery {
   }
 
   String get avater => _avater;
+  String get username => _username;
+  String get nickname => _nickname;
+  int get role => _role;
+
 
   Gallery({
       int id, 
@@ -164,7 +171,10 @@ class Gallery {
       String markname, 
       String comments,
       String editorurl,
-      String avater,}){
+      String avater,
+      String username,
+      String nickname,
+      int role,}){
     _id = id;
     _dateId = dateId;
     _name = name;
@@ -184,6 +194,9 @@ class Gallery {
     _comments = comments;
     _editorurl = editorurl;
     _avater = avater;
+    _username = username;
+    _nickname = nickname;
+    _role = role;
 }
 
   Gallery.fromJson(dynamic json) {
@@ -206,6 +219,15 @@ class Gallery {
     _comments = json['comments'];
     _editorurl = json['editorurl'];
     _avater = json['avater'];
+    if(json['nickname'] != null){
+      _nickname = json['nickname'];
+    }
+    if(json['username'] != null){
+      _username = json['username'];
+    }
+    if(json['role'] != null){
+      _role = json['role'];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -229,6 +251,9 @@ class Gallery {
     map['comments'] = _comments;
     map['editorurl'] = _editorurl;
     map['avater'] = _avater;
+    map['username'] = _username;
+    map['nickname'] = _nickname;
+    map['role'] = _role;
     return map;
   }
 

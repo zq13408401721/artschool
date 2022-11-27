@@ -143,7 +143,31 @@ class GalleryPageViewState extends BaseViewPagerState<GalleryListData,GalleryPag
                             url: data.url,name: data.name,width: data.width,height: data.height,from: getWidget().from,
                           ),
                         ),
-                        m_role == 1 ? PushButtonWidget(cb: (){
+                        InkWell(
+                          onTap: (){
+                            pushGallery(context, {
+                              "name":m_username == null ? m_nickname : m_username,
+                              "url":data.url,
+                              "width":data.width,
+                              "height":data.height,
+                              "maxwidth":data.maxwidth,
+                              "maxheight":data.maxheight
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.purple,
+                                borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(5)))
+                            ),
+                            margin: EdgeInsets.only(right: SizeUtil.getAppWidth(20)),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: SizeUtil.getAppWidth(20),
+                                vertical: SizeUtil.getAppHeight(10)
+                            ),
+                            child: Text("推送到班级",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
+                          ),
+                        )
+                        /*m_role == 1 ? PushButtonWidget(cb: (){
                           pushGallery(context, {
                             "name":m_username == null ? m_nickname : m_username,
                             "url":data.url,
@@ -152,7 +176,7 @@ class GalleryPageViewState extends BaseViewPagerState<GalleryListData,GalleryPag
                             "maxwidth":data.maxwidth,
                             "maxheight":data.maxheight
                           });
-                        },title: "推送",) : SizedBox()
+                        },title: "推送",) : SizedBox()*/
                       ],
                     ),
                   ),

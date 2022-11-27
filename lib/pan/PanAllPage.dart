@@ -161,6 +161,9 @@ class PanAllPageState extends BaseRefreshState<PanAllPage> with SingleTickerProv
             if(result != null){
               PanEditor editor = result["editor"];
               if(editor == PanEditor.EDITOR){
+                if(result["value"] == 0){
+                  panList.remove(item);
+                }
                 item.imagenum = result["value"];
               }else if(editor == PanEditor.DELETE){
                 for(Data data in panList){

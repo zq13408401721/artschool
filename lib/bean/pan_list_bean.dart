@@ -162,6 +162,9 @@ class Data {
   int get fileid => _fileid;
   String get imagename => _imagename;
   String get url => _url;
+  void set url(String value){
+    _url = value;
+  }
   num get width => _width;
   num get height => _height;
   num get imagenum => _imagenum;

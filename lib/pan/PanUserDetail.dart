@@ -17,6 +17,7 @@ import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 
 import '../utils/HttpUtils.dart';
+import '../widgets/BackButtonWidget.dart';
 
 class PanUserDetail extends StatefulWidget{
 
@@ -128,17 +129,9 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  InkWell(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.only(
-                        right: SizeUtil.getAppWidth(40)
-                      ),
-                      child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
-                    ),
-                  ),
+                  BackButtonWidget(cb: (){
+                    Navigator.pop(context);
+                  }, title:""),
                   Offstage(
                     offstage: m_uid == widget.data.uid,
                     child: InkWell(

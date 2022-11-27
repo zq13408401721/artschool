@@ -147,22 +147,27 @@ class CollectVideoButtonState extends BaseState<CollectVideoButton>{
         }
       },
       child: Container(
-        margin: EdgeInsets.only(
-            left: ScreenUtil().setWidth(SizeUtil.getWidth(widget.margin_left.toDouble())),
-            right: ScreenUtil().setWidth(SizeUtil.getWidth(widget.margin_right.toDouble()))
-        ),
-        padding: EdgeInsets.only(
-            top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(30))
-        ),
-        child: Row(
+          margin: EdgeInsets.only(
+              left: ScreenUtil().setWidth(SizeUtil.getWidth(widget.margin_left.toDouble())),
+              right: ScreenUtil().setWidth(SizeUtil.getWidth(widget.margin_right.toDouble()))
+          ),
+          decoration: BoxDecoration(
+              color: this.iscollect ? Colors.red : Colors.amberAccent,
+              borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(5)))
+          ),
+          padding:EdgeInsets.symmetric(
+              horizontal: SizeUtil.getAppWidth(20),
+              vertical: SizeUtil.getAppHeight(10)
+          ),
+          child: Text(this.iscollect ? "取消收藏" : "收藏",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),)
+        /*Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(this.iscollect ? "image/ic_collect_select.png" : "image/ic_collect_normal.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(40)),height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
             SizedBox(width: ScreenUtil().setWidth(8),),
             Text(this.iscollect ? "取消收藏" : "收藏",style: TextStyle(color: this.iscollect ? Colors.red : Colors.black,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))))
           ],
-        ),
+        ),*/
       ),
     );
   }

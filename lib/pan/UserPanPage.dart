@@ -109,11 +109,18 @@ class UserPanPageState extends BaseRefreshState<UserPanPage>{
               top: SizeUtil.getAppWidth(20),
               bottom: SizeUtil.getAppWidth(5),
             ),child:Text("${item.name}"),),
+            //网盘图片数量显示
             Padding(padding: EdgeInsets.only(
                 left: SizeUtil.getAppWidth(20),
                 right: SizeUtil.getAppWidth(20),
-                top: SizeUtil.getAppHeight(10),
-                bottom: SizeUtil.getAppHeight(10)
+                top: SizeUtil.getAppHeight(5)
+            ),child: Text("共计${item.imagenum}张图片",style: TextStyle(color: Colors.grey[400],fontSize: SizeUtil.getAppFontSize(30)),),),
+            //用户头像信息显示
+            Padding(padding: EdgeInsets.only(
+                left: SizeUtil.getAppWidth(20),
+                right: SizeUtil.getAppWidth(20),
+                top: SizeUtil.getAppHeight(20),
+                bottom: SizeUtil.getAppHeight(20)
             ),child: InkWell(
               onTap: (){
                 var param = new S.Result(
@@ -140,13 +147,7 @@ class UserPanPageState extends BaseRefreshState<UserPanPage>{
                   Text(item.nickname != null ? item.nickname : item.username,style: Constant.smallTitleTextStyle,)
                 ],
               ),
-            )),
-            Padding(padding: EdgeInsets.only(
-                left: SizeUtil.getAppWidth(20),
-                right: SizeUtil.getAppWidth(20),
-                top: SizeUtil.getAppWidth(5),
-                bottom: SizeUtil.getAppHeight(20)
-            ),child: Text("P${item.imagenum}",style: TextStyle(color: Colors.grey,fontSize: SizeUtil.getAppFontSize(30)),),),
+            ))
             /*SizedBox(height: SizeUtil.getAppHeight(10),),
             Offstage(
               offstage: item.uid == m_uid,

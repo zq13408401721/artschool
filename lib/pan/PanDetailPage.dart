@@ -28,6 +28,7 @@ import '../bean/pan_addlike_bean.dart' as K;
 import '../bean/pan_topping_bean.dart' as T;
 import '../utils/DataUtils.dart';
 import '../utils/HttpUtils.dart';
+import '../widgets/BackButtonWidget.dart';
 import 'PanCreate.dart';
 import 'PanUserDetail.dart';
 
@@ -59,6 +60,8 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
   List<F.Data> filesList=[];
   List<Asset> _imgs = [];
   List<LocalFile> _files = []; //当前选中文件的路径
+  bool isUpdate = false; //记录是否更新盘文件 空盘文件上传和文件删除更新上一个页面的列表中网盘信息
+
 
   @override
   void initState() {
@@ -283,6 +286,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
     print("deletePanFile ${folderid} ${panid}");
     deletePanImage().then((value){
       print("deletePanImage ${value}");
+      isUpdate = true;
       if(value != null){
         var param = {
           "panid":panid,
@@ -365,6 +369,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         },
       );
     }).then((value){
+      isUpdate = true;
       //上传结束直接刷新数据
       this._imgs = [];
       _files = [];
@@ -502,14 +507,22 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            InkWell(
+            /*InkWell(
               onTap: (){
                 Navigator.pop(context,{"editor":PanEditor.EDITOR,"value":widget.panData.imagenum});
               },
               child: Container(
                 child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
               ),
-            ),
+            ),*/
+            BackButtonWidget(cb: (){
+              //判断当前网盘信息是否更新如果已经更新，需要替换本地网盘信息
+              var param = {"editor":PanEditor.EDITOR,"value":filesList.length};
+              if(isUpdate){
+                param["url"] = filesList.length == 0 ? "" : filesList[0].url;
+              }
+              Navigator.pop(context,param);
+            }, title:""),
             Expanded(child: SizedBox()),
             Offstage(
               offstage: !widget.isself || widget.panData.isself != 0,
@@ -556,7 +569,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                 onTap: (){
                   //删除
                   DialogManager().showDeletePanDialog(context,type:PanDeleteType.PAN, title: "是否确定删除${widget.panData.name}网盘？", panid: widget.panData.panid).then((value){
-                    if(value != null){
+                    if(value){
                       Navigator.pop(context,{"editor":PanEditor.DELETE,"value":widget.panData.panid});
                     }
                   });
@@ -572,7 +585,6 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
           ],
         ),
       ),
-      Container(color:Colors.white,height: SizeUtil.getAppHeight(20),),
       //网盘名
       Container(
         color: Colors.white,
