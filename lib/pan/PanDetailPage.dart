@@ -16,6 +16,7 @@ import 'package:yhschool/bean/pan_list_bean.dart';
 import 'package:yhschool/bean/pan_classify_bean.dart' as A;
 import 'package:yhschool/bean/user_search.dart' as S;
 import 'package:yhschool/pan/PanImageDetail.dart';
+import 'package:yhschool/pan/PanImageDetailViewPager.dart';
 import 'package:yhschool/popwin/DialogManager.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/EnumType.dart';
@@ -402,7 +403,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
     });
   }
 
-  Widget panItem(F.Data item){
+  Widget panItem(int index,F.Data item){
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -415,7 +416,8 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
         onTap: (){
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
-            return PanImageDetail(panData: widget.panData,imgUrl:item.url,imgData: item,fileid: item.fileid,);
+            //return PanImageDetail(panData: widget.panData,imgUrl:item.url,imgData: item,fileid: item.fileid,);
+            return PanImageDetailViewPager(panData: widget.panData,start: index,);
           })).then((value){
             if(value != null){
               if(value == 1){
@@ -704,7 +706,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
             staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
             //StaggeredTile.count(3,index==0?2:3),
             itemBuilder: (context,index){
-              return panItem(filesList[index]);
+              return panItem(index,filesList[index]);
             },
           ),
         ),
