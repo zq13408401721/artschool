@@ -398,7 +398,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
     });
   }
 
-  Widget panItem(F.Data item){
+  Widget panItem(int index,F.Data item){
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -412,7 +412,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
           //进入网盘详情页面
           Navigator.push(context, MaterialPageRoute(builder: (context){
             //return PanImageDetail(panData: widget.panData,imgUrl:item.url,imgData: item,fileid: item.fileid,);
-            return PanImageDetailViewPager(panData: widget.panData,);
+            return PanImageDetailViewPager(panData: widget.panData,start: index,);
           })).then((value){
             if(value != null){
               if(value == 1){
@@ -694,7 +694,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
             staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
             //StaggeredTile.count(3,index==0?2:3),
             itemBuilder: (context,index){
-              return panItem(filesList[index]);
+              return panItem(index,filesList[index]);
             },
           ),
         ),
