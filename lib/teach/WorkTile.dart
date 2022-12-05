@@ -5,6 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yhschool/bean/work_list_bean.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
+import 'package:yhschool/bean/user_search.dart' as S;
+
+import '../pan/PanUserDetail.dart';
 
 class WorkTile extends StatelessWidget{
 
@@ -68,26 +71,42 @@ class WorkTile extends StatelessWidget{
                     fit: BoxFit.cover,
                   )
               ),
-              Padding(
-                padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ClipOval(
-                      child: (avater == null || avater.length == 0)
-                          ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
-                          : CachedNetworkImage(imageUrl: avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
-                    ),
-                    SizedBox(width: SizeUtil.getAppWidth(10),),
-                    Text(
-                      '${data.author}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Constant.titleTextStyleNormal,
+              InkWell(
+                onTap: (){
+                  var param = new S.Result(
+                    uid: data.uid,
+                    username:data.author,
+                    nickname:data.author,
+                    avater:avater,
+                    role:data.role,
+                  );
+                  param.panid = "";
+                  //进入用户详情页
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return PanUserDetail(data: param,);
+                  }));
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ClipOval(
+                        child: (avater == null || avater.length == 0)
+                            ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                            : CachedNetworkImage(imageUrl: avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                      ),
+                      SizedBox(width: SizeUtil.getAppWidth(10),),
+                      Text(
+                        '${data.author}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Constant.titleTextStyleNormal,
 
-                    )
-                  ],
-                ),
+                      )
+                    ],
+                  ),
+                )
               ),
               Padding(
                 padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(0)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10)),left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
