@@ -251,93 +251,103 @@ class PanImageDetailViewPagerState extends BaseRefreshViewPagerState<Data,PanIma
         Container(
           child: initTitleBar(data),
         ),
-        //图片
-        Container(
-            child: InkWell(
-              onTap: (){
-                Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (BuildContext context){
-                  return GalleryBig(imgUrl: data.url,imageType: BigImageType.pan);
-                }), (route) => true);
-              },
-              child: Stack(
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: Constant.parsePanSmallString(data.url),
-                    width:Constant.SCREEN_W,
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Offstage(
-                      offstage: !loadmoreright,
-                      child: Container(
-                        color: Colors.grey[100],
-                        width: SizeUtil.getAppWidth(100),
-                        alignment: Alignment.center,
-                        child: Container(
-                          width: SizeUtil.getAppWidth(50),
-                          child: Text("加载更多",textDirection: TextDirection.ltr,textAlign: TextAlign.center,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-        ),
-        //图片信息
-        Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: SizeUtil.getAppHeight(20),
-              horizontal: SizeUtil.getAppWidth(20)
-          ),
-          child: Text("${widget.panData.date}",style: Constant.smallTitleTextStyle,),
-        ),
-        InkWell(
-          onTap: (){
-            //用户详情
-            var param = new S.Result(
-              uid: widget.panData.uid,
-              username:widget.panData.username,
-              nickname:widget.panData.nickname,
-              avater:widget.panData.avater,
-              role:widget.panData.role,
-            );
-            param.panid = widget.panData.panid;
-            //进入用户详情页
-            Navigator.push(context, MaterialPageRoute(builder: (context){
-              return PanUserDetail(data: param,);
-            }));
-          },
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: SizeUtil.getAppHeight(20),
-                horizontal: SizeUtil.getAppWidth(20)
-            ),
-            child: Row(
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipOval(
-                  child: (widget.panData.avater == null || widget.panData.avater.length == 0)
-                      ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
-                      : CachedNetworkImage(imageUrl: widget.panData.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                //图片
+                Container(
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (BuildContext context){
+                          return GalleryBig(imgUrl: data.url,imageType: BigImageType.pan);
+                        }), (route) => true);
+                      },
+                      child: Stack(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: Constant.parsePanSmallString(data.url),
+                            width:Constant.SCREEN_W,
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: Offstage(
+                              offstage: !loadmoreright,
+                              child: Container(
+                                color: Colors.grey[100],
+                                width: SizeUtil.getAppWidth(100),
+                                alignment: Alignment.center,
+                                child: Container(
+                                  width: SizeUtil.getAppWidth(50),
+                                  child: Text("加载更多",textDirection: TextDirection.ltr,textAlign: TextAlign.center,style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
                 ),
-                SizedBox(width: SizeUtil.getAppWidth(10),),
-                Text(widget.panData.nickname != null ? widget.panData.nickname : widget.panData.username,style: Constant.smallTitleTextStyle,),
+                //图片信息
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: SizeUtil.getAppHeight(20),
+                      horizontal: SizeUtil.getAppWidth(20)
+                  ),
+                  child: Text("${widget.panData.date}",style: Constant.smallTitleTextStyle,),
+                ),
+                InkWell(
+                  onTap: (){
+                    //用户详情
+                    var param = new S.Result(
+                      uid: widget.panData.uid,
+                      username:widget.panData.username,
+                      nickname:widget.panData.nickname,
+                      avater:widget.panData.avater,
+                      role:widget.panData.role,
+                    );
+                    param.panid = widget.panData.panid;
+                    //进入用户详情页
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return PanUserDetail(data: param,);
+                    }));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: SizeUtil.getAppHeight(20),
+                        horizontal: SizeUtil.getAppWidth(20)
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ClipOval(
+                          child: (widget.panData.avater == null || widget.panData.avater.length == 0)
+                              ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover,)
+                              : CachedNetworkImage(imageUrl: widget.panData.avater,width: SizeUtil.getAppWidth(50),height: SizeUtil.getAppWidth(50),fit: BoxFit.cover),
+                        ),
+                        SizedBox(width: SizeUtil.getAppWidth(10),),
+                        Text(widget.panData.nickname != null ? widget.panData.nickname : widget.panData.username,style: Constant.smallTitleTextStyle,),
+                      ],
+                    ),
+                  ),
+                ),
+                Offstage(
+                  offstage: widget.panData.name == null,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: SizeUtil.getAppHeight(20),
+                        horizontal: SizeUtil.getAppWidth(20)
+                    ),
+                    child: Text("网盘名称：${widget.panData.name}，共计${widget.panData.imagenum}张图片",style: Constant.smallTitleTextStyle,),
+                  ),
+                )
               ],
             ),
-          ),
-        ),
-        Offstage(
-          offstage: widget.panData.name == null,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: SizeUtil.getAppHeight(20),
-                horizontal: SizeUtil.getAppWidth(20)
-            ),
-            child: Text("网盘名称：${widget.panData.name}，共计${widget.panData.imagenum}张图片",style: Constant.smallTitleTextStyle,),
           ),
         )
       ],

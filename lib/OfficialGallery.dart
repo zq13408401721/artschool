@@ -12,6 +12,8 @@ import 'package:yhschool/BaseCoustPageRefreshState.dart';
 import 'package:yhschool/BaseCoustRefreshState.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/bean/GalleryTabDB.dart';
+import 'package:yhschool/bean/official_cover.dart';
+import 'package:yhschool/gallery/GalleryCover.dart';
 import 'package:yhschool/gallery/GalleryPageView.dart';
 import 'package:yhschool/gallery/GalleryTabEditor.dart';
 import 'package:yhschool/gallery/GalleryTile.dart';
@@ -118,8 +120,13 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
   var galleryMap;
   var categoryMap; //分类列表数据缓存
   ScrollController _scrollController;
+  List<Data> officialCoverList = [];
+  List<Data> coverGridList = [];
 
-  int page=1,size=20;
+
+  int page=1,size=30;
+  //封面分页页码
+  int pageCover=1;
 
   TextStyle categorySelect;
   TextStyle categoryNormal;
@@ -194,12 +201,14 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
               classify_type = myTabList[0].id;
               classify_name = myTabList[0].name;
               getClassify(classify_type);
+              //getGalleryCover(classify_type);
             }else{
               //初始化获取第一个分类的数据
               if(data.data.length > 0){
                 classify_type = data.data[0].id;
                 classify_name = data.data[0].name;
                 getClassify(classify_type);
+                //getGalleryCover(classify_type);
               }
             }
           }).catchError((err){
@@ -208,6 +217,8 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
               classify_type = data.data[0].id;
               classify_name = data.data[0].name;
               getClassify(classify_type);
+
+              //getGalleryCover(classify_type);
             }
           });
         }).catchError((err){
@@ -216,6 +227,8 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
             classify_type = data.data[0].id;
             classify_name = data.data[0].name;
             getClassify(classify_type);
+
+            //getGalleryCover(classify_type);
           }
         });
       });
@@ -227,6 +240,33 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
    */
   bool isRemove(int id){
     return localList.any((element) => element.tabid == id);
+  }
+
+  /**
+   * 获取封面列表
+   */
+  getGalleryCoverList(int id){
+    var option = {
+      "pid":id,
+      "page":this.page,
+      "size":this.size
+    };
+    if(this.page == 1){
+      this.coverGridList.clear();
+    }
+    httpUtil.post(DataUtils.api_gallery_more,data: option).then((value){
+      print("gallerycover $value");
+      if(value != null){
+        OfficialCover officialCover = OfficialCover.fromJson(json.decode(value));
+        if(officialCover.errno == 0) {
+          this.coverGridList.addAll(officialCover.data);
+        }
+      }
+      setState(() {
+      });
+    }).catchError((err)=>{
+      print(err)
+    });
   }
 
   /**
@@ -242,6 +282,9 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
             this.classify_name = _data.name;
             //请求对应的分类列表数据
             getClassify(_data.id);
+
+            //getGalleryCover(_data.id);
+
           });
         }
 
@@ -376,7 +419,7 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
             list.forEach((element) {
               this.allCategory.addAll(element.categorys);
             });
-            //初始化全部分类数据
+            //初始化全部分类数据  现在修改成书籍的形式
             getCategoryList(0);
           });
         }else{
@@ -430,6 +473,31 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
         print(err);
       });
     }
+  }
+
+  //图库封面
+  getGalleryCover(int id){
+    var param = {
+      "page":pageCover,
+      "size":size,
+      "id":id
+    };
+    officialCoverList.clear();
+    httpUtil.post(DataUtils.api_gallery_cover,data: param,context: context).then((value){
+      print("cover:${value}");
+      if(value != null){
+        OfficialCover officialCover = OfficialCover.fromJson(json.decode(value));
+        if(officialCover.errno == 0){
+          this.officialCoverList.add(new Data(id: 0,name: "全部"));
+          officialCoverList.addAll(officialCover.data);
+          pageCover++;
+        }
+      }
+      setState(() {
+      });
+    }).catchError((err){
+      print(err);
+    });
   }
 
   /**
@@ -494,6 +562,8 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
             classify_type = myTabList[0].id;
             classify_name = myTabList[0].name;
             getClassify(classify_type);
+
+            //getGalleryCover(classify_type);
           }
         });
       });
@@ -520,9 +590,12 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
       onTap: (){
         if(curCategoryId != _data.id){
           setState(() {
+            page = 1;
             this.curCategoryId = _data.id;
             this.hasData = true;
+            //获取列表的封面
             getCategoryList(_data.id);
+            //getGalleryCoverList(this.curCategoryId);
           });
         }
       },
@@ -612,7 +685,7 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
               right: ScreenUtil().setWidth(SizeUtil.getWidth(20))
           ),
           child: ListView.builder(
-            itemCount: this.allCategory.length,
+            itemCount: this.allCategory.length,//this.officialCoverList.length,
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemBuilder: (context,index){
@@ -641,7 +714,7 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
                   StaggeredTile.fit(1),
               itemBuilder: (context,index){
                 return GestureDetector(
-                  child: GalleryTile(category: categoryList[index]),
+                  child:GalleryTile(category: categoryList[index]), //GalleryCover(category: coverGridList[index],),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>
                         GalleryPageView(list: categoryList,position: index,from: Constant.COLLECT_GALLERY,)

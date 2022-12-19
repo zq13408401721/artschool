@@ -79,7 +79,7 @@ class StartPageState extends BaseState{
       if(bean.errno == 0){
         registerNet(bean.data.apiUrl, bean.data.uploadUrl);
         //registerNet("http://res.yimios.com:9060/api/", bean.data.uploadUrl);
-        //registerNet("http://192.168.0.194:12005/api/", bean.data.uploadUrl);
+        //registerNet("http://192.168.31.13:12005/api/", bean.data.uploadUrl);
         // 1为测试服 2正式服
         if(bean.data.state == 2){
           DBUtils.dbUtils.then((db){

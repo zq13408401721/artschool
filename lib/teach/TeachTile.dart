@@ -116,7 +116,7 @@ class TeachTileState extends BaseState<TeachTile>{
   @override
   Widget build(BuildContext context) {
 
-    double _height = ScreenUtil().setHeight(SizeUtil.getHeight(Constant.getScaleH(gallery.width.toDouble(), gallery.height.toDouble())));
+    double _height = ScreenUtil().setHeight(SizeUtil.getHeight(Constant.getScaleH(gallery.width != null ? gallery.width.toDouble() : 300, gallery.height != null ? gallery.height.toDouble() : 500)));
     return Padding(padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
       child: Card(
         color: Colors.white,

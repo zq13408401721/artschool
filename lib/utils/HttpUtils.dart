@@ -267,7 +267,11 @@ class HttpUtil {
       );
       requestSet.remove(response.requestOptions.path);
       if(option != null && response.data != null){
-        await insertData(db, key, response.data);
+        //正常的数据才插入到本地数据库
+        BaseBean bean = BaseBean.fromJson(json.decode(response.data));
+        if(bean.errno == 0){
+          await insertData(db, key, response.data);
+        }
       }
       //检查返回数据，做双保险
       if(response.data == null){

@@ -53,7 +53,7 @@ class MyApp extends StatefulWidget {
 }
 
 //with SingleTickerProviderStateMixin
-class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
+class AppState extends VersionState<MyApp> with TickerProviderStateMixin{
 
   final GlobalKey<VideoPageState> videoStateKey = GlobalKey<VideoPageState>();
   final GlobalKey<GalleryState> galleryStateKey = GlobalKey<GalleryState>();
@@ -84,16 +84,19 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
   int role = 0;
 
   bool loadover = false;
+  Offset _offset = new Offset(50, 100);
   
   /*VideoPlayerController _videoPlayerController;
   bool isinit = false;*/
 
   int barIndex = 0;
+  AnimationController _rotationController;
 
   @override
   void initState(){
     print("Home initState");
     checkVersion();
+    _rotationController = AnimationController(duration:const Duration(seconds: 6),vsync: this)..repeat();
 
     //屏幕常亮
     getLight().then((value){
@@ -281,6 +284,40 @@ class AppState extends VersionState<MyApp> with SingleTickerProviderStateMixin{
                       ],
                     ),
                   ),
+                  //音乐播放
+                  /*Positioned(
+                    left: _offset.dx,
+                    top: _offset.dy,
+                    child: Draggable(
+                      data:Colors.amber,
+                      child: RotationTransition(
+                        turns: _rotationController,
+                        child: Container(
+                          width: SizeUtil.getAppWidth(100),
+                          height: SizeUtil.getAppWidth(100),
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(50))
+                          ),
+                          child: Text("music"),
+                        ),
+                      ),
+                      feedback: Container(
+                        width: SizeUtil.getAppWidth(100),
+                        height: SizeUtil.getAppWidth(100),
+                        decoration: BoxDecoration(
+                            color: Colors.red[100],
+                            borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(50))
+                        ),
+                      ),
+                      onDraggableCanceled:(Velocity velocity,Offset offset){
+                        print("drag:${offset.dx} ${offset.dy}");
+                        setState(() {
+                          this._offset = offset;
+                        });
+                      },
+                    )
+                  ),*/
                   //启动页面
                   loadover ? SizedBox() :
                   Container(

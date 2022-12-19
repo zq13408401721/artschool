@@ -15,6 +15,7 @@ class DataUtils{
   static const String api_videolist_category = "home/videoListCategory"; //主页根据章节获取视频列表
   static const String api_gallery = "home/galleryTabs"; //图库的tab数据
   static const String api_gallery_category = "home/galleryClassify"; //图库tab对应的节点数据列表
+  static const String api_gallery_cover = "home/galleryCover"; //图库封面
   static const String api_gallery_list = "home/galleryList"; //图库列表数据
   static const String api_gallery_more = "home/galleryClassifyList"; //图库类别list
   static const String api_video_category_list = "home/getVideoCategoryList"; //视频最后一个节点的列表数据

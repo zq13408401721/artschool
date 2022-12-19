@@ -48,7 +48,7 @@ class TodayTeachGallery extends StatefulWidget{
 
 class TodayTeachGalleryState extends BaseRefreshState<TodayTeachGallery>{
 
-  int page = 1,size=7;
+  int page = 1,size=15;
   String tid;
   int dateId;
   int role;
@@ -72,9 +72,7 @@ class TodayTeachGalleryState extends BaseRefreshState<TodayTeachGallery>{
 
   @override
   void loadmore(){
-    if(!isloading){
-      getIssueListMore();
-    }
+    getIssueListMore();
   }
 
   @override
@@ -192,8 +190,8 @@ class TodayTeachGalleryState extends BaseRefreshState<TodayTeachGallery>{
                       sort:element.sort,
                       url:element.url,
                       categoryid: element.galleryid,
-                      width: element.width,
-                      height:element.height,
+                      width: element.width == null ? 400 : element.width,
+                      height:element.height == null ? 500 : element.height,
                       maxwidth: element.maxwidth,
                       maxheight: element.maxheight,
                       markname:element.markname,
