@@ -32,6 +32,11 @@ class DataUtils{
   static const String api_issuedateidbyclass = "issue/issueDateIdByClass"; //获取发布作品班级对应的日期数据
   static const String api_issuedeletegallery = "issue/issueDeleteGallery"; //删除课堂对应的图片作品
 
+  /********************video****************************/
+  static const String api_school_video_tab = "video/schoolVideoTab"; //学校视频分类
+  static const String api_school_video_group = "video/schoolVideoGroup"; //学校视频分组
+  static const String api_school_video_list = "video/schoolVideoList"; //学校视频列表
+
   /********************pan******************************/
   static const String api_panclassify = "pan/panClassify"; //网盘分类
   static const String api_panmark = "pan/panMark"; //网盘分类对应的标记
@@ -73,6 +78,11 @@ class DataUtils{
   static const String api_pandeletefile = "pan/deletePanFile"; //删除网盘文件
   static const String api_pandeletefolder = "pan/deletePanFolder"; //删除文件夹
   static const String api_pandelete = "pan/deletePan"; //删除网盘
+
+
+  static const String api_booktab = "book/queryBookTab";  //书籍匪类
+  static const String api_booklist = "book/queryBookList"; //书籍列表
+  static const String api_bookimagelist = "book/queryBookImageList"; //书籍图片列表
 
 
   static const String api_getschoolteacher = "shared/getSchoolTeacher"; //获取学校老师

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yhschool/BaseState.dart';
+import 'package:yhschool/FlutterPlugins.dart';
 import 'package:yhschool/Login.dart';
 import 'package:yhschool/VersionState.dart';
 import 'package:yhschool/Home.dart';
@@ -47,6 +48,7 @@ class StartPage extends StatefulWidget{
 }
 
 class StartPageState extends BaseState{
+
   @override
   void initState() {
     //查看本地是否有app服务器地址
@@ -55,7 +57,7 @@ class StartPageState extends BaseState{
         if(value != null && value.apiurl != null && value.uploadurl != null){
           //注册网络请求
           registerNet(value.apiurl, value.uploadurl);
-          _skipPage(1500);
+          //_skipPage(1500);
         }else{
           _getUrls();
         }
@@ -79,17 +81,17 @@ class StartPageState extends BaseState{
       if(bean.errno == 0){
         registerNet(bean.data.apiUrl, bean.data.uploadUrl);
         //registerNet("http://res.yimios.com:9060/api/", bean.data.uploadUrl);
-        //registerNet("http://192.168.31.13:12005/api/", bean.data.uploadUrl);
+        //registerNet("http://192.168.0.196:12005/api/", bean.data.uploadUrl);
         // 1为测试服 2正式服
         if(bean.data.state == 2){
           DBUtils.dbUtils.then((db){
             db.insertUrls(UrlsDB(id: bean.data.id,apiurl: bean.data.apiUrl,uploadurl: bean.data.uploadUrl));
           });
         }
-        _skipPage(1500);
+        //_skipPage(1500);
       }
     }).catchError((err){
-      _skipPage(1500);
+      //_skipPage(1500);
     });
   }
 
@@ -150,9 +152,15 @@ class StartPageState extends BaseState{
         child: ScreenUtilInit(
             designSize: Constant.isPad ? Size(1536, 2056) : Size(750,1334),
             builder: (_context,_){
-              return Container(
-                alignment: Alignment(0,1),
-                child: Image.asset("image/ic_logo.png",width: ScreenUtil().setWidth(300),height: ScreenUtil().setHeight(500),),
+              return InkWell(
+                onTap: (){
+                  var result = FlutterPlugins.setLauncher('setLauncher');
+                  print("result:$result");
+                },
+                child: Container(
+                  alignment: Alignment(0,1),
+                  child: Image.asset("image/ic_logo.png",width: ScreenUtil().setWidth(300),height: ScreenUtil().setHeight(500),),
+                ),
               );
             }
         ),
@@ -193,9 +201,23 @@ class PageState extends BaseState{
     return ScreenUtilInit(
       designSize: Constant.isPad ? Size(1536, 2056) : Size(750,1334),
       builder: (_context,_){
-        return Container(
-          alignment: Alignment(0,1),
-          child: Image.asset("image/ic_logo.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(300)),height: ScreenUtil().setHeight(SizeUtil.getHeight(500)),),
+        return Column(
+          children: [
+            Container(
+              child: Text("click"),
+            ),
+            InkWell(
+              onTap: (){
+                print("click");
+                var result = FlutterPlugins.setLauncher('setLauncher');
+                print("result:$result");
+              },
+              child: Container(
+                alignment: Alignment(0,1),
+                child: Image.asset("image/ic_logo.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(300)),height: ScreenUtil().setHeight(SizeUtil.getHeight(500)),),
+              ),
+            )
+          ],
         );
       }
     );

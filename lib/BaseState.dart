@@ -364,6 +364,8 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     prefs.setString("classes", classes);
     prefs.setString("classids", classids);
     prefs.setString("schoolname", info.schoolname);
+    prefs.setString("appname", info.appname);
+    prefs.setString("appicon", info.appicon);
     if(info.phone != null){
       prefs.setString("phoneno", info.phone);
     }

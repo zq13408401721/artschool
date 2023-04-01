@@ -12,6 +12,7 @@ import 'package:yhschool/SchoolGallery.dart';
 import 'package:yhschool/TileCard.dart';
 import 'package:yhschool/bean/entity_gallery_classify.dart';
 import 'package:yhschool/bean/entity_gallery_tab.dart';
+import 'package:yhschool/book/OfficialBook.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
@@ -57,7 +58,8 @@ class GalleryState extends BaseState<Gallery> with SingleTickerProviderStateMixi
     tabNormal = TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.black87);
 
     tabPage = [
-      OfficialGallery(key: officialGalleryKey,),
+      //OfficialGallery(key: officialGalleryKey,),
+      OfficialBook(),
       SchoolGallery(key:schoolGalleryKey,)
     ];
     currentPage = tabPage[tabIndex];

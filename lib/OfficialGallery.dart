@@ -162,6 +162,16 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
 
   updataState(){
     loadTabs(type);
+    loadBookTabs(0);
+  }
+
+  /**
+   * 获取书籍标签
+   */
+  loadBookTabs(int pid){
+    httpUtil.post(DataUtils.api_booktab,data: {"pid":pid}).then((value){
+      print("bookTabs $value");
+    });
   }
 
   /**
@@ -173,7 +183,7 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
       print("gallery:$value");
       String result = checkLoginExpire(value);
       if(result.isNotEmpty){
-        createTab(new GalleryTab.fromJson(json.decode(result)));
+         (new GalleryTab.fromJson(json.decode(result)));
       }
     }).catchError((err)=>{
       print("gallery err:$err")
@@ -714,7 +724,7 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
                   StaggeredTile.fit(1),
               itemBuilder: (context,index){
                 return GestureDetector(
-                  child:GalleryTile(category: categoryList[index]), //GalleryCover(category: coverGridList[index],),
+                  child:GalleryTile(data: categoryList[index]), //GalleryCover(category: coverGridList[index],),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>
                         GalleryPageView(list: categoryList,position: index,from: Constant.COLLECT_GALLERY,)

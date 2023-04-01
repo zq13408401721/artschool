@@ -8,6 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		3795C45129ACF39A00E0EC49 /* 春Icon-Small-40@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C44929ACF39A00E0EC49 /* 春Icon-Small-40@3x.png */; };
+		3795C45229ACF39A00E0EC49 /* 春Icon-Small-20@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C44A29ACF39A00E0EC49 /* 春Icon-Small-20@3x.png */; };
+		3795C45329ACF39A00E0EC49 /* 春Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C44B29ACF39A00E0EC49 /* 春Icon-60@3x.png */; };
+		3795C45429ACF39A00E0EC49 /* 春Icon-Small-29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C44C29ACF39A00E0EC49 /* 春Icon-Small-29@3x.png */; };
+		3795C45529ACF39A00E0EC49 /* 春Icon-Small-20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C44D29ACF39A00E0EC49 /* 春Icon-Small-20@2x.png */; };
+		3795C45629ACF39A00E0EC49 /* 春Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C44E29ACF39A00E0EC49 /* 春Icon-60@2x.png */; };
+		3795C45729ACF39A00E0EC49 /* 春Icon-Small-29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C44F29ACF39A00E0EC49 /* 春Icon-Small-29@2x.png */; };
+		3795C45829ACF39A00E0EC49 /* 春Icon-Small-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C45029ACF39A00E0EC49 /* 春Icon-Small-40@2x.png */; };
+		3795C46129ACF3F800E0EC49 /* 冬Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C45929ACF3F800E0EC49 /* 冬Icon-60@2x.png */; };
+		3795C46229ACF3F800E0EC49 /* 冬Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C45A29ACF3F800E0EC49 /* 冬Icon-60@3x.png */; };
+		3795C46329ACF3F800E0EC49 /* 冬Icon-Small-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C45B29ACF3F800E0EC49 /* 冬Icon-Small-40@2x.png */; };
+		3795C46429ACF3F800E0EC49 /* 冬Icon-Small-40@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C45C29ACF3F800E0EC49 /* 冬Icon-Small-40@3x.png */; };
+		3795C46529ACF3F800E0EC49 /* 冬Icon-Small-29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C45D29ACF3F800E0EC49 /* 冬Icon-Small-29@2x.png */; };
+		3795C46629ACF3F800E0EC49 /* 冬Icon-Small-29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C45E29ACF3F800E0EC49 /* 冬Icon-Small-29@3x.png */; };
+		3795C46729ACF3F800E0EC49 /* 冬Icon-Small-20@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C45F29ACF3F800E0EC49 /* 冬Icon-Small-20@3x.png */; };
+		3795C46829ACF3F800E0EC49 /* 冬Icon-Small-20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795C46029ACF3F800E0EC49 /* 冬Icon-Small-20@2x.png */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -32,6 +48,22 @@
 /* Begin PBXFileReference section */
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		3795C44929ACF39A00E0EC49 /* 春Icon-Small-40@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "春Icon-Small-40@3x.png"; path = "节日图标/春/春Icon-Small-40@3x.png"; sourceTree = "<group>"; };
+		3795C44A29ACF39A00E0EC49 /* 春Icon-Small-20@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "春Icon-Small-20@3x.png"; path = "节日图标/春/春Icon-Small-20@3x.png"; sourceTree = "<group>"; };
+		3795C44B29ACF39A00E0EC49 /* 春Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "春Icon-60@3x.png"; path = "节日图标/春/春Icon-60@3x.png"; sourceTree = "<group>"; };
+		3795C44C29ACF39A00E0EC49 /* 春Icon-Small-29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "春Icon-Small-29@3x.png"; path = "节日图标/春/春Icon-Small-29@3x.png"; sourceTree = "<group>"; };
+		3795C44D29ACF39A00E0EC49 /* 春Icon-Small-20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "春Icon-Small-20@2x.png"; path = "节日图标/春/春Icon-Small-20@2x.png"; sourceTree = "<group>"; };
+		3795C44E29ACF39A00E0EC49 /* 春Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "春Icon-60@2x.png"; path = "节日图标/春/春Icon-60@2x.png"; sourceTree = "<group>"; };
+		3795C44F29ACF39A00E0EC49 /* 春Icon-Small-29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "春Icon-Small-29@2x.png"; path = "节日图标/春/春Icon-Small-29@2x.png"; sourceTree = "<group>"; };
+		3795C45029ACF39A00E0EC49 /* 春Icon-Small-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "春Icon-Small-40@2x.png"; path = "节日图标/春/春Icon-Small-40@2x.png"; sourceTree = "<group>"; };
+		3795C45929ACF3F800E0EC49 /* 冬Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "冬Icon-60@2x.png"; path = "节日图标/冬/冬Icon-60@2x.png"; sourceTree = "<group>"; };
+		3795C45A29ACF3F800E0EC49 /* 冬Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "冬Icon-60@3x.png"; path = "节日图标/冬/冬Icon-60@3x.png"; sourceTree = "<group>"; };
+		3795C45B29ACF3F800E0EC49 /* 冬Icon-Small-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "冬Icon-Small-40@2x.png"; path = "节日图标/冬/冬Icon-Small-40@2x.png"; sourceTree = "<group>"; };
+		3795C45C29ACF3F800E0EC49 /* 冬Icon-Small-40@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "冬Icon-Small-40@3x.png"; path = "节日图标/冬/冬Icon-Small-40@3x.png"; sourceTree = "<group>"; };
+		3795C45D29ACF3F800E0EC49 /* 冬Icon-Small-29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "冬Icon-Small-29@2x.png"; path = "节日图标/冬/冬Icon-Small-29@2x.png"; sourceTree = "<group>"; };
+		3795C45E29ACF3F800E0EC49 /* 冬Icon-Small-29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "冬Icon-Small-29@3x.png"; path = "节日图标/冬/冬Icon-Small-29@3x.png"; sourceTree = "<group>"; };
+		3795C45F29ACF3F800E0EC49 /* 冬Icon-Small-20@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "冬Icon-Small-20@3x.png"; path = "节日图标/冬/冬Icon-Small-20@3x.png"; sourceTree = "<group>"; };
+		3795C46029ACF3F800E0EC49 /* 冬Icon-Small-20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "冬Icon-Small-20@2x.png"; path = "节日图标/冬/冬Icon-Small-20@2x.png"; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		673937818374015E91844F83 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -61,6 +93,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3795C44829ACF38700E0EC49 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				3795C46A29ACFAA400E0EC49 /* 冬 */,
+				3795C46929ACFA9000E0EC49 /* 春 */,
+			);
+			name = icons;
+			sourceTree = "<group>";
+		};
+		3795C46929ACFA9000E0EC49 /* 春 */ = {
+			isa = PBXGroup;
+			children = (
+				3795C44E29ACF39A00E0EC49 /* 春Icon-60@2x.png */,
+				3795C44B29ACF39A00E0EC49 /* 春Icon-60@3x.png */,
+				3795C44D29ACF39A00E0EC49 /* 春Icon-Small-20@2x.png */,
+				3795C44A29ACF39A00E0EC49 /* 春Icon-Small-20@3x.png */,
+				3795C44F29ACF39A00E0EC49 /* 春Icon-Small-29@2x.png */,
+				3795C44C29ACF39A00E0EC49 /* 春Icon-Small-29@3x.png */,
+				3795C45029ACF39A00E0EC49 /* 春Icon-Small-40@2x.png */,
+				3795C44929ACF39A00E0EC49 /* 春Icon-Small-40@3x.png */,
+			);
+			name = "春";
+			sourceTree = "<group>";
+		};
+		3795C46A29ACFAA400E0EC49 /* 冬 */ = {
+			isa = PBXGroup;
+			children = (
+				3795C45929ACF3F800E0EC49 /* 冬Icon-60@2x.png */,
+				3795C45A29ACF3F800E0EC49 /* 冬Icon-60@3x.png */,
+				3795C46029ACF3F800E0EC49 /* 冬Icon-Small-20@2x.png */,
+				3795C45F29ACF3F800E0EC49 /* 冬Icon-Small-20@3x.png */,
+				3795C45D29ACF3F800E0EC49 /* 冬Icon-Small-29@2x.png */,
+				3795C45E29ACF3F800E0EC49 /* 冬Icon-Small-29@3x.png */,
+				3795C45B29ACF3F800E0EC49 /* 冬Icon-Small-40@2x.png */,
+				3795C45C29ACF3F800E0EC49 /* 冬Icon-Small-40@3x.png */,
+			);
+			name = "冬";
+			sourceTree = "<group>";
+		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
@@ -75,6 +146,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				3795C44829ACF38700E0EC49 /* icons */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -189,8 +261,24 @@
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				3795C45329ACF39A00E0EC49 /* 春Icon-60@3x.png in Resources */,
+				3795C46229ACF3F800E0EC49 /* 冬Icon-60@3x.png in Resources */,
+				3795C46329ACF3F800E0EC49 /* 冬Icon-Small-40@2x.png in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
+				3795C45529ACF39A00E0EC49 /* 春Icon-Small-20@2x.png in Resources */,
+				3795C46729ACF3F800E0EC49 /* 冬Icon-Small-20@3x.png in Resources */,
+				3795C45129ACF39A00E0EC49 /* 春Icon-Small-40@3x.png in Resources */,
+				3795C45229ACF39A00E0EC49 /* 春Icon-Small-20@3x.png in Resources */,
+				3795C45829ACF39A00E0EC49 /* 春Icon-Small-40@2x.png in Resources */,
+				3795C45629ACF39A00E0EC49 /* 春Icon-60@2x.png in Resources */,
+				3795C45729ACF39A00E0EC49 /* 春Icon-Small-29@2x.png in Resources */,
+				3795C46529ACF3F800E0EC49 /* 冬Icon-Small-29@2x.png in Resources */,
+				3795C46129ACF3F800E0EC49 /* 冬Icon-60@2x.png in Resources */,
+				3795C46629ACF3F800E0EC49 /* 冬Icon-Small-29@3x.png in Resources */,
+				3795C46829ACF3F800E0EC49 /* 冬Icon-Small-20@2x.png in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				3795C45429ACF39A00E0EC49 /* 春Icon-Small-29@3x.png in Resources */,
+				3795C46429ACF3F800E0EC49 /* 冬Icon-Small-40@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,7 +297,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
 		};
 		59F2F6FE9BE2C1EF804B1570 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -240,7 +328,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		CD3D808225D348228B99BF79 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -344,7 +432,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -356,10 +444,11 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = W796TF7U96;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
@@ -369,10 +458,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yimi.art;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -480,7 +570,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -494,11 +584,12 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Distribution: Xiaohu Yan (W796TF7U96)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = W796TF7U96;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
@@ -508,7 +599,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yimi.art;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -525,10 +616,11 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = W796TF7U96;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
@@ -539,10 +631,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yimi.art;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

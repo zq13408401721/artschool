@@ -34,6 +34,7 @@ class GalleryBigState extends BaseState<GalleryBig>{
   @override
   void initState() {
     super.initState();
+    print("GalleryBig ${_imgUrl} $imageType ${widget.width} ${widget.height}");
   }
 
   @override
@@ -60,7 +61,7 @@ class GalleryBigState extends BaseState<GalleryBig>{
               child: CachedNetworkImage(
                 imageUrl: _imgUrl,
                 progressIndicatorBuilder: (_context,_url,_progress){
-                  print("progress:${_progress.progress}");
+                  print("progress:${_progress.downloaded} ${_progress.progress} ${_progress.totalSize}");
                   if(_progress.totalSize == null){
                     return SizedBox();
                   }else{

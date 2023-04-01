@@ -11,9 +11,72 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIcons</key>
-	<dict/>
+	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>春</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>春Icon-60</string>
+					<string>春Icon-Small-40</string>
+					<string>春Icon-Small-29</string>
+					<string>春Icon-Small-20</string>
+				</array>
+			</dict>
+		</dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string></string>
+			</array>
+			<key>CFBundleIconName</key>
+			<string>美术</string>
+			<key>UIPrerenderedIcon</key>
+			<false/>
+		</dict>
+		<key>UINewsstandIcon</key>
+		<dict>
+			<key>AppIcon</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>icon_83.png</string>
+					<string>icon_60.png</string>
+					<string>icon_40.png</string>
+					<string>icon_29.png</string>
+					<string>icon_20.png</string>
+				</array>
+			</dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string></string>
+			</array>
+			<key>UINewsstandBindingEdge</key>
+			<string>UINewsstandBindingEdgeLeft</string>
+			<key>UINewsstandBindingType</key>
+			<string>UINewsstandBindingTypeMagazine</string>
+			<key>iconName</key>
+			<string>美术</string>
+		</dict>
+	</dict>
 	<key>CFBundleIcons~ipad</key>
-	<dict/>
+	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>春</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>春Icon-60</string>
+					<string>春Icon-Small-40</string>
+					<string>春Icon-Small-29</string>
+					<string>春Icon-Small-20</string>
+				</array>
+			</dict>
+		</dict>
+	</dict>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>

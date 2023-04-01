@@ -104,10 +104,6 @@ dependencies {
     api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-beta01'
     api "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
 
-
-    implementation 'com.github.yalantis:ucrop:2.2.4'
-
-
    /* //获得场景视频SDK，必须引入
     implementation 'com.bokecc:CCVOD:3.15.3'
     //播放加密视频必须引用drm

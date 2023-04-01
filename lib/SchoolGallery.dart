@@ -577,7 +577,7 @@ class SchoolState extends BaseCacheListRefresh<SchoolGallery>{
 
             itemBuilder: (context,index){
               return GestureDetector(
-                child: GalleryTile(category: categoryList[index]),
+                child: GalleryTile(data: categoryList[index]),
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>
                       GalleryPageView(list: categoryList,position: index,from: Constant.COLLECT_GALLERY,)

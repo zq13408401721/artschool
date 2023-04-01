@@ -222,6 +222,14 @@ class Constant{
   }
 
   /**
+   * 书本小图
+   */
+  static String parseBookSmallString(String url){
+    if(url == null) return "";
+    return url.replaceFirst("res.yimios.com:9050/book", "res.yimios.com:9050/book/small");
+  }
+
+  /**
    * 今日课堂小图
    */
   static String parseIssueSmallString(String url){
@@ -274,6 +282,7 @@ class Constant{
   }
 
   static String parseBigImageString(String url,int w,int h,int q){
+    print("parseBigImage $isIosLowVersion $w $h");
     if(isIosLowVersion && w > 0 && h > 0){
       return parseIosSmallString(url, w, h,q);
     }

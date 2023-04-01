@@ -11,17 +11,20 @@ import 'package:yhschool/utils/SizeUtil.dart';
 class GalleryTile extends StatelessWidget{
 
 
-  GalleryListData category;
+  dynamic data;
   String smallurl = "";
-  GalleryTile({Key key,@required this.category}):super(key: key){
-    smallurl = Constant.parseNewGallerySmallString(this.category.url,category.width,category.height);
+  bool hideWord;
+  GalleryTile({Key key,@required this.data,@required this.hideWord = false}):super(key: key){
+    if(this.data != null && this.data.url != null){
+      smallurl = Constant.parseNewGallerySmallString(this.data.url,this.data.width,this.data.height);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
 
     print("smallurl:${smallurl}");
-    double _height = ScreenUtil().setHeight(SizeUtil.getHeight(Constant.getScaleH(category.width.toDouble(), category.height.toDouble())));
+    double _height = ScreenUtil().setHeight(SizeUtil.getHeight(Constant.getScaleH(data.width.toDouble(), data.height.toDouble())));
     return Card(
       color: Colors.white,
       elevation: 0.0,
@@ -35,32 +38,32 @@ class GalleryTile extends StatelessWidget{
               decoration: BoxDecoration(
                 color: Constant.getColor(),
               ),
-              child:CachedNetworkImage(
+              child:smallurl.isNotEmpty ? CachedNetworkImage(
                 imageUrl: smallurl,
                 fit: BoxFit.cover,
-                memCacheWidth: category.width,
-                memCacheHeight: category.height,
-              )
+                memCacheWidth: data.width,
+                memCacheHeight: data.height,
+              ) : SizedBox()
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(40)),left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
             child: Text(
-              '${category.name}',
+              '${data.name}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(32))),
 
             ),
           ),
-          Padding(
+          !hideWord ? Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(30)),left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
             child: Text(
-              '${category.word}',
+              '${data.word}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: Constant.smallTitleTextStyle,
             ),
-          )
+          ) : SizedBox()
         ],
       ),
     );

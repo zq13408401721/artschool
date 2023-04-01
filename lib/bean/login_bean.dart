@@ -202,6 +202,8 @@ class Userinfo {
   String _token;
   String _schoolname;
   dynamic _phone;
+  String _appname;
+  String _appicon;
 
   String get uid => _uid;
   String get username => _username;
@@ -212,6 +214,8 @@ class Userinfo {
   String get token => _token;
   String get schoolname => _schoolname;
   dynamic get phone => _phone;
+  String get appname => _appname;
+  String get appicon => _appicon;
 
   Userinfo({
       String uid, 
@@ -222,7 +226,9 @@ class Userinfo {
       String schoolid, 
       String token, 
       String schoolname, 
-      dynamic phone}){
+      dynamic phone,
+      String appname,
+      String appicon}){
     _uid = uid;
     _username = username;
     _nickname = nickname;
@@ -232,6 +238,8 @@ class Userinfo {
     _token = token;
     _schoolname = schoolname;
     _phone = phone;
+    _appname = appname;
+    _appicon = appicon;
 }
 
   Userinfo.fromJson(dynamic json) {
@@ -244,6 +252,8 @@ class Userinfo {
     _token = json['token'];
     _schoolname = json['schoolname'];
     _phone = json['phone'];
+    _appname = json['appname'];
+    _appicon = json['appicon'];
   }
 
   Map<String, dynamic> toJson() {
@@ -257,6 +267,8 @@ class Userinfo {
     map['token'] = _token;
     map['schoolname'] = _schoolname;
     map['phone'] = _phone;
+    map['appname'] = _appname;
+    map['appicon'] = _appicon;
     return map;
   }
 
