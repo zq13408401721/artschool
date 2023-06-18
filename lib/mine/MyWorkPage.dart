@@ -69,7 +69,8 @@ class MyWorkPageState extends BaseState{
                       onTap: (){
                         Navigator.pop(context);
                       },
-                      child: Image.asset("image/ic_arrow_left.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setHeight(80),),
+                      child: backArrowWidget(),
+                      //child: Image.asset("image/ic_arrow_left.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setHeight(80),),
                     ),
                     Text("我的作业",style: TextStyle(fontSize: ScreenUtil().setSp(40),fontWeight: FontWeight.bold),),
                   ],

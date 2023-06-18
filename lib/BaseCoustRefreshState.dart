@@ -25,7 +25,7 @@ abstract class BaseCoustRefreshState<T extends StatefulWidget> extends BaseState
   ScrollController initScrollController({bool isfresh=true}){
     _scrollController = ScrollController();
     _scrollController.addListener(() {
-      //print("${_scrollController.position.pixels}:${_scrollController.position.maxScrollExtent}");
+      print("${_scrollController.position.pixels}:${_scrollController.position.maxScrollExtent}");
       if(_scrollController.position.maxScrollExtent > 0 && _scrollController.position.pixels > _scrollController.position.maxScrollExtent-100){
         //加载更多
         if(isloading == false){

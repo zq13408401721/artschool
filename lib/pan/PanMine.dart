@@ -124,7 +124,7 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
    * 删除网盘
    */
   void deletePan(String name,String panid){
-    DialogManager().showDeletePanDialog(context,type:PanDeleteType.PAN, title: "是否确定删除${name}网盘？", panid: panid).then((value){
+    DialogManager().showDeletePanDialog(context,type:PanDeleteType.PAN, title: "是否确定删除${name}相册？", panid: panid).then((value){
       print("deletePan ${panid}");
       if(value){
         for(Data item in panList){
@@ -295,14 +295,14 @@ class PanMineState extends BaseRefreshState<PanMine> with SingleTickerProviderSt
                           onTap: (){
                             //置顶
                             if(item.top == 0){
-                              showPanTopping("是否置顶本网盘?").then((value){
+                              showPanTopping("是否置顶本相册?").then((value){
                                 if(value){
                                   panTopping(1, item.id);
                                 }
                               });
                             }else{
                               //取消置顶
-                              showPanTopping("是否取消置顶本网盘?").then((value){
+                              showPanTopping("是否取消置顶本相册?").then((value){
                                 if(value){
                                   panTopping(0, item.id);
                                 }

@@ -149,7 +149,7 @@ class ColumnPageState extends BaseState{
           children: [
             //顶部导航
             Container(
-              height:  ScreenUtil().setHeight(SizeUtil.getHeight(Constant.SIZE_TOP_BAR_HEIGHT)),
+              height:SizeUtil.getAppHeight(SizeUtil.getTabHeight()),
               padding:EdgeInsets.only(
                 /*top:ScreenUtil().setHeight(SizeUtil.getHeight(32)),
                     bottom: ScreenUtil().setHeight(SizeUtil.getHeight(35)),*/
@@ -169,7 +169,7 @@ class ColumnPageState extends BaseState{
                       _changeType(0);
                     });
                   },),*/
-                  M.TextButton(key:columnMyKey,label:"我的网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),defaultSelect:true,cb: (){
+                  M.TextButton(key:columnMyKey,label:"我的相册",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),defaultSelect:true,cb: (){
                     print("我的专栏");
                     changeColumnTab(0);
                     setState(() {
@@ -178,7 +178,7 @@ class ColumnPageState extends BaseState{
                       changeType(0);
                     });
                   },),
-                  M.TextButton(key:columnAllKey,label:"全部网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
+                  M.TextButton(key:columnAllKey,label:"全部相册",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
                     print("全部专栏");
                     changeColumnTab(1);
                     setState(() {
@@ -187,7 +187,7 @@ class ColumnPageState extends BaseState{
                       changeType(0);
                     });
                   },),
-                  M.TextButton(key:columnSchoolKey,label:"学校网盘",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
+                  M.TextButton(key:columnSchoolKey,label:"学校相册",labelSpace:ScreenUtil().setWidth(SizeUtil.getWidth(40)),cb: (){
                     changeColumnTab(2);
                     //切换到我的订阅刷新页面
                     setState(() {

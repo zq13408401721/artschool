@@ -75,23 +75,24 @@ class ClassTabState extends BaseState<ClassTab>{
       child: Container(
         decoration: BoxDecoration(
             color: selectClassId == _data.id ? Colors.red : Colors.white,
-            borderRadius: BorderRadius.only(
+            /*borderRadius: BorderRadius.only(
               topLeft: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
               topRight: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(10)),),
               bottomLeft: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(10)),),
               bottomRight: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
-            ),
+            ),*/
+            borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(35)),
             border: Border.all(width: 1.0,color: selectClassId == _data.id ? Colors.red : Colors.grey[200],)
         ),
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
+            horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
             vertical: ScreenUtil().setHeight(SizeUtil.getHeight(10))
         ),
         margin: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(10))
         ),
-        child: Text(_data.name,style: TextStyle(color: selectClassId == _data.id ? Colors.white : Colors.black87,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+        child: Text(_data.name,style: TextStyle(color: selectClassId == _data.id ? Colors.white : Colors.black38,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
       ),
     );
   }

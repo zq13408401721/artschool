@@ -232,7 +232,7 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
           Padding(padding: EdgeInsets.only(
             left: ScreenUtil().setWidth(SizeUtil.getWidth(5)),
             bottom: ScreenUtil().setWidth(SizeUtil.getWidth(5)),
-          ),child: Text('${_data.date}',style: Constant.titleTextStyle,),),
+          ),child: Text('${_data.date}',style: TextStyle(fontSize: SizeUtil.getAppFontSize(36),color: Colors.black87,fontWeight: FontWeight.bold)),),
           StaggeredGridView.countBuilder(
             crossAxisCount: Constant.isPad ? 3 : 2,
             itemCount: _data.works.length,
@@ -321,10 +321,10 @@ class ClassWorkPageState extends BaseCoustRefreshState<ClassWorkPage>{
   List<Widget> addChildren(){
     return [
       Container(
-          height: ScreenUtil().setHeight(SizeUtil.getHeight(115)),
+          height: SizeUtil.getAppHeight(SizeUtil.getTabHeight()),
           padding: EdgeInsets.only(
-            //top: ScreenUtil().setWidth(SizeUtil.getWidth(25)),
-            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(30)),
+            top: SizeUtil.getAppHeight(SizeUtil.getTabRadius()),
+            bottom: SizeUtil.getAppHeight(SizeUtil.getTabRadius()),
             left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
             right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
           ),

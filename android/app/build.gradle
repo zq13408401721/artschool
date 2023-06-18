@@ -29,7 +29,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -38,7 +38,7 @@ android {
     defaultConfig {
         applicationId "com.yhschool"
         minSdkVersion 19
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -60,6 +60,7 @@ android {
             minifyEnabled true
             //代码压缩
             //useProguard true
+            multiDexEnabled true
             //读取混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -91,6 +92,12 @@ flutter {
     source '../..'
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -98,11 +105,24 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.android.support:multidex:1.0.1'
+
+    implementation 'com.umeng.umsdk:common:9.5.6'
+    implementation 'com.umeng.umsdk:asms:1.6.3'
+    implementation 'com.umeng.umsdk:link:1.2.0'
+
+    implementation 'com.umeng.umsdk:share-core:7.3.2'
+    //微信
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
+    implementation 'com.umeng.umsdk:share-wx:7.3.2'
+
+    //极验
+    implementation(name:'geetest_onelogin_android_v2.8.4_20230510',ext:'aar')
+
     //anko库
     //implementation "org.jetbrains.anko:anko:0.10.8"
     //viewModelScope
-    api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-beta01'
-    api "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+    /*api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-beta01'
+    api "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"*/
 
    /* //获得场景视频SDK，必须引入
     implementation 'com.bokecc:CCVOD:3.15.3'

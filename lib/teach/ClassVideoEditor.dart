@@ -118,7 +118,7 @@ class ClassVideoEditorState extends BaseState{
     DBUtils.dbUtils.then((db) async{
       var result = await db.queryApiData(key);
       if(result.length > 0){
-        _getCategoryByTabReturn(result);
+        _getCategoryByTabReturn(db,key,result);
       }else{
         var data = {
           "page":1,
@@ -128,8 +128,7 @@ class ClassVideoEditorState extends BaseState{
         };
         //获取对应的章节数据
         httpUtil.post(DataUtils.api_video_tab_category,data: data).then((result){
-          db.insertApi(ApiDB(api:key,result:result));
-          _getCategoryByTabReturn(result);
+          _getCategoryByTabReturn(db,key,result);
         }).catchError((err) => {
 
         });
@@ -137,15 +136,19 @@ class ClassVideoEditorState extends BaseState{
     });
   }
 
-  void _getCategoryByTabReturn(String result){
+  void _getCategoryByTabReturn(DBUtils db,String key,String result){
     var videoTab = new V.VideoTab.fromJson(json.decode(result));
     videoTabList.clear();
-    setState(() {
+    if(videoTab.errno == 0 && videoTab.data != null && videoTab.data.length > 0){
+      db.insertApi(ApiDB(api:key,result:result));
       videoTabList.addAll(videoTab.data);
       selectCategoryId = videoTabList[0].categoryid;
       categoryname = videoTabList[0].categoryname;
       videoCategoryList.clear();
       getVideoCategoryList(selectCategoryId);
+    }
+    setState(() {
+
     });
   }
 

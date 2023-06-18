@@ -131,6 +131,7 @@ class PanAllPageState extends BaseRefreshState<PanAllPage> with SingleTickerProv
       return StatefulBuilder(builder: (_context,_builder) => PanCopyDialog(callback: (result,panid){
         if(result){
           httpUtil.post(DataUtils.api_pancopy,data: {panid:panid}).then((value){
+            showToast("复制成功");
             //跳转到我的网盘
             PanPageState _state = widget.getBaseState();
             _state.changeTab(2);

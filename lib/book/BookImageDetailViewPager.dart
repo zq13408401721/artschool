@@ -36,7 +36,7 @@ class BookImageDetailViewPager extends StatefulWidget{
 class BookImageDetailViewPagerState extends BaseRefreshViewPagerState<Data,BookImageDetailViewPager>{
 
 
-  int pagenum=1,pagesize=3;
+  int pagenum=1,pagesize=20;
   List<Data> bookImageList=[];
   dynamic imgData;
   int fileid; //对应的文件id

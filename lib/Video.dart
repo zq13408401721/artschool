@@ -519,6 +519,16 @@ class VideoState extends VersionState<Video> with SingleTickerProviderStateMixin
 
     });
   }
+
+  @override
+  void loadmore() {
+
+  }
+
+  @override
+  void refresh() {
+
+  }
 }
 
 /**

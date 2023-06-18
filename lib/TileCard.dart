@@ -221,7 +221,11 @@ class TileCard extends StatelessWidget{
                 : getWHImage(context),
             Positioned(
               left:0,right:0,top:0,bottom: 0,
-              child: Image.asset(Constant.isPad ? "image/ic_play.png" : "image/ic_play_30.png"),
+              child: UnconstrainedBox(
+                child: Container(
+                  child: Image.asset(Constant.isPad ? "image/ic_play.png" : "image/ic_play_30.png",width: SizeUtil.getAppWidth(80),height: SizeUtil.getAppWidth(80),),
+                ),
+              )
             )
           ],
         ),

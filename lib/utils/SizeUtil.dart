@@ -38,4 +38,19 @@ class SizeUtil{
     return ScreenUtil().setSp(getFontSize(value));
   }
 
+  /**
+   * 顶部分类的Bar高度
+   */
+  static double getTabHeight(){
+    return Constant.isPad ? Constant.SIZE_TOP_BAR_PAD_HEIGHT : Constant.SIZE_TOP_BAR_HEIGHT;
+  }
+
+  static double getTabRadius(){
+    return Constant.isPad ? 35 : 25;
+  }
+
+  static double getBannerHeight(){
+    return Constant.isPad ? 600 : 400;
+  }
+
 }

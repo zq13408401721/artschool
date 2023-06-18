@@ -29,7 +29,7 @@
 
     <application
         android:icon="@mipmap/icon_art"
-        android:label="艺画美术"
+        android:label="艺画美术APP"
         android:theme="@style/MyTheme"
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true"

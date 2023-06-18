@@ -39,8 +39,10 @@ class VideoAITile extends StatelessWidget{
                 bottom: 0,
                 left:0,
                 right:0,
-                child: Container(
-                  child: Image.asset(Constant.isPad ? "image/ic_play.png" : "image/ic_play_30.png",),
+                child: UnconstrainedBox(
+                  child: Container(
+                    child: Image.asset(Constant.isPad ? "image/ic_play.png" : "image/ic_play_30.png",width: SizeUtil.getAppWidth(80),height: SizeUtil.getAppWidth(80),),
+                  )
                 ),
               ),
             ],

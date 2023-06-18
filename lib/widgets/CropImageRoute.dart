@@ -13,6 +13,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/bean/LocalFile.dart';
 import 'package:yhschool/bean/up_load_head_bean.dart';
+import 'package:yhschool/utils/Button.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
@@ -138,6 +139,15 @@ class _CropImageRouteState extends BaseState<CropImageRoute> {
                           },
                           child: Text("裁 剪",style: TextStyle(color: Colors.white),),
                         ),
+                        /*ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                          onPressed: () {
+                            if(image != null){
+                              _crop(image);
+                            }
+                          },
+                          child: Text("裁 剪",style: TextStyle(color: Colors.white),),
+                        ),*/
                       ],
                     ),
                   ),

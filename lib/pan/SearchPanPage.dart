@@ -36,8 +36,8 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
   ScrollController _scrollController;
 
   String searchword;
-  List<String> searchTypes = ["网盘","用户"];
-  String searchType = "网盘";
+  List<String> searchTypes = ["相册","用户"];
+  String searchType = "相册";
   String searchReslt = "";
   int page = 1;
   int size = 10;
@@ -90,7 +90,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
           PanSearch panSearch = PanSearch.fromJson(json.decode(value));
           total = panSearch.data.total;
           searchList.addAll(panSearch.data.result);
-          searchReslt = "共有$total个相关网盘";
+          searchReslt = "共有$total个相关相册";
         }
       }
       setState(() {
@@ -100,7 +100,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
   }
 
   void clearList(){
-    if(searchType == null || searchType == "网盘"){
+    if(searchType == null || searchType == "相册"){
       searchList.clear();
     }else{
       searchUsers.clear();
@@ -246,7 +246,8 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
               padding: EdgeInsets.symmetric(
                 vertical: SizeUtil.getAppHeight(40)
               ),
-              child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppWidth(60),),
+              child: backArrowWidget(),
+              //child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppWidth(60),),
             ),
           ),
           //搜索框
@@ -392,7 +393,7 @@ class SearchPanPageState extends BaseHeaderRefresh<SearchPanPage>{
                 vertical: SizeUtil.getAppHeight(20),
                 horizontal: SizeUtil.getAppWidth(20)
               ),
-              child: Text("共有$total个相关网盘",style: Constant.smallTitleTextStyle,),
+              child: Text("共有$total个相关相册",style: Constant.smallTitleTextStyle,),
             )
           ),
           Expanded(

@@ -118,7 +118,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
     };
     httpUtil.post(DataUtils.api_pancopy,data:param).then((value){
       print("copypan $value");
-
+      showToast("复制成功");
     });
   }
 
@@ -151,7 +151,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
       if(value != null){
         T.PanToppingBean panToppingBean = T.PanToppingBean.fromJson(json.decode(value));
         if(panToppingBean.errno == 0){
-          showToast("网盘置顶");
+          showToast("相册置顶");
           pagenum = 1;
           filesList = [];
           queryPanImageList();
@@ -451,7 +451,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                   InkWell(
                     onTap: (){
                       print("top click ${widget.panData.panid}");
-                      DialogManager().showPanDialogTitle(context,title: item.top == 0 ? "置顶网盘？" : "取消置顶？").then((value){
+                      DialogManager().showPanDialogTitle(context,title: item.top == 0 ? "置顶相册？" : "取消置顶？").then((value){
                         //确定
                         if(value == true){
                           //网盘图片置顶
@@ -561,7 +561,7 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
                     borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getAppWidth(10)))
                   ),
                   //child: Image.asset("image/ic_pan_copy.png",width: SizeUtil.getAppWidth(40),height: SizeUtil.getAppWidth(40)),
-                  child: Text("复制网盘",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.white),),
+                  child: Text("复制相册",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.white),),
                 ),
               ),
             ),
@@ -684,12 +684,12 @@ class PanDetailPageState extends BaseCoustRefreshState<PanDetailPage>{
               Text("+ 上传图片",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),fontWeight: FontWeight.bold,color: Colors.red),),
               Text("严禁上传色情、政治等不合规图片",style: Constant.smallTitleTextStyle,)
             ],
-          ) : Padding(padding: EdgeInsets.only(top: SizeUtil.getAppHeight(20)),child: Text("复制网盘无法上传图片",style: Constant.smallTitleTextStyle,),),
+          ) : Padding(padding: EdgeInsets.only(top: SizeUtil.getAppHeight(20)),child: Text("复制相册无法上传图片",style: Constant.smallTitleTextStyle,),),
         ),
       ) : SizedBox(),
       Expanded(
         child: Container(
-          padding: EdgeInsets.only(top: SizeUtil.getHeight(20)),
+          padding: EdgeInsets.only(top: SizeUtil.getAppHeight(20)),
           decoration: BoxDecoration(
             color: Colors.grey[100],
           ),

@@ -343,7 +343,7 @@ class PanImageDetailViewPagerState extends BaseRefreshViewPagerState<Data,PanIma
                         vertical: SizeUtil.getAppHeight(20),
                         horizontal: SizeUtil.getAppWidth(20)
                     ),
-                    child: Text("网盘名称：${widget.panData.name}，共计${widget.panData.imagenum}张图片",style: Constant.smallTitleTextStyle,),
+                    child: Text("相册名称：${widget.panData.name}，共计${widget.panData.imagenum}张图片",style: Constant.smallTitleTextStyle,),
                   ),
                 )
               ],

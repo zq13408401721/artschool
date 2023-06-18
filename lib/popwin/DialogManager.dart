@@ -212,7 +212,7 @@ class DialogManager{
                         right: SizeUtil.getAppWidth(20),
                         top: SizeUtil.getAppHeight(20)
                     ),
-                    child: Text("复制到我的网盘",style: Constant.titleTextStyleNormal,),
+                    child: Text("复制到我的相册",style: Constant.titleTextStyleNormal,),
                   ),
                   SizedBox(height: SizeUtil.getAppWidth(20),),
                   Padding(

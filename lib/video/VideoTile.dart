@@ -42,7 +42,11 @@ class VideoTile extends StatelessWidget{
               ),
               Positioned(
                 top: 0,bottom: 0,left: 0,right: 0,
-                child: Image.asset(Constant.isPad ? "image/ic_play.png" : "image/ic_play_30.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(60)),height: ScreenUtil().setHeight(SizeUtil.getHeight(60)),),
+                child: UnconstrainedBox(
+                  child: Container(
+                    child: Image.asset(Constant.isPad ? "image/ic_play.png" : "image/ic_play_30.png",width: SizeUtil.getAppWidth(80),height: SizeUtil.getAppWidth(80)),
+                  ),
+                ),
               )
             ],
           ),

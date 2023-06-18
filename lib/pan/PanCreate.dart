@@ -168,7 +168,7 @@ class PanCreateState extends BaseState<PanCreate>{
    */
   Future<bool> submitCreatePan() async{
     if(this.panName.isEmpty){
-      showToast("请输入网盘名称");
+      showToast("请输入相册名称");
       return true;
     }
     if(this.selectItem == null){
@@ -226,7 +226,7 @@ class PanCreateState extends BaseState<PanCreate>{
    */
   Future<bool> submitEditorPan() async{
     if(this.panName.isEmpty){
-      showToast("请输入网盘名称");
+      showToast("请输入相册名称");
       this.ishttp = false;
       return true;
     }
@@ -291,7 +291,7 @@ class PanCreateState extends BaseState<PanCreate>{
               //标题
               PanTitle(cb: (){
                 Navigator.pop(context,false);
-              },title: widget.isCreate ? "新建网盘" : widget.panData.name,),
+              },title: widget.isCreate ? "新建相册" : widget.panData.name,),
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
@@ -309,7 +309,7 @@ class PanCreateState extends BaseState<PanCreate>{
                                   style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color:Colors.grey),
                                   controller: TextEditingController(text: panName != null ? panName : ""),
                                   decoration: InputDecoration(
-                                      hintText: "网盘名称",
+                                      hintText: "相册名称",
                                       hintStyle: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),
                                       border:InputBorder.none,
                                       fillColor: Colors.white,
@@ -319,6 +319,9 @@ class PanCreateState extends BaseState<PanCreate>{
                                       borderSide: BorderSide(color: Colors.black12)
                                   ),*/
                                       enabledBorder:OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.black12)
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(color: Colors.black12)
                                       )
                                   ),

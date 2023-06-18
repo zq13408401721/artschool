@@ -7,12 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:package_info/package_info.dart';
 import 'package:yhschool/BaseDialogState.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/Login.dart';
 import 'package:yhschool/WebStage.dart';
 import 'package:yhschool/bean/edit_user_info_bean.dart';
+import 'package:yhschool/bean/home_banner_bean.dart' as B;
 import 'package:yhschool/bean/my_work_bean.dart' as W;
 import 'package:yhschool/bean/notice_bean.dart';
 import 'package:yhschool/bean/relation_bean.dart';
@@ -45,6 +47,7 @@ import 'package:yhschool/widgets/ClickCallback.dart';
 import 'package:yhschool/bean/user_search.dart' as S;
 
 import '../pan/PanUserDetail.dart';
+import '../utils/Banner.dart';
 import 'UserInfoDetail.dart';
 import 'package:yhschool/bean/help_bean.dart';
 
@@ -79,32 +82,36 @@ class MineState extends BaseDialogState{
   int relationid=0;
   HelpBean _helpBean;
 
+  //官方banner数据表
+  List<B.Data> bannerList = [];
+
   // 学生身份工具栏
   List<dynamic> _studentToolsData = [
     //{"id":1,"name":"我的老师","icon":"image/ic_myteacher.png"},
     {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
-    {"id":4,"name":"我的网盘","icon":"image/ic_column.png"},
+    {"id":4,"name":"我的相册","icon":"image/ic_column.png"},
     /*{"id":11,"name":"收藏的网盘","icon":"image/ic_column.png"},*/
     {"id":5,"name":"我的作业","icon":"image/ic_mywork.png"},
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
     {"id":9,"name":"听歌","icon":"image/ic_music.png"},
     {"id":12,"name":"关于艺画","icon":"image/ic_about_yihua.png"},
-    {"id":13,"name":"提意见","icon":"image/ic_advise.png"}
+    {"id":13,"name":"帮助中心","icon":"image/ic_advise.png"}
 
     //{"id":6,"name":"看MV","icon":"image/ic_mv.png"}
   ];
 
   List<dynamic> _teacherToolsData = [
     {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
+    {"id":14,"name":"图片排课","icon":"image/ic_work_plan.png"},
     {"id":3,"name":"我的课件","icon":"image/ic_mycourse.png"},
-    {"id":4,"name":"我的网盘","icon":"image/ic_column.png"},
+    {"id":4,"name":"我的相册","icon":"image/ic_column.png"},
     /*{"id":11,"name":"收藏的网盘","icon":"image/ic_column.png"},*/
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
     {"id":9,"name":"听歌","icon":"image/ic_music.png"},
     {"id":12,"name":"关于艺画","icon":"image/ic_about_yihua.png"},
-    {"id":13,"name":"提意见","icon":"image/ic_advise.png"}
+    {"id":13,"name":"帮助中心","icon":"image/ic_advise.png"}
     //{"id":6,"name":"看MV","icon":"image/ic_mv.png"},
   ];
 
@@ -286,51 +293,125 @@ class MineState extends BaseDialogState{
         ),
         padding: EdgeInsets.only(
             left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+            right: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
             top: ScreenUtil().setHeight(SizeUtil.getHeight(40)),
             bottom: ScreenUtil().setHeight(SizeUtil.getHeight(40))
         ),
         margin: EdgeInsets.only(
             bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Expanded(
-              child: Row(
+            Container(
+              padding: EdgeInsets.symmetric(
+                vertical: SizeUtil.getAppHeight(40)
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ClipOval(
-                    child: avater != null ? CachedNetworkImage(imageUrl: avater,height: ScreenUtil().setWidth(SizeUtil.getWidth(100)),width: ScreenUtil().setWidth(SizeUtil.getWidth(100)),fit: BoxFit.cover,) :
-                    Image.asset("image/ic_head.png",height: ScreenUtil().setWidth(SizeUtil.getWidth(100)),width: ScreenUtil().setWidth(SizeUtil.getWidth(100)),fit:BoxFit.cover),
+                    child: avater != null ? CachedNetworkImage(imageUrl: avater,height: ScreenUtil().setWidth(SizeUtil.getWidth(150)),width: ScreenUtil().setWidth(SizeUtil.getWidth(150)),fit: BoxFit.cover,) :
+                    Image.asset("image/ic_head.png",height: ScreenUtil().setWidth(SizeUtil.getWidth(150)),width: ScreenUtil().setWidth(SizeUtil.getWidth(150)),fit:BoxFit.cover),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
+                  SizedBox(height:SizeUtil.getAppHeight(30),),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      (m_nickname == null && m_username == null) ? Text("") :
-                      Text(m_nickname != null ? m_nickname : m_username,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),fontWeight: FontWeight.bold),),
-                      SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(5)),),
-                      Text(mark != null ? mark : "",style:Constant.smallTitleTextStyle)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Container(
+                            child: Text((m_nickname != null && m_nickname.length > 0) ? m_nickname : m_username,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(56))),),
+                          ),
+                          SizedBox(width: SizeUtil.getAppWidth(10),),
+                          Container(
+                            padding: EdgeInsets.only(
+                              bottom: SizeUtil.getAppHeight(10)
+                            ),
+                            child: Text("${Constant.parseRole(m_role)}",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.black38),),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: SizeUtil.getAppHeight(60),),
+                      Text("仰望星空，脚踏实地，每一步都算数",style: TextStyle(fontSize: SizeUtil.getAppFontSize(36),color: Colors.black38),),
+                      //SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(10)),),
+                      //班级
+                      //Text(mark != null ?  subWord(mark, 20): "",style:Constant.smallTitleTextStyle),
+                      //SizedBox(height: SizeUtil.getAppHeight(20),),
+                      /*Row(
+                        children: [
+                          //个人主页
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: SizeUtil.getAppWidth(20),
+                                vertical: SizeUtil.getAppHeight(10)
+                            ),
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(30, 25, 1, 255),
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.amber)
+                            ),
+                            child: Text("个人主页",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                          ),
+                          //粉丝
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: SizeUtil.getAppWidth(20),
+                                vertical: SizeUtil.getAppHeight(10)
+                            ),
+                            margin: EdgeInsets.only(left: SizeUtil.getAppWidth(40)),
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(30, 124, 77, 255),
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.deepPurpleAccent[100])
+                            ),
+                            child: Text("个粉丝",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                          ),
+                          //关注
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: SizeUtil.getAppWidth(20),
+                                vertical: SizeUtil.getAppHeight(10)
+                            ),
+                            margin: EdgeInsets.only(left: SizeUtil.getAppWidth(40)),
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(30, 128, 216, 255),
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.lightBlueAccent[100])
+                            ),
+                            child: Text("关注",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                          ),
+                        ],
+                      )*/
                     ],
                   )
                 ],
               ),
             ),
-            InkWell(
-              onTap: (){
-                //设置
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>UserInfoDetail())).then((value){
-                  getUserInfo().then((value){
-                    setState(() {
-                      m_nickname = value["nickname"];
-                      avater = value["avater"];
+            Positioned(
+              right: 0,
+              child: InkWell(
+                onTap: (){
+                  //设置
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>UserInfoDetail())).then((value){
+                    getUserInfo().then((value){
+                      setState(() {
+                        m_nickname = value["nickname"];
+                        avater = value["avater"];
+                      });
                     });
                   });
-                });
-              },
-              child: Container(
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
-                child: Image.asset("image/ic_setting.png",height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
+                },
+                child: Container(
+                  //margin: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(40)),bottom: SizeUtil.getAppHeight(30)),
+                  padding: EdgeInsets.only(
+                    left:SizeUtil.getAppWidth(20),
+                    right:SizeUtil.getAppWidth(20),
+                  ),
+                  child: Image.asset("image/ic_setting.png",height: ScreenUtil().setHeight(SizeUtil.getHeight(50),),width: SizeUtil.getAppWidth(50),),
+                ),
               ),
             )
           ],
@@ -363,15 +444,15 @@ class MineState extends BaseDialogState{
                     vertical: ScreenUtil().setHeight(SizeUtil.getHeight(60))
                 ),
                 margin: EdgeInsets.only(
-                    right: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
+                    //right: ScreenUtil().setWidth(SizeUtil.getWidth(10)),
                     top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
                     bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
                 ),
-                child: Text("图文课堂排课",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),color: Colors.black54,fontWeight: FontWeight.bold)),
+                child: Text("作业排课",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),color: Colors.black54,fontWeight: FontWeight.bold)),
               ),
             ),
           ),
-          Expanded(
+          /*Expanded(
             flex: 1,
             child: InkWell(
               onTap: (){
@@ -391,10 +472,10 @@ class MineState extends BaseDialogState{
                     top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
                     bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))
                 ),
-                child: Text("视频课堂排课",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),color: Colors.black54,fontWeight: FontWeight.bold),),
+                child: Text("视频排课",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),color: Colors.black54,fontWeight: FontWeight.bold),),
               ),
             ),
-          )
+          )*/
         ],
       ),
     );
@@ -437,6 +518,8 @@ class MineState extends BaseDialogState{
           Navigator.push(context, MaterialPageRoute(builder: (context) =>
               WebStage(url: 'https://support.qq.com/product/326279', title: "")
           ));
+        }else if(_data["id"] == 14){ //图片排课
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>ClassImagePlanPage()));
         }
       },
       child: Container(
@@ -965,7 +1048,7 @@ class MineState extends BaseDialogState{
             ],
           ),*/
           //视频栏目
-          Container(
+          /*Container(
             margin: EdgeInsets.symmetric(
               vertical: ScreenUtil().setHeight(SizeUtil.getHeight(10))
             ),
@@ -982,7 +1065,7 @@ class MineState extends BaseDialogState{
             child: Text(_helpBean != null ? _helpBean.courseTitle : "",style: TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.black54,fontWeight: FontWeight.bold),)
           ),
           //课堂
-          if(_helpBean != null) for(var _course in _helpBean.course) _clickCourse(_course),
+          if(_helpBean != null) for(var _course in _helpBean.course) _clickCourse(_course),*/
 
           Text("......",style: TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.black54,fontWeight: FontWeight.bold),),
           
@@ -1014,6 +1097,58 @@ class MineState extends BaseDialogState{
     );
   }
 
+  Widget mineBanner(){
+    return Padding(
+      padding: EdgeInsets.only(
+        left: SizeUtil.getAppWidth(40),
+        right: SizeUtil.getAppWidth(40),
+        top:SizeUtil.getAppHeight(20),
+        bottom:SizeUtil.getAppHeight(20),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10)),
+        child: Image.asset("image/ic_banner_mine.jpg",height: SizeUtil.getAppHeight(400),fit: BoxFit.cover,),
+      ),
+      //child: Image.asset("image/ic_banner_mine.jpg",height: SizeUtil.getAppHeight(400),fit: BoxFit.cover,),
+    );
+    /*return Padding(
+      padding: EdgeInsets.only(
+          left: SizeUtil.getAppWidth(40),
+          right: SizeUtil.getAppWidth(40),
+          top:SizeUtil.getAppHeight(20),
+          bottom:SizeUtil.getAppHeight(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: SizeUtil.getAppHeight(400),
+            child: Swiper(
+              itemCount: bannerList.length,
+              autoplay: true,
+              itemBuilder: (BuildContext context,int index){
+                return InkWell(
+                    onTap: (){
+                      if(bannerList[index].weburl != null){
+                        //跳转到对应的网页
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                            WebStage(url: bannerList[index].weburl, title: "")
+                        ));
+                      }
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10)),
+                      child: CachedNetworkImage(imageUrl: bannerList[index].url,fit: BoxFit.cover),
+                    )
+                );
+              },
+            ),
+          )
+        ],
+      ),
+    );*/
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -1024,8 +1159,12 @@ class MineState extends BaseDialogState{
             children: [
               //用户信息
               _userInfo(),
+              //banner
+              SizedBox(height: SizeUtil.getAppHeight(10),),
+              bannerSingleWidget("image/ic_banner_mine.jpg"),
+
               //排课图标
-              role == 1 ? _classCard() : Container(),
+              //role == 1 ? _classCard() : Container(),
               _tools(),
               //_teachers(),
               _noticeImage(),
@@ -1038,9 +1177,9 @@ class MineState extends BaseDialogState{
               //学习文化课
               //_cultureClass(),
               //关于艺画 帮助信息
-              _yihuahelp(),
+              //_yihuahelp(),
               SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(100)),),
-              Text(_packageInfo != null ? "艺画美术 V${_packageInfo.version}   年费1980/年" : "",textAlign: TextAlign.center,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25)),color: Colors.grey),),
+              Text(_packageInfo != null ? "艺画美术 V${_packageInfo.version}" : "",textAlign: TextAlign.center,style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25)),color: Colors.grey),),
               SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(100)),)
             ],
           ),

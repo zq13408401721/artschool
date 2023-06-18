@@ -139,9 +139,9 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
     super.initState();
     print("OfficialGallery initState");
     categorySelect = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.white);
-    categoryNormal = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.black87);
+    categoryNormal = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.black38);
     categorySelect2 = TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.red,fontWeight: FontWeight.bold);
-    categoryNormal2 = TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.black87);
+    categoryNormal2 = TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.black38);
     galleryMap = Map();
     categoryMap = Map();
     _scrollController = initScrollController(isfresh:false);
@@ -302,12 +302,13 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
       child: Container(
         decoration: BoxDecoration(
             color: tabId == _data.id ? Colors.red : Colors.white,
-            borderRadius: BorderRadius.only(
+            /*borderRadius: BorderRadius.only(
               topLeft: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
               topRight: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(10)),),
               bottomLeft: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(10)),),
               bottomRight: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
-            ),
+            ),*/
+            borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(40)),
             border: Border.all(width: 1.0,color: tabId == _data.id ? Colors.red : Colors.grey[200],)
         ),
         alignment: Alignment.center,
@@ -318,7 +319,7 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
         margin: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(10))
         ),
-        child: Text(_data.name,style: TextStyle(color: tabId == _data.id ? Colors.white : Colors.black87,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+        child: Text(_data.name,style: TextStyle(color: tabId == _data.id ? Colors.white : Colors.black38,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
       ),
     );
   }
@@ -531,6 +532,7 @@ class OfficialState extends BaseCacheListRefresh<OfficialGallery>{
         GalleryList gallery = new GalleryList.fromJson(json.decode(value));
         if(gallery.errno == 0){
           page++;
+          print("load more page ${page}");
           CategoryCache cache = categoryMap[key];
           if(cache == null){
             cache = CategoryCache(page: page,list:gallery.data);

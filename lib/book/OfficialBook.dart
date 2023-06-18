@@ -12,6 +12,7 @@ import 'package:yhschool/book/BookImageListPageView.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
+import 'package:yhschool/utils/ImageType.dart';
 
 import '../gallery/GalleryTile.dart';
 import '../utils/SizeUtil.dart';
@@ -47,14 +48,16 @@ class OfficialBookState extends BaseCacheListRefresh<OfficialBook> {
   TextStyle categorySelect2;
   TextStyle categoryNormal2;
 
+  String selectTab1name,selectTab2name;
+
   @override
   void initState() {
     super.initState();
     _scrollController = initScrollController(isfresh:false);
     categorySelect = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.white);
-    categoryNormal = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.black87);
+    categoryNormal = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.black38);
     categorySelect2 = TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.red,fontWeight: FontWeight.bold);
-    categoryNormal2 = TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.black87);
+    categoryNormal2 = TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.black38);
     getBookTab(0);
   }
 
@@ -68,6 +71,7 @@ class OfficialBookState extends BaseCacheListRefresh<OfficialBook> {
         BookTabBean bookTabBean = BookTabBean.fromJson(json.decode(value));
         tabOneList.addAll(bookTabBean.data);
         currentPid = tabOneList[0].id;
+        selectTab1name = tabOneList[0].name;
         tabTwoList = [];
         getBookTabTwo(tabOneList[0].id);
         setState(() {
@@ -88,6 +92,7 @@ class OfficialBookState extends BaseCacheListRefresh<OfficialBook> {
           tabTwoList.addAll(bookTabBean.data);
           bookList = [];
           selectBookTabId = tabTwoList[0].id;
+          selectTab2name = tabTwoList[0].name;
           getBookList(selectBookTabId);
         });
       }
@@ -138,6 +143,7 @@ class OfficialBookState extends BaseCacheListRefresh<OfficialBook> {
         if(currentPid != _data.id){
           page = 1;
           currentPid = _data.id;
+          selectTab1name = _data.name;
           tabTwoList = [];
           getBookTabTwo(_data.id);
           setState(() {
@@ -148,23 +154,24 @@ class OfficialBookState extends BaseCacheListRefresh<OfficialBook> {
       child: Container(
         decoration: BoxDecoration(
             color: currentPid == _data.id ? Colors.red : Colors.white,
-            borderRadius: BorderRadius.only(
+            /*borderRadius: BorderRadius.only(
               topLeft: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
               topRight: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(10)),),
               bottomLeft: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(10)),),
               bottomRight: Radius.circular(ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
-            ),
+            ),*/
+            borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(35)),
             border: Border.all(width: 1.0,color: currentPid == _data.id ? Colors.red : Colors.grey[200],)
         ),
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(40),
+            horizontal: ScreenUtil().setWidth(30),
             vertical: ScreenUtil().setHeight(10)
         ),
         margin: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(10))
         ),
-        child: Text(_data.name,style: TextStyle(color: currentPid == _data.id ? Colors.white : Colors.black87,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+        child: Text(_data.name,style: TextStyle(color: currentPid == _data.id ? Colors.white : Colors.black38,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
       ),
     );
   }
@@ -175,6 +182,7 @@ class OfficialBookState extends BaseCacheListRefresh<OfficialBook> {
         if(selectBookTabId != _data.id){
           setState(() {
             page = 1;
+            selectTab2name = _data.name;
             this.selectBookTabId = _data.id;
             this.hasData = true;
             bookList = [];
@@ -207,20 +215,20 @@ class OfficialBookState extends BaseCacheListRefresh<OfficialBook> {
     return [
       Container(
         color:Colors.white,
+        height: SizeUtil.getAppHeight(SizeUtil.getTabHeight()),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Container(
-                height: ScreenUtil().setHeight(SizeUtil.getHeight(105)),
                 decoration: BoxDecoration(
                     color: Colors.white
                 ),
                 padding: EdgeInsets.only(
                   left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
                   right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-                  bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-                  //top: ScreenUtil().setHeight(SizeUtil.getHeight(25))
+                  bottom: SizeUtil.getAppHeight(SizeUtil.getTabRadius()),
+                  top: SizeUtil.getAppHeight(SizeUtil.getTabRadius())
                 ),
                 child: ListView.builder(itemCount:tabOneList.length,scrollDirection:Axis.horizontal,itemBuilder: (_context,_index){
                   return createTabItems(tabOneList[_index]);
@@ -239,8 +247,8 @@ class OfficialBookState extends BaseCacheListRefresh<OfficialBook> {
         child: Container(
           height: ScreenUtil().setHeight(SizeUtil.getHeight(70)),
           margin: EdgeInsets.only(
-            //top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
-              bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+              top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
+              bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
               left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
               right: ScreenUtil().setWidth(SizeUtil.getWidth(20))
           ),
@@ -257,15 +265,16 @@ class OfficialBookState extends BaseCacheListRefresh<OfficialBook> {
       SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(20)),),
       //瀑布流显示分组中的第一张图片
       Expanded(
-          child: Padding(
+          child: Container(
+            color: Colors.white,
             padding: EdgeInsets.only(
               left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
               right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
             ),
-            child:  StaggeredGridView.countBuilder(
+            child: StaggeredGridView.countBuilder(
+              controller: _scrollController,
               crossAxisCount: Constant.isPad ? 3 : 2,
               itemCount: bookList.length,
-              controller: _scrollController,
               primary: false,
               mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(6)),
               crossAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(6)),
@@ -274,16 +283,16 @@ class OfficialBookState extends BaseCacheListRefresh<OfficialBook> {
                   StaggeredTile.fit(1),
               itemBuilder: (context,index){
                 return GestureDetector(
-                  child:GalleryTile(data: bookList[index]), //GalleryCover(category: coverGridList[index],),
+                  child:GalleryTile(data: bookList[index],tileType: BigImageType.book,), //GalleryCover(category: coverGridList[index],),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                        BookImageListPageView(bookid: bookList[index].id,bookname: bookList[index].name,)
+                        BookImageListPageView(bookid: bookList[index].bookid,bookname: bookList[index].name,tab1name: selectTab1name,tab2name: selectTab2name,icon: bookList[index].url,)
                     ));
                   },
                 );
               },
             ),
-          )
+          ),
       ),
       this.isloading ? loadmoreWidget() : SizedBox()
     ];

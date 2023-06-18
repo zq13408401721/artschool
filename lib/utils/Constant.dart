@@ -49,7 +49,8 @@ class Constant{
 
   static final double SIZE_TOP_HEIGHT = 120; //顶部高度
   static final double SIZE_TITLE_NORMAL_HEIGHT = 80; // 顶部标题的高度
-  static final double SIZE_TOP_BAR_HEIGHT = 140; //顶部Bar高度
+  static final double SIZE_TOP_BAR_HEIGHT = 120; //顶部Bar高度
+  static final double SIZE_TOP_BAR_PAD_HEIGHT = 140; //pad顶部bar的高度
 
   static final Color COLOR_TITLE = Colors.black;  //标题字体的颜色
   static final Color COLOR_GRID_DESC = Colors.black26; //条目描述字体颜色
@@ -103,7 +104,7 @@ class Constant{
 
   static bool isPad = false; //当前是否是pad
 
-  static final double padsize = 7; //pad屏幕尺寸
+  static final double padsize = 6.5; //pad屏幕尺寸
 
   static final double SCREEN_W = window.physicalSize.width;
   static final double SCREEN_H = window.physicalSize.height; //屏幕的宽高
@@ -138,7 +139,9 @@ class Constant{
   static final List _randomColors = [Color(0xFFFCF6F6),Color(0xFFFCF7F1),Color(0xFFFAF7EB),Color(0xFFFFF7EE)];
 
   //标题字体样式加粗
-  static final TextStyle titleTextStyle = TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),fontWeight: FontWeight.bold);
+  static final TextStyle titleTextStyle = TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color:Colors.black87,fontWeight: FontWeight.bold);
+  //灰色标题字体
+  static final TextStyle titleGrayTextStyle = TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.black38);
 
   //标题字体样式正常
   static final TextStyle titleTextStyleNormal = TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)));
@@ -226,7 +229,7 @@ class Constant{
    */
   static String parseBookSmallString(String url){
     if(url == null) return "";
-    return url.replaceFirst("res.yimios.com:9050/book", "res.yimios.com:9050/book/small");
+    return url.replaceFirst("res.yimios.com:9050/book", "res.yimios.com:9070/book/small");
   }
 
   /**
@@ -266,7 +269,7 @@ class Constant{
    */
   static String parseGallerySmallString(String url){
     print("图库小图：${url}");
-    return url.replaceFirst("res.yimios.com:9050/gallery", "res.yimios.com:9050/gallery/small");
+    return url.replaceFirst("res.yimios.com:9050/gallery", "res.yimios.com:9070/gallery/small");
   }
 
   static String parseNewGallerySmallString(String url,int w,int h){
@@ -437,7 +440,8 @@ class Constant{
    * 角色名
    */
   static String parseRole(int role){
+    print("parseRole $role");
     if(role == null || role == 0) return "";
-    return role == 1 ? "老师" : "学生";
+    return role == 1 || role == 3 ? "老师" : "学生";
   }
 }

@@ -217,7 +217,7 @@ class ColumnSubscriblePageState extends BaseListRefresh<ColumnSubscriblePage>{
                 child:BackButtonWidget(
                   cb: (){
                     Navigator.pop(context);
-                  },title: "收藏的网盘",
+                  },title: "收藏的相册",
                 ),
               ),
               //分类

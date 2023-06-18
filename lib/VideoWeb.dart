@@ -18,6 +18,7 @@ import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
+import 'package:yhschool/video/TopVideoBar.dart';
 import 'package:yhschool/widgets/BackButtonWidget.dart';
 import 'package:yhschool/widgets/PushButtonWidget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -94,6 +95,8 @@ class VideoWebState extends BaseDialogState{
   WebViewController _webViewController;  //
 
   int clickTime = 0;
+
+  GlobalKey<TabVideoBarState> _topVideoBarState = new GlobalKey<TabVideoBarState>();
 
 
   @override
@@ -205,11 +208,13 @@ class VideoWebState extends BaseDialogState{
           setState(() {
             if(msg.message == "vertical"){
               curmodel = msg.message;
+              _topVideoBarState.currentState.updateModel(curmodel);
               _webViewController.loadUrl("javascript:normalScreen();");
               changeScreen();
               return;
             }else if(msg.message == "horizontal"){
               curmodel = msg.message;
+              _topVideoBarState.currentState.updateModel(curmodel);
               _webViewController.loadUrl("javascript:fullScreen();");
               changeScreen();
               return;
@@ -339,9 +344,9 @@ class VideoWebState extends BaseDialogState{
     showPushVideo(context,section+"/"+category,categoryid);
   }
 
-
   @override
   Widget build(BuildContext context) {
+    print("video build curmodel:"+curmodel);
     return WillPopScope(
         child: new Scaffold(
           backgroundColor: Colors.white,
@@ -349,7 +354,7 @@ class VideoWebState extends BaseDialogState{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Offstage(
+                  /*Offstage(
                     offstage: curmodel == "horizontal",
                     child: Container(
                       decoration: BoxDecoration(
@@ -392,17 +397,31 @@ class VideoWebState extends BaseDialogState{
                                     child: Text("推送到班级",style: TextStyle(fontSize: SizeUtil.getAppFontSize(25),color: Colors.white),),
                                   ),
                                 )
-                                /* m_role == 1 ?
+                                *//* m_role == 1 ?
                                 PushButtonWidget(cb: (){
                                   pushVideo();
-                                }, title: "推送") : SizedBox()*/
+                                }, title: "推送") : SizedBox()*//*
                               ],
                             ),
                           ) : SizedBox()
                         ],
                       ),
                     ),
-                  ),
+                  ),*/
+                  TabVideoBar(key: _topVideoBarState,role: m_role,categoryid: categoryid,classify: classify,section: section,callback: (type){
+                    if(type == "back"){
+                      if(curmodel == "horizontal"){
+                        curmodel = "vertical";
+                        changeScreen();
+                        _webViewController.loadUrl("javascript:normalScreen();");
+                      }else if(curmodel == "vertical"){
+                        //当前为双击
+                        Navigator.pop(context);
+                      }
+                    }else if(type == "push"){
+                      pushVideo();
+                    }
+                  },),
                   Expanded(child: webPlayer(),),
                 ],
               )
@@ -410,11 +429,28 @@ class VideoWebState extends BaseDialogState{
         ),
         onWillPop: (){
           //返回键监听 如何当前是横屏，先调整为竖屏
-          setState(() {
+          print("onWillPop");
+          /*if(curmodel == "horizontal"){
+            curmodel = "vertical";
+            _topVideoBarState.currentState.updateModel(curmodel);
+            changeScreen();
+            _webViewController.loadUrl("javascript:normalScreen();");
+          }else if(curmodel == "vertical"){
+            if(DateTime.now().millisecondsSinceEpoch - clickTime < 300){
+              //当前为双击
+              Navigator.pop(context);
+            }else{
+              clickTime = DateTime.now().millisecondsSinceEpoch;
+            }
+          }*/
+
+          if(Platform.isAndroid){
             if(curmodel == "horizontal"){
               curmodel = "vertical";
-              changeScreen();
+              _topVideoBarState.currentState.updateModel(curmodel);
               _webViewController.loadUrl("javascript:normalScreen();");
+              changeScreen();
+              return;
             }else if(curmodel == "vertical"){
               if(DateTime.now().millisecondsSinceEpoch - clickTime < 300){
                 //当前为双击
@@ -423,7 +459,7 @@ class VideoWebState extends BaseDialogState{
                 clickTime = DateTime.now().millisecondsSinceEpoch;
               }
             }
-          });
+          }
         },
     );
   }

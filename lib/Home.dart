@@ -75,7 +75,7 @@ class AppState extends VersionState<MyApp> with TickerProviderStateMixin{
     ["image/ic_tab_mine_normal.png","image/ic_tab_mine_select.png"]
   ];
 
-  final List<String> barTitles = ["视频","图库","上课","网盘","我的"];
+  final List<String> barTitles = ["视频","图库","上课","相册","我的"];
 
   TabController tabController;
 
@@ -230,15 +230,17 @@ class AppState extends VersionState<MyApp> with TickerProviderStateMixin{
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               backgroundColor: Colors.white,
-              body:  Stack(
-                children: [
-                  SafeArea(
-                    child: Column(
+              body: SafeArea(
+                child: Stack(
+                  children: [
+                    Column(
                       children: [
                         Expanded(
-                          child: IndexedStack(
-                            index: this.index,
-                            children: this.pages,
+                          child: Container(
+                            child: IndexedStack(
+                              index: this.index,
+                              children: this.pages,
+                            ),
                           ),
                         ),
                         Container(
@@ -283,55 +285,21 @@ class AppState extends VersionState<MyApp> with TickerProviderStateMixin{
 
                       ],
                     ),
-                  ),
-                  //音乐播放
-                  /*Positioned(
-                    left: _offset.dx,
-                    top: _offset.dy,
-                    child: Draggable(
-                      data:Colors.amber,
-                      child: RotationTransition(
-                        turns: _rotationController,
-                        child: Container(
-                          width: SizeUtil.getAppWidth(100),
-                          height: SizeUtil.getAppWidth(100),
-                          decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(50))
-                          ),
-                          child: Text("music"),
-                        ),
-                      ),
-                      feedback: Container(
-                        width: SizeUtil.getAppWidth(100),
-                        height: SizeUtil.getAppWidth(100),
-                        decoration: BoxDecoration(
-                            color: Colors.red[100],
-                            borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(50))
-                        ),
-                      ),
-                      onDraggableCanceled:(Velocity velocity,Offset offset){
-                        print("drag:${offset.dx} ${offset.dy}");
-                        setState(() {
-                          this._offset = offset;
-                        });
-                      },
-                    )
-                  ),*/
-                  //启动页面
-                  loadover ? SizedBox() :
-                  Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    color: Colors.white,
-                    child: Center(
-                      child: Image.asset("image/start.png"),
+                    //启动页面
+                    loadover ? SizedBox() :
+                    Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      color: Colors.white,
+                      child: Center(
+                        child: Image.asset("image/start.png"),
                         //child: Image.asset("image/start.png",width: ScreenUtil().setWidth(463),height: ScreenUtil().setHeight(565),)
-                      //isinit ? VideoPlayer(_videoPlayerController) : SizedBox(),
-                    ),
-                  )
+                        //isinit ? VideoPlayer(_videoPlayerController) : SizedBox(),
+                      ),
+                    )
 
-                ],
+                  ],
+                ),
               ),
             ),
             onWillPop: () async{
@@ -340,6 +308,14 @@ class AppState extends VersionState<MyApp> with TickerProviderStateMixin{
       },
     );
 
+  }
+
+  @override
+  void loadmore() {
+  }
+
+  @override
+  void refresh() {
   }
   
 }

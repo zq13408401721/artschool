@@ -260,7 +260,7 @@ class TodayNetTeachState extends BaseCoustRefreshState<TodayNetTeach>{
                 crossAxisCount: Constant.isPad ? 3 : 2,
                 mainAxisSpacing: ScreenUtil().setWidth(Constant.PADDING_GALLERY_CROSS),
                 crossAxisSpacing: Constant.GARRERY_GRID_CROSSAXISSPACING,
-                childAspectRatio: Constant.isPad ? 0.8 : 0.78
+                childAspectRatio: Constant.isPad ? 0.8 : 0.76
             ),
             itemBuilder: (BuildContext context,int index){
               return InkWell(

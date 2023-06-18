@@ -50,19 +50,23 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   bool ishttp = false;
 
   String m_uid="",m_username="",m_nickname="",m_schoolid="";
+  String welcome="",schoolname="";
   int m_role;
   bool isShowDialog = false;
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String,dynamic> deviceData = <String,dynamic>{};
   //当前用户所在的班级ID
   List<String> selfclassids = List.empty();
+  bool permissionCheck = true;
 
 
   @override
   void initState() async{
     super.initState();
     if(Platform.isAndroid){
-      await permission_android();
+      if(permissionCheck){
+        await permission_android();
+      }
       this.isAndroid = true;
     }else{
       try{
@@ -184,6 +188,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     double height = _size.height*_ratio;
     double ich = _ratio*160; //屏幕的像素密度
     double mc = math.sqrt(math.pow(width, 2)+math.pow(height, 2))/ich;
+    //showToast("pixel:$mc");
     if(mc > Constant.padsize){
       Constant.isPad = true;
     }
@@ -322,6 +327,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     username = prefs.getString("username");
     nickname = prefs.getString("nickname");
+    welcome = prefs.getString("welcome");
     var option = {
       "username":username,
       "nickname":nickname,
@@ -364,8 +370,17 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     prefs.setString("classes", classes);
     prefs.setString("classids", classids);
     prefs.setString("schoolname", info.schoolname);
-    prefs.setString("appname", info.appname);
-    prefs.setString("appicon", info.appicon);
+    schoolname = info.schoolname;
+    if(info.welcome != null) {
+      welcome = info.welcome;
+      prefs.setString("welcome", info.welcome);
+    }
+    if(info.appname != null){
+      prefs.setString("appname", info.appname);
+    }
+    if(info.appicon != null){
+      prefs.setString("appicon", info.appicon);
+    }
     if(info.phone != null){
       prefs.setString("phoneno", info.phone);
     }
@@ -521,6 +536,15 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _bool = await prefs.getBool("panvisible");
     return _bool;
+  }
+
+  /**
+   * 获取欢迎语
+   */
+  Future<String> getWelcome() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String _welcome = await prefs.getString("welcome");
+    return _welcome;
   }
 
   /**
@@ -791,69 +815,71 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
         builder: (_context,_state){
          return AlertDialog(
            contentPadding: EdgeInsets.all(0),
-           content: Container(
-               width: ScreenUtil().setWidth(300),
-               height:ScreenUtil().setHeight(600),
-               decoration: BoxDecoration(
-                   borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(10)))
-               ),
-               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.center,
-                 children: [
-                   Padding(
-                     padding: EdgeInsets.only(
-                         top: ScreenUtil().setHeight(40),
-                         bottom:ScreenUtil().setHeight(40)
+           content: SingleChildScrollView(
+             child: Container(
+                 width: ScreenUtil().setWidth(300),
+                 height:ScreenUtil().setHeight(600),
+                 decoration: BoxDecoration(
+                     borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(10)))
+                 ),
+                 child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.center,
+                   children: [
+                     Padding(
+                       padding: EdgeInsets.only(
+                           top: ScreenUtil().setHeight(40),
+                           bottom:ScreenUtil().setHeight(40)
+                       ),
+                       child: Text("服务协议和隐私政策",style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Colors.black54),),
                      ),
-                     child: Text("服务协议和隐私政策",style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Colors.black54),),
-                   ),
-                   Container(
-                     padding: EdgeInsets.only(
-                         left: ScreenUtil().setWidth(40),
-                         right:ScreenUtil().setWidth(40)
+                     Container(
+                       padding: EdgeInsets.only(
+                           left: ScreenUtil().setWidth(40),
+                           right:ScreenUtil().setWidth(40)
+                       ),
+                       child: RichText(
+                           text: TextSpan(
+                               children: [
+                                 TextSpan(
+                                     text:"请你务必审慎阅读、充分理解\"服务协议\"和\"隐私政策\"各条款，包括但不限于为了向你提供资料、内容发布等服务，我们需要收集你的设备信息、操作日志等个人信息，你可以在"+
+                                         "\"我的\"中查看本隐私条款。你可以阅读",
+                                     style:TextStyle(color: Colors.black54,fontSize: ScreenUtil().setSp(30),wordSpacing: 20,letterSpacing: 2)
+                                 ),
+                                 TextSpan(
+                                     text: "《服务协议》",
+                                     recognizer: TapGestureRecognizer()
+                                       ..onTap = (){
+                                         Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                             WebStage(url: 'http://res.yimios.com:9050/html/privacy.html', title: "艺画美术app隐私协议")
+                                         ));
+                                       },
+                                     style: TextStyle(color:Colors.blueAccent,fontSize: ScreenUtil().setSp(30))
+                                 ),
+                                 TextSpan(
+                                     text:",",
+                                     style: TextStyle(color:Colors.black54,fontSize: ScreenUtil().setSp(30))
+                                 ),
+                                 TextSpan(
+                                     text: "《隐私协议》",
+                                     recognizer: TapGestureRecognizer()
+                                       ..onTap = (){
+                                         Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                             WebStage(url: 'http://res.yimios.com:9050/html/policy.html', title: "艺画美术app隐私协议")
+                                         ));
+                                       },
+                                     style: TextStyle(color:Colors.blueAccent,fontSize: ScreenUtil().setSp(30))
+                                 ),
+                                 TextSpan(
+                                     text: "了解详细信息，如你同意，请点击\"同意\"开始接受我们的服务。",
+                                     style: TextStyle(color:Colors.black54,fontSize: ScreenUtil().setSp(30))
+                                 )
+                               ]
+                           )),
                      ),
-                     child: RichText(
-                         text: TextSpan(
-                             children: [
-                               TextSpan(
-                                   text:"请你务必审慎阅读、充分理解\"服务协议\"和\"隐私政策\"各条款，包括但不限于为了向你提供资料、内容发布等服务，我们需要收集你的设备信息、操作日志等个人信息，你可以在"+
-                                       "\"我的\"中查看本隐私条款。你可以阅读",
-                                   style:TextStyle(color: Colors.black54,fontSize: ScreenUtil().setSp(30),wordSpacing: 20,letterSpacing: 2)
-                               ),
-                               TextSpan(
-                                   text: "《服务协议》",
-                                   recognizer: TapGestureRecognizer()
-                                     ..onTap = (){
-                                       Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                           WebStage(url: 'http://res.yimios.com:9050/html/privacy.html', title: "艺画美术app隐私协议")
-                                       ));
-                                     },
-                                   style: TextStyle(color:Colors.blueAccent,fontSize: ScreenUtil().setSp(30))
-                               ),
-                               TextSpan(
-                                   text:",",
-                                   style: TextStyle(color:Colors.black54,fontSize: ScreenUtil().setSp(30))
-                               ),
-                               TextSpan(
-                                   text: "《隐私协议》",
-                                   recognizer: TapGestureRecognizer()
-                                     ..onTap = (){
-                                       Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                           WebStage(url: 'http://res.yimios.com:9050/html/policy.html', title: "艺画美术app隐私协议")
-                                       ));
-                                     },
-                                   style: TextStyle(color:Colors.blueAccent,fontSize: ScreenUtil().setSp(30))
-                               ),
-                               TextSpan(
-                                   text: "了解详细信息，如你同意，请点击\"同意\"开始接受我们的服务。",
-                                   style: TextStyle(color:Colors.black54,fontSize: ScreenUtil().setSp(30))
-                               )
-                             ]
-                         )),
-                   ),
 
-                 ],
-               )
+                   ],
+                 )
+             ),
            ),
            actions: [
              TextButton(onPressed: (){
@@ -903,6 +929,41 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
           child: Image.network(url,fit:BoxFit.cover),
         ),
       ),
+    );
+  }
+
+  String subWord(String word,int length){
+    if(word == null || word.length == 0) return "";
+    if(word.length < length) return word;
+    return word.substring(0,length)+"...";
+  }
+
+  /**
+   * 单张banner
+   */
+  Widget bannerSingleWidget(String path,{double horizontal=40,double vertical:20}){
+    return Container(
+      width: double.infinity,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: SizeUtil.getAppWidth(horizontal),
+          vertical:SizeUtil.getAppHeight(vertical),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10)),
+          child: Image.asset(path,height: SizeUtil.getAppHeight(SizeUtil.getBannerHeight()),fit: BoxFit.cover,),
+        ),
+      ),
+    );
+  }
+
+  Widget backArrowWidget(){
+    return Container(
+      padding: EdgeInsets.only(left: ScreenUtil().setWidth(20),top: ScreenUtil().setHeight(20),bottom: ScreenUtil().setHeight(20),right: ScreenUtil().setWidth(20)),
+      child: Icon(
+        Icons.arrow_back,
+        size: 24,
+      )
     );
   }
 

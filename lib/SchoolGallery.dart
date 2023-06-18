@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -84,9 +85,9 @@ class SchoolState extends BaseCacheListRefresh<SchoolGallery>{
   void initState() {
     super.initState();
     categorySelect = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.white);
-    categoryNormal = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.black87);
+    categoryNormal = TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.black38);
     categorySelect2 = TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.red,fontWeight: FontWeight.bold);
-    categoryNormal2 = TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.black87);
+    categoryNormal2 = TextStyle(fontSize: ScreenUtil().setSp(25),color: Colors.black38);
 
     galleryMap = Map();
     categoryMap = Map();
@@ -415,12 +416,13 @@ class SchoolState extends BaseCacheListRefresh<SchoolGallery>{
       child: Container(
         decoration: BoxDecoration(
             color: tabId == _data.id ? Colors.red : Colors.white,
-            borderRadius: BorderRadius.only(
+            /*borderRadius: BorderRadius.only(
               topLeft: Radius.circular(ScreenUtil().setWidth(20),),
               topRight: Radius.circular(ScreenUtil().setWidth(10),),
               bottomLeft: Radius.circular(ScreenUtil().setWidth(10),),
               bottomRight: Radius.circular(ScreenUtil().setWidth(20),),
-            ),
+            ),*/
+            borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(40)),
             border: Border.all(width: 1.0,color: tabId == _data.id ? Colors.red : Colors.black12,)
         ),
         alignment: Alignment.center,
@@ -431,7 +433,7 @@ class SchoolState extends BaseCacheListRefresh<SchoolGallery>{
         margin: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(10)
         ),
-        child: Text(_data.name,style: TextStyle(color: tabId == _data.id ? Colors.white : Colors.black87,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
+        child: Text(_data.name,style: TextStyle(color: tabId == _data.id ? Colors.white : Colors.black38,fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
       ),
     );
   }

@@ -199,7 +199,7 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
         children: [
           Row(
             children: [
-              Text(_date,style:Constant.titleTextStyle,),
+              Text(_date,style:TextStyle(fontSize: SizeUtil.getAppFontSize(36),fontWeight: FontWeight.bold),),
               SizedBox(width: 5,),
               today == _date ? Text("Today",style:TextStyle(color:Colors.red),) : SizedBox(),
             ],
@@ -221,7 +221,7 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
                   onTap: (){
                     //点击事件
                     Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                        TodayTeachList(teacherName: _data[index].name,tid: _data[index].tid,dateId: _data[index].dateId,date: Constant.getDateFormatByString( _data[index].date),classid: selectClassId,)
+                        TodayTeachList(teacherName: _data[index].nickname != null && _data[index].nickname.length > 0 ? _data[index].nickname : _data[index].username,tid: _data[index].tid,dateId: _data[index].dateId,date: Constant.getDateFormatByString( _data[index].date),classid: selectClassId,)
                     ));
                   },
                   child: Stack(
@@ -291,7 +291,8 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
                                       alignment: Alignment(-1,0),
                                       color: Colors.white,
                                       child: Text(
-                                        _data[index].name,
+                                        //_data[index].name,
+                                        _data[index].nickname != null && _data[index].nickname.length > 0 ? _data[index].nickname : _data[index].username,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),
@@ -326,10 +327,10 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
                               color: Colors.red
                           ),
                           padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-                              vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20))
+                              horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(15)),
+                              vertical: ScreenUtil().setHeight(SizeUtil.getHeight(15))
                           ),
-                          child: Text("自己",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(36)),color: Colors.white),),
+                          child: Text("自己",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.white),),
                         ),
                       ) : SizedBox()
                     ],
@@ -411,13 +412,13 @@ class TodayTeachState extends BaseCoustRefreshState<TodayTeach>{
     return [
       //班级
       Container(
-        height: ScreenUtil().setHeight(SizeUtil.getHeight(115)),
+        height:SizeUtil.getAppHeight(SizeUtil.getTabHeight()),
         alignment:Alignment(-1,0),
         padding: EdgeInsets.only(
             left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
             right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-            //top: ScreenUtil().setHeight(SizeUtil.getHeight(25)),
-            bottom: ScreenUtil().setHeight(SizeUtil.getHeight(30))
+            top: SizeUtil.getAppHeight(SizeUtil.getTabRadius()),
+            bottom: SizeUtil.getAppHeight(SizeUtil.getTabRadius())
         ),
         decoration: BoxDecoration(
             color: Colors.white

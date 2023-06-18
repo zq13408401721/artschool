@@ -164,13 +164,13 @@ class LivePageState extends BaseCoustPageRefreshState<LivePage>{
             //可滑动
             content: Text('删除后无法找回，确认删除？'),
             actions: <Widget>[
-              new FlatButton(
+              new ElevatedButton(
                 child: new Text('确定'),
                 onPressed: () {
                   _delLiveRecord(recordid);
                 },
               ),
-              new FlatButton(
+              new ElevatedButton(
                 child: new Text('取消'),
                 onPressed: () {
                   Navigator.of(context).pop();

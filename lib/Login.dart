@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/WebStage.dart';
+import 'package:yhschool/mine/AccountStage.dart';
 import 'package:yhschool/other/ActiveCodePage.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
@@ -43,6 +44,7 @@ class LoginState extends BaseState<Login>{
 
   @override
   void initState() {
+    permissionCheck = false;
     super.initState();
     Constant.isLogin = true;
     //clearCache();
@@ -325,19 +327,33 @@ class LoginState extends BaseState<Login>{
                             child: Text("登 录",style: TextStyle(fontSize:ScreenUtil().setSp(SizeUtil.getFontSize(40)),fontWeight: FontWeight.bold,color:Colors.white),),
                           ),
                         ),
-                        InkWell(
-                            onTap: (){
-                              Constant.isLogin = false;
-                              //激活账号
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ActiveCodePage())).then((value){
-                                if(value != null){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
-                                  //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp()));
-                                }
-                              });
-                            },
-                            child: Text("激活账号",style: TextStyle(fontSize:ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.black54))
-                          //color:Constant.isPad ? Colors.white : Colors.black54),),
+                        Row(
+                          children: [
+                            InkWell(
+                                onTap: (){
+                                  Constant.isLogin = false;
+                                  //激活账号
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ActiveCodePage())).then((value){
+                                    if(value != null){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+                                      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp()));
+                                    }
+                                  });
+                                },
+                                child: Text("激活账号",style: TextStyle(fontSize:ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.black54))
+                              //color:Constant.isPad ? Colors.white : Colors.black54),),
+                            ),
+                            SizedBox(width: SizeUtil.getAppWidth(20),),
+                            InkWell(
+                                onTap: (){
+                                  Constant.isLogin = false;
+                                  //激活账号
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AccountStage(url: 'http://res.yimios.com:9070/app/%E9%A2%86%E5%8F%96%E8%B4%A6%E5%8F%B7%E4%BA%8C%E7%BB%B4%E7%A0%81.png',title: "免费获取体验帐号",)));
+                                },
+                                child: Text("获取帐号",style: TextStyle(fontSize:ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.black54))
+                              //color:Constant.isPad ? Colors.white : Colors.black54),),
+                            )
+                          ],
                         )
                       ],
                     )

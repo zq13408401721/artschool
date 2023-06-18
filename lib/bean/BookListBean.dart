@@ -51,7 +51,8 @@ class Data {
       String url,
       int width,
       int height,
-      String word,}){
+      String word,
+      int bookid,}){
     _id = id;
     _createtime = createtime;
     _pages = pages;
@@ -64,6 +65,7 @@ class Data {
     _width = width;
     _height = height;
     _word = word;
+    _bookid = bookid;
 }
 
   Data.fromJson(dynamic json) {
@@ -79,6 +81,7 @@ class Data {
     _width = json['width'];
     _height = json['height'];
     _word = json['word'];
+    _bookid = json['bookid'];
   }
   int _id;
   String _createtime;
@@ -92,6 +95,7 @@ class Data {
   int _width;
   int _height;
   String _word;
+  int _bookid;
 
 
   int get id => _id;
@@ -106,6 +110,7 @@ class Data {
   int get width => _width;
   int get height => _height;
   String get word => _word;
+  int get bookid => _bookid;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -121,6 +126,7 @@ class Data {
     map['width'] = _width;
     map['height'] = _height;
     map['word'] = _word;
+    map['bookid'] = _bookid;
     return map;
   }
 

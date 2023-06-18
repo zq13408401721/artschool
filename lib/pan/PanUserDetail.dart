@@ -122,9 +122,10 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: SizeUtil.getAppHeight(40),
-                horizontal: SizeUtil.getAppWidth(20)
+              padding: EdgeInsets.only(
+                bottom: SizeUtil.getAppHeight(20),
+                left: SizeUtil.getAppWidth(20),
+                right: SizeUtil.getAppWidth(20)
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,67 +160,80 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: SizeUtil.getAppWidth(20)
+              padding: EdgeInsets.only(
+                left: SizeUtil.getAppWidth(40)
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ClipOval(
                     child: (panUserDetail == null || panUserDetail.avater == null)
-                        ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(80),height: SizeUtil.getAppWidth(80),fit: BoxFit.cover,)
-                        : CachedNetworkImage(imageUrl: panUserDetail.avater,width: SizeUtil.getAppWidth(80),height: SizeUtil.getAppWidth(80),fit: BoxFit.cover),
+                        ? Image.asset("image/ic_head.png",width: SizeUtil.getAppWidth(150),height: SizeUtil.getAppWidth(150),fit: BoxFit.cover,)
+                        : CachedNetworkImage(imageUrl: panUserDetail.avater,width: SizeUtil.getAppWidth(150),height: SizeUtil.getAppWidth(150),fit: BoxFit.cover),
                   ),
+                  SizedBox(height: SizeUtil.getAppHeight(30),),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Padding(padding: EdgeInsets.symmetric(
-                              vertical: SizeUtil.getAppHeight(5),
-                            horizontal: SizeUtil.getAppWidth(10)
-                          ),child:Text(widget.data.nickname != null ? widget.data.nickname : widget.data.username,style:TextStyle(
-                            fontSize: SizeUtil.getAppFontSize(40),color: Colors.black87,fontWeight: FontWeight.bold
-                          ),),),
-                          Padding(padding: EdgeInsets.symmetric(
-                            vertical: SizeUtil.getAppHeight(5),
-                            horizontal: SizeUtil.getAppWidth(10)
-                          ),child: Text(" / ${Constant.parseRole(widget.data.role)}",style: TextStyle(
-                            fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey
-                          ),),)
+                          Container(
+                            child: Text(widget.data.nickname != null && widget.data.nickname.length > 0 ? widget.data.nickname : widget.data.username,style:TextStyle(
+                                fontSize: SizeUtil.getAppFontSize(56),color: Colors.black87
+                            ),),
+                          ),
+                          SizedBox(width: SizeUtil.getWidth(10),),
+                          //身份
+                          Container(
+                            padding: EdgeInsets.only(
+                              bottom: SizeUtil.getAppHeight(10)
+                            ),
+                            child: Text("${Constant.parseRole(widget.data.role)}",style: TextStyle(
+                                fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey
+                            ),),
+                          ),
+                          SizedBox(width: SizeUtil.getWidth(20),),
+                          //粉丝
+                          Container(
+                            padding: EdgeInsets.only(
+                              bottom: SizeUtil.getAppHeight(10)
+                            ),
+                            child: InkWell(
+                                onTap: (){
+                                  if(panUserDetail == null) return;
+                                  print("uid:${widget.data.uid}");
+                                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                                    return UserFansDetail(data: {
+                                      "uid":widget.data.uid,
+                                      "username":panUserDetail.username,
+                                      "nickname":panUserDetail.nickname,
+                                      "fansnum":panUserDetail.fansnum
+                                    });
+                                  }));
+                                },
+                                child: Text("${panUserDetail == null ? 0 : panUserDetail.fansnum} 粉丝",style: TextStyle(
+                                    fontSize: SizeUtil.getAppFontSize(30),color: Colors.lightBlueAccent
+                                ),)
+                            ),
+                          )
                         ],
                       ),
-                      Padding(padding: EdgeInsets.symmetric(
+                      SizedBox(height: SizeUtil.getHeight(30),),
+                      //Text("仰望星空，脚踏实地，走好每一步",style:TextStyle(fontSize: SizeUtil.getAppFontSize(36),color: Colors.black38),)
+                      //班级
+                     /* Padding(padding: EdgeInsets.symmetric(
                         horizontal: SizeUtil.getAppWidth(20)
-                      ),child: Text("${classname}"),),
-                      InkWell(
-                        onTap: (){
-                          if(panUserDetail == null) return;
-                          print("uid:${widget.data.uid}");
-                          Navigator.push(context, MaterialPageRoute(builder: (context){
-                            return UserFansDetail(data: {
-                              "uid":widget.data.uid,
-                              "username":panUserDetail.username,
-                              "nickname":panUserDetail.nickname,
-                              "fansnum":panUserDetail.fansnum
-                            });
-                          }));
-                        },
-                        child: Padding(padding: EdgeInsets.symmetric(
-                          horizontal: SizeUtil.getAppWidth(20),
-                          vertical: SizeUtil.getAppHeight(20)
-                        ),child: Text("${panUserDetail == null ? 0 : panUserDetail.fansnum} 粉丝 >",style: TextStyle(
-                          fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey
-                        ),),),
-                      )
+                      ),child: Text("${subWord(classname,20)}",style:Constant.smallTitleTextStyle,)),*/
+
                     ],
                   ),
                 ],
               ),
             ),
-            SizedBox(height: SizeUtil.getAppHeight(20),),
+            SizedBox(height: SizeUtil.getAppHeight(60),),
             //top bar
             Container(
               decoration: BoxDecoration(
@@ -243,7 +257,7 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(panUserDetail == null ? "0" : "${panUserDetail.pannum}",style: tabIndex == 0 ? selectStyle : normalStyle,),
-                          Text("网盘",style: tabIndex == 0 ? selectStyle : normalStyle,),
+                          Text("相册",style: tabIndex == 0 ? selectStyle : normalStyle,),
                         ],
                       ),
                     ),
@@ -260,7 +274,7 @@ class PanUserDetailState extends BaseState<PanUserDetail>{
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(panUserDetail == null ? "" : "${panUserDetail.imagenum}",style: tabIndex == 1 ? selectStyle : normalStyle,),
-                          Text("网盘图片",style: tabIndex == 1 ? selectStyle : normalStyle,),
+                          Text("相册图片",style: tabIndex == 1 ? selectStyle : normalStyle,),
                         ],
                       ),
                     ),

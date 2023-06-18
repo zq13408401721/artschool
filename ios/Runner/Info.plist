@@ -12,19 +12,6 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIcons</key>
 	<dict>
-		<key>CFBundleAlternateIcons</key>
-		<dict>
-			<key>春</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>春Icon-60</string>
-					<string>春Icon-Small-40</string>
-					<string>春Icon-Small-29</string>
-					<string>春Icon-Small-20</string>
-				</array>
-			</dict>
-		</dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
 			<key>CFBundleIconFiles</key>
@@ -35,46 +22,6 @@
 			<string>美术</string>
 			<key>UIPrerenderedIcon</key>
 			<false/>
-		</dict>
-		<key>UINewsstandIcon</key>
-		<dict>
-			<key>AppIcon</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>icon_83.png</string>
-					<string>icon_60.png</string>
-					<string>icon_40.png</string>
-					<string>icon_29.png</string>
-					<string>icon_20.png</string>
-				</array>
-			</dict>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string></string>
-			</array>
-			<key>UINewsstandBindingEdge</key>
-			<string>UINewsstandBindingEdgeLeft</string>
-			<key>UINewsstandBindingType</key>
-			<string>UINewsstandBindingTypeMagazine</string>
-			<key>iconName</key>
-			<string>美术</string>
-		</dict>
-	</dict>
-	<key>CFBundleIcons~ipad</key>
-	<dict>
-		<key>CFBundleAlternateIcons</key>
-		<dict>
-			<key>春</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>春Icon-60</string>
-					<string>春Icon-Small-40</string>
-					<string>春Icon-Small-29</string>
-					<string>春Icon-Small-20</string>
-				</array>
-			</dict>
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
@@ -120,14 +67,10 @@
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

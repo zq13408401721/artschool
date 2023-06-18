@@ -74,6 +74,7 @@ class UserFansDetailState extends BaseCoustRefreshState<UserFansDetail>{
 
   Widget userItem(Data item){
     return Card(
+      shadowColor:Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -84,7 +85,7 @@ class UserFansDetailState extends BaseCoustRefreshState<UserFansDetail>{
                 vertical: SizeUtil.getAppHeight(80)
             ),
             child: ClipOval(
-                child: item.avater != null ? CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(100),height: SizeUtil.getAppWidth(100),)
+                child: item.avater != null ? CachedNetworkImage(imageUrl: item.avater,width: SizeUtil.getAppWidth(100),height: SizeUtil.getAppWidth(100),fit: BoxFit.cover,)
                     : Image.asset("image/ic_head.png",height: ScreenUtil().setWidth(SizeUtil.getWidth(100)),width: ScreenUtil().setWidth(SizeUtil.getWidth(100)),fit:BoxFit.cover)
             ),
           ),
@@ -128,7 +129,8 @@ class UserFansDetailState extends BaseCoustRefreshState<UserFansDetail>{
                 padding: EdgeInsets.only(
                     right: SizeUtil.getAppWidth(40)
                 ),
-                child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
+                child: backArrowWidget(),
+                //child: Image.asset("image/ic_arrow_left.png",width: SizeUtil.getAppWidth(60),height: SizeUtil.getAppHeight(60),),
               ),
             ),
             Padding(
@@ -158,6 +160,7 @@ class UserFansDetailState extends BaseCoustRefreshState<UserFansDetail>{
               itemCount: fansList.length,
               primary: false,
               crossAxisSpacing: SizeUtil.getAppWidth(Constant.DIS_LIST),
+              mainAxisSpacing: SizeUtil.getAppWidth(Constant.DIS_LIST),
               controller: _scrollController,
               addAutomaticKeepAlives: false,
               padding: EdgeInsets.only(left: SizeUtil.getAppWidth(Constant.DIS_LIST),right: SizeUtil.getAppWidth(Constant.DIS_LIST)),

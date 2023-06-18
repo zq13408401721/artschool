@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.3.2+38
+version: 2.4.0+40
 
 environment:
   sdk: ">=2.7.0 <=3.0.0"
@@ -30,7 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   dio: ^4.0.0
-  shared_preferences: ^2.0.5
+  shared_preferences: ^2.1.1
   flutter_screenutil: ^5.0.0+2
   flutter_spinkit: ^5.0.0
   pull_to_refresh: ^2.0.0
@@ -41,10 +41,10 @@ dependencies:
   dio_cookie_manager: ^2.0.0
   fluttertoast: ^8.0.7
   video_player: ^2.1.1
-  chewie: ^1.0.0  #video_player播放空间
+  chewie: ^1.4.0  #video_player播放空间
   audioplayers: ^0.20.1 # music播放
   flutter_staggered_grid_view: ^0.4.0 # 瀑布流
-  photo_view: ^0.13.0
+  photo_view: ^0.14.0
   cached_network_image: ^3.0.0
   webview_flutter: ^2.0.9  # webview网页插件
   flutter_html: ^2.2.1
@@ -64,7 +64,7 @@ dependencies:
   open_appstore: ^1.0.2 # 打开appstore下载页面
   url_launcher: ^6.0.9  # 打开本地浏览器
   sqflite: ^2.0.0+4    # 本地数据库
-  wakelock: ^0.5.6   #  屏幕常亮
+  wakelock: ^0.6.2   #  屏幕常亮
   get_it: ^7.2.0   # 拨打电话相关
   image_gallery_saver: ^1.7.1 # 保存图片到本地
   image_cropper: ^1.4.1  # 图片剪切
@@ -78,6 +78,8 @@ dependencies:
   #qr_flutter: ^4.0.0 #二维码
   barcode_scan2: ^4.1.4 #二维码
   event_bus: ^2.0.0
+  flutter_swiper: ^1.1.6 #轮播图
+  umeng_common_sdk: ^1.2.3 #友盟
 
 dev_dependencies:
   flutter_test:
@@ -236,6 +238,27 @@ flutter:
     - image/ic_btn_close.png
     - image/ic_checkbox_normal.png
     - image/ic_checkbox_select.png
+    - image/ic_book.png
+    - image/ic_video_tab_select.png
+    - image/ic_video_tab_normal.png
+    - image/ic_video_alltab_select.png
+    - image/ic_video_alltab_normal.png
+    - image/ic_mine_page.png
+    - image/ic_work_plan.png
+    - image/ic_work_publish_normal.png
+    - image/ic_work_publish_select.png
+    - image/ic_work_student_normal.png
+    - image/ic_work_student_select.png
+    - image/ic_photo_all_normal.png
+    - image/ic_photo_all_select.png
+    - image/ic_photo_school_normal.png
+    - image/ic_photo_school_select.png
+    - image/ic_photo_mine_normal.png
+    - image/ic_photo_mine_select.png
+    - image/ic_banner_offical.jpg
+    - image/ic_banner_mine.jpg
+    - image/ic_button_more.png
+    - image/ic_image_video_tips.png
     - videos/login_page.mp4
     - videos/x2/login_page_x2.mp4
     - videos/x2/login_page_android_x2.mp4
@@ -245,3 +268,4 @@ flutter:
     - data/user.json
     - data/help.json
     - files/audio/audio_player.html
+    - files/videoplayer.html

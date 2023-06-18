@@ -213,7 +213,7 @@ class ClassPlanPageState extends BaseState<ClassPlanPage>{
     DBUtils.dbUtils.then((db) async{
       var result = await db.queryApiData(key);
       if(result.length > 0){
-        _getCategoryByTabReturn(result);
+        _getCategoryByTabReturn(db,key,result);
       }else{
         var data = {
           "page":1,
@@ -223,8 +223,7 @@ class ClassPlanPageState extends BaseState<ClassPlanPage>{
         };
         //获取对应的章节数据
         httpUtil.post(DataUtils.api_video_tab_category,data: data).then((result){
-          db.insertApi(ApiDB(api:key,result:result));
-          _getCategoryByTabReturn(result);
+          _getCategoryByTabReturn(db,key,result);
         }).catchError((err) => {
           print(err)
         });
@@ -235,15 +234,19 @@ class ClassPlanPageState extends BaseState<ClassPlanPage>{
   /**
    * tab对应的视频分类数据获取返回
    */
-  void _getCategoryByTabReturn(String result){
+  void _getCategoryByTabReturn(DBUtils db,String key,String result){
     var videoTab = new V.VideoTab.fromJson(json.decode(result));
     videoTabList.clear();
-    setState(() {
+    if(videoTab.errno == 0 && videoTab.data != null && videoTab.data.length > 0){
+      db.insertApi(ApiDB(api:key,result:result));
       videoTabList.addAll(videoTab.data);
       selectCategoryId = videoTabList[0].categoryid;
       categoryname = videoTabList[0].categoryname;
       videoCategoryList.clear();
       getVideoCategoryList(selectCategoryId);
+    }
+    setState(() {
+
     });
   }
 
@@ -404,7 +407,7 @@ class ClassPlanPageState extends BaseState<ClassPlanPage>{
                   ),
                   child: BackButtonWidget(cb: (){
                     Navigator.pop(context);
-                  }, title: "视频课堂排课"),
+                  }, title: "视频排课"),
                 ),
                 //选中的日期
                 Container(

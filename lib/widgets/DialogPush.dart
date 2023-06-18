@@ -276,7 +276,7 @@ class DialogPushState extends BaseState<DialogPush>{
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-    top = _size.height/3*2;
+    top = _size.height/3*2-50;
     return Card(
       margin: EdgeInsets.only(top:top,left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10))),
       child: Container(

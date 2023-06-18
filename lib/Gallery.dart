@@ -93,40 +93,41 @@ class GalleryState extends BaseState<Gallery> with SingleTickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[100]
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //顶部导航
-          Container(
-            height: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.SIZE_TOP_BAR_HEIGHT)),
-            padding: EdgeInsets.only(
-              /*top: ScreenUtil().setHeight(SizeUtil.getHeight(32)),
-              bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10)),*/
-              left: ScreenUtil().setWidth(SizeUtil.getWidth(30))
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white
-            ),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: (){
-                    if(tabIndex !=  0){
-                      setState(() {
-                        tabIndex = 0;
-                        currentPage = tabPage[tabIndex];
-                      });
-                    }
-                  },
-                  child: Container(
-                    child: Text("云图片",style: tabIndex == 0 ? tabSelect : tabNormal,),
-                  ),
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.grey[100]
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //顶部导航
+              Container(
+                //height: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.SIZE_TOP_BAR_HEIGHT)),
+                height: SizeUtil.getAppHeight(SizeUtil.getTabHeight()),
+                decoration: BoxDecoration(
+                    color: Colors.white
                 ),
-                SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(SizeUtil.getWidth(30))),),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        if(tabIndex !=  0){
+                          setState(() {
+                            tabIndex = 0;
+                            currentPage = tabPage[tabIndex];
+                          });
+                        }
+                      },
+                      child: Container(
+                        //child: Text("图书馆",style: tabIndex == 0 ? tabSelect : tabNormal,),
+                        child: Image.asset("image/ic_book.png",height:SizeUtil.getAppHeight(80),fit: BoxFit.contain,),
+                      ),
+                    ),
+                    /*SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(SizeUtil.getWidth(30))),),
                 InkWell(
                   onTap: (){
                     //showToast("学校暂未开启本功能");
@@ -140,17 +141,20 @@ class GalleryState extends BaseState<Gallery> with SingleTickerProviderStateMixi
                   child: Container(
                     child: Text("学校图片",style: tabIndex == 1 ? tabSelect : tabNormal,),
                   ),
-                )
-              ],
-            ),
+                )*/
+                  ],
+                ),
+              ),
+              Expanded(child: OfficialBook()),
+              /*Expanded(
+                child: IndexedStack(
+                  index: tabIndex,
+                  children: tabPage,
+                ),
+              )*/
+            ],
           ),
-          Expanded(
-            child: IndexedStack(
-              index: tabIndex,
-              children: tabPage,
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

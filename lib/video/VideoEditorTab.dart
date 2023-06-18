@@ -47,7 +47,8 @@ class VideoEditorTabState extends BaseState{
                 onTap: (){
                   Navigator.pop(context);
                 },
-                child: Image.asset("image/ic_arrow_left.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setHeight(80),),
+                child: backArrowWidget(),
+                //child: Image.asset("image/ic_arrow_left.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setHeight(80),),
               ),
               Text("我的分类",style: TextStyle(fontSize: ScreenUtil().setSp(40),fontWeight: FontWeight.bold),),
               Expanded(

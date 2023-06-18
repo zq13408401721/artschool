@@ -66,6 +66,7 @@ class UserPanFollowPageState extends BaseRefreshState<UserPanFollowPage>{
 
   Widget userItem(Data item){
     return Card(
+      shadowColor: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -106,6 +107,7 @@ class UserPanFollowPageState extends BaseRefreshState<UserPanFollowPage>{
         itemCount: followsList.length,
         primary: false,
         crossAxisSpacing: SizeUtil.getAppWidth(Constant.DIS_LIST),
+        mainAxisSpacing: SizeUtil.getAppWidth(Constant.DIS_LIST),
         controller: _scrollController,
         addAutomaticKeepAlives: false,
         padding: EdgeInsets.only(left: SizeUtil.getAppWidth(Constant.DIS_LIST),right: SizeUtil.getAppWidth(Constant.DIS_LIST)),

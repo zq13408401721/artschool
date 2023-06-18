@@ -29,11 +29,11 @@
   "course_title": "课堂栏目",
   "course":[
     {
-      "name":"什么是图文课堂、视频课堂？",
+      "name":"什么是发布作业、发布视频？",
       "url":"https://support.qq.com/products/326279/faqs/94711"
     },
     {
-      "name":"如何在图文课堂中添加图片资料？",
+      "name":"如何在发布作业中添加图片资料？",
       "url":"https://support.qq.com/products/326279/faqs/94715"
     },
     {
@@ -41,7 +41,7 @@
       "url": "https://support.qq.com/products/326279/faqs/94717"
     },
     {
-      "name":"如何在视频课堂中排课？",
+      "name":"如何在发布视频中排课？",
       "url": "https://support.qq.com/products/326279/faqs/94728"
     }
   ]

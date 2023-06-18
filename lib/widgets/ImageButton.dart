@@ -31,7 +31,7 @@ class ImageButton extends StatelessWidget{
                 padding: EdgeInsets.only(
                   right: SizeUtil.getAppWidth(10)
                 ),
-                child: Image.asset(icon,width: ScreenUtil().setWidth(40),height: ScreenUtil().setHeight(40),),
+                child: Image.asset(icon,width: ScreenUtil().setWidth(30),height: ScreenUtil().setHeight(30),),
               ),
             ),
             TextSpan(

@@ -38,7 +38,11 @@ class ClassVideoTile extends StatelessWidget{
                 right: 0,
                 child: Offstage(
                   offstage: isEditor==true,
-                  child: Image.asset(Constant.isPad ? "image/ic_play.png" : "image/ic_play_30.png"),
+                  child: UnconstrainedBox(
+                    child: Container(
+                        child: Image.asset(Constant.isPad ? "image/ic_play.png" : "image/ic_play_30.png",width: SizeUtil.getAppWidth(80),height: SizeUtil.getAppWidth(80))
+                    )
+                  ),
                 ),
               ),
               Align(

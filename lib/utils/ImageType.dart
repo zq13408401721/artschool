@@ -23,4 +23,5 @@ enum BigImageType {
   issue,
   work,
   correct,
+  book
 }

@@ -8,6 +8,7 @@ class DataUtils{
   static const String api_checklogin = "auth/checkLogin"; //检查登录是否有效
   static const String api_startadvert = "advert/startAdvert"; //开设的广告数据
   static const String api_advertvideo = "advert/queryAdvertVideo"; //视频广告
+  static const String api_homebanner = "home/queryBanner"; //首页banner数据
   static const String api_tab = "home/officialTab"; //主页tab接口
   static const String api_categorybytabid = "home/queryCategoryByTab"; //获取视频分类对应的分组数据
   static const String api_login = "user/login"; //登录接口 username password
@@ -36,6 +37,7 @@ class DataUtils{
   static const String api_school_video_tab = "video/schoolVideoTab"; //学校视频分类
   static const String api_school_video_group = "video/schoolVideoGroup"; //学校视频分组
   static const String api_school_video_list = "video/schoolVideoList"; //学校视频列表
+  static const String api_school_video_group_total = "video/querySchoolVideoGroupTotal"; //视频合集对应的视频总数
 
   /********************pan******************************/
   static const String api_panclassify = "pan/panClassify"; //网盘分类
@@ -80,9 +82,9 @@ class DataUtils{
   static const String api_pandelete = "pan/deletePan"; //删除网盘
 
 
-  static const String api_booktab = "book/queryBookTab";  //书籍匪类
+  static const String api_booktab = "book/queryBookTab";  //书籍分类
   static const String api_booklist = "book/queryBookList"; //书籍列表
-  static const String api_bookimagelist = "book/queryBookImageList"; //书籍图片列表
+  static const String api_bookimagelist = "book/【"; //书籍图片列表
 
 
   static const String api_getschoolteacher = "shared/getSchoolTeacher"; //获取学校老师

@@ -15,9 +15,134 @@ import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
-class VersionState<T extends StatefulWidget> extends BaseState<T>{
+abstract class VersionState<T extends StatefulWidget> extends BaseState<T>{
 
   AppInfo appInfo;
+
+  bool isloading = false,isrefreshing = false; //是否加载中
+  bool hasData = true; //是否有更多数据
+  ScrollController _scrollController;
+  int mintop;
+  String loadmoreword="加载更多";
+
+  @override
+  void initState() {
+    super.initState();
+    mintop = -100;
+  }
+
+  ScrollController initScrollController({bool isfresh=true}){
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      print("scroll ${_scrollController.position.pixels}:${_scrollController.position.maxScrollExtent}");
+      if(_scrollController.position.maxScrollExtent > 0 && _scrollController.position.pixels > _scrollController.position.maxScrollExtent-100){
+        //加载更多
+        if(isloading == false && hasData){
+          print("isloading:$isloading");
+          setState(() {
+            loadmore();
+            this.isloading = true;
+          });
+        }
+      }else if(_scrollController.position.pixels <= mintop){
+        if(!isfresh) return;
+        print("refresh:$isrefreshing");
+        //刷新
+        if(isrefreshing == false){
+          setState(() {
+            refresh();
+            this.isrefreshing = true;
+          });
+        }
+
+      }
+    });
+    return _scrollController;
+  }
+
+  //刷新动画
+  Widget refreshUI(){
+    return isrefreshing ?
+    Center(
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            vertical: ScreenUtil().setHeight(40)
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: ScreenUtil().setWidth(40),
+              height: ScreenUtil().setWidth(40),
+              child: CircularProgressIndicator(color: Colors.red,),
+            ),
+            SizedBox(width: 10,),
+            Text("数据刷新中",style: TextStyle(color: Colors.grey),)
+          ],
+        ),
+      ),
+    ) : SizedBox();
+  }
+
+  Widget loadmoreUI(){
+    return isloading ?
+    Center(
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            vertical: ScreenUtil().setHeight(40)
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: ScreenUtil().setWidth(40),
+              height: ScreenUtil().setWidth(40),
+              child: CircularProgressIndicator(color: Colors.red,),
+            ),
+            SizedBox(width: 10,),
+            Text("${loadmoreword}",style: TextStyle(color:Colors.grey,fontSize: ScreenUtil().setSp(30),fontWeight: FontWeight.normal,decoration: TextDecoration.none),)
+          ],
+        ),
+      ),
+    ) : SizedBox();
+  }
+
+  //隐藏刷新
+  void hideRefreshing(){
+    Future.delayed(new Duration(seconds: 1),(){
+      setState(() {
+        this.isrefreshing = false;
+      });
+    });
+  }
+
+  //隐藏加载更多
+  void hideLoadMore(){
+    Future.delayed(new Duration(seconds: 1),(){
+      if(mounted){
+        setState(() {
+          this.isloading = false;
+        });
+      }
+    });
+  }
+
+  /**
+   * 加载更多
+   */
+  void setLoadmoreword(String word){
+    setState(() {
+      loadmoreword = word;
+    });
+  }
+
+  //刷新
+  void refresh();
+
+  //加载更多
+  void loadmore();
+
+
   //版本更新提醒
   void checkVersion(){
     PackageInfo packageInfo;
@@ -153,5 +278,13 @@ class VersionState<T extends StatefulWidget> extends BaseState<T>{
     }).then((value){
     });
   }*/
+
+  @override
+  void dispose() {
+    if(_scrollController != null){
+      _scrollController.dispose();
+    }
+    super.dispose();
+  }
 
 }

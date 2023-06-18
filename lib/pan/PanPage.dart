@@ -57,7 +57,7 @@ class PanPageState extends BaseDialogState<PanPage>{
   int page = 0;
   List<Data> tabsList=[];
   String icon_enable_teacher = "image/ic_unenable_teacher.png";
-  bool enable_teacher = false;
+  bool enable_teacher = true;
   int selectClassify = 0;
   String selectClassName="";
   String schoolid;
@@ -96,22 +96,22 @@ class PanPageState extends BaseDialogState<PanPage>{
     marks = "";
     marknames = "";
     if(index == 0){
-      allTopTabState.currentState.select(true);
+      /*allTopTabState.currentState.select(true);
       schoolTopTabState.currentState.select(false);
-      mineTopTabState.currentState.select(false);
+      mineTopTabState.currentState.select(false);*/
       resetSelectTab();
       updatePanList();
     }else if(index == 1){
-      allTopTabState.currentState.select(false);
+      /*allTopTabState.currentState.select(false);
       schoolTopTabState.currentState.select(true);
-      mineTopTabState.currentState.select(false);
+      mineTopTabState.currentState.select(false);*/
       resetSelectTab();
       updatePanList();
       //panSchoolStateKey.currentState.queryPanList(schoolid: schoolid,classifyid: 0,marks:marks,visible:enable_teacher);
     }else if(index == 2){
-      allTopTabState.currentState.select(false);
+      /*allTopTabState.currentState.select(false);
       schoolTopTabState.currentState.select(false);
-      mineTopTabState.currentState.select(true);
+      mineTopTabState.currentState.select(true);*/
       resetSelectTab();
       updatePanList();
       //panMineStateKey.currentState.queryPanList(classifyid: 0);
@@ -212,50 +212,70 @@ class PanPageState extends BaseDialogState<PanPage>{
               children: [
                 //顶部菜单 左右两边
                 Container(
-                  height: SizeUtil.getAppHeight(Constant.SIZE_TOP_BAR_HEIGHT),
+                  height: SizeUtil.getAppHeight(SizeUtil.getTabHeight()),
                   decoration: BoxDecoration(
                     color: Colors.white
                   ),
+                  alignment: Alignment(0,0),
                   padding: EdgeInsets.symmetric(
                       horizontal: SizeUtil.getAppWidth(20)
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  child: Stack(
                     children: [
                       //左边
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: SizeUtil.getAppWidth(30)),
-                            child: PanTopTabButton(key:allTopTabState,name: "全部", tab: "", index: 0, clickCB: changeTab),
+                            child: InkWell(
+                              onTap: (){
+                                changeTab(0);
+                              },
+                              child: Image.asset(page == 0 ? "image/ic_photo_all_select.png" : "image/ic_photo_all_normal.png",height: SizeUtil.getAppHeight(80),fit: BoxFit.contain,),
+                            ),
+                            //child: PanTopTabButton(key:allTopTabState,name: "全部相册", tab: "", index: 0, clickCB: changeTab),
                           ),
                           Padding(
                             padding: EdgeInsets.only(right: SizeUtil.getAppWidth(30)),
-                            child: PanTopTabButton(key:schoolTopTabState,name: "学校", tab: "", index: 1, clickCB: changeTab),
+                            child: InkWell(
+                              onTap: (){
+                                changeTab(1);
+                              },
+                              child: Image.asset(page == 1 ? "image/ic_photo_school_select.png" : "image/ic_photo_school_normal.png",height: SizeUtil.getAppHeight(80),fit: BoxFit.contain,),
+                            ),
+                            //child: PanTopTabButton(key:schoolTopTabState,name: "学校相册", tab: "", index: 1, clickCB: changeTab),
                           ),
                           Padding(
                             padding: EdgeInsets.only(right: SizeUtil.getAppWidth(30)),
-                            child: PanTopTabButton(key:mineTopTabState,name: "我的", tab: "", index: 2, clickCB: changeTab),
+                            child: InkWell(
+                              onTap: (){
+                                changeTab(2);
+                              },
+                              child: Image.asset(page == 2 ? "image/ic_photo_mine_select.png" : "image/ic_photo_mine_normal.png",height: SizeUtil.getAppHeight(80),fit: BoxFit.contain,),
+                            ),
+                            //child: PanTopTabButton(key:mineTopTabState,name: "我的相册", tab: "", index: 2, clickCB: changeTab),
                           )
                         ],
                       ),
-                      //中间
-                      Expanded(
-                        flex: 1,
-                        child: SizedBox(),
-                      ),
                       //搜索
-                      Container(
-                        padding: EdgeInsets.only(
-                          right: SizeUtil.getAppWidth(20)
-                        ),
-                        child: ImageButton(icon: "image/ic_search.png", label: "", cb: ()=>{
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPanPage(callback: (){
+                      Positioned(
+                        right: 0,
+                        top:0,
+                        bottom: 0,
+                        child: Container(
+                          alignment: Alignment(0,0),
+                          padding: EdgeInsets.only(
+                              right: SizeUtil.getAppWidth(20)
+                          ),
+                          child: ImageButton(icon: "image/ic_search.png", label: "", cb: ()=>{
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPanPage(callback: (){
 
-                          })))
-                        }),
-                      ),
+                            })))
+                          }),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -280,10 +300,11 @@ class PanPageState extends BaseDialogState<PanPage>{
                 //广告栏
                 //CachedNetworkImage(imageUrl: ""),
                 //markname  筛选
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: SizeUtil.getAppHeight(20),
-                    horizontal: SizeUtil.getAppWidth(20)
+                Container(
+                  padding: EdgeInsets.only(
+                    left: SizeUtil.getAppHeight(20),
+                    right:SizeUtil.getAppHeight(20),
+                    top: SizeUtil.getAppWidth(20)
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -339,8 +360,8 @@ class PanPageState extends BaseDialogState<PanPage>{
                                   children: [
                                     Image.asset(
                                       enable_teacher ? "image/ic_checkbox_select.png" : "image/ic_checkbox_normal.png",
-                                      width: SizeUtil.getAppWidth(40),
-                                      height: SizeUtil.getAppWidth(40),
+                                      width: SizeUtil.getAppWidth(30),
+                                      height: SizeUtil.getAppWidth(30),
                                     ),
                                     SizedBox(width: SizeUtil.getAppWidth(10),),
                                     Text("只看老师",style: enable_teacher ? screenTeacherSelect : screenTeacherNormal,),

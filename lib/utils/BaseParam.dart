@@ -8,6 +8,8 @@ abstract class BaseParam{
 
   String param;
 
+  int page;
+
   // 读取参数json格式内容
   @override
   String toString(){

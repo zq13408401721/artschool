@@ -42,10 +42,11 @@ class CollectPageState extends BaseState{
                 decoration: BoxDecoration(
                     color: Colors.white
                 ),
+                //我的收藏
                 child:BackButtonWidget(
                   cb: (){
                     Navigator.pop(context);
-                  },title: "我的收藏",
+                  },title: "",
                 ),
               ),
               Container(

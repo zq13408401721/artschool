@@ -9,7 +9,17 @@ class PanTitle extends StatelessWidget{
   Function cb;
   String title;
 
-  PanTitle({@required this.cb,@required this.title="新建网盘"});
+  PanTitle({@required this.cb,@required this.title="新建相册"});
+
+  Widget backArrowWidget(){
+    return Container(
+        padding: EdgeInsets.only(left: ScreenUtil().setWidth(20),top: ScreenUtil().setHeight(20),bottom: ScreenUtil().setHeight(20),right: ScreenUtil().setWidth(20)),
+        child: Icon(
+          Icons.arrow_back,
+          size: 24,
+        )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +34,8 @@ class PanTitle extends StatelessWidget{
                cb();
              }
             },
-            child: Image.asset("image/ic_arrow_left.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setHeight(80),),
+            child: backArrowWidget(),
+            //child: Image.asset("image/ic_arrow_left.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setHeight(80),),
           ),
           Text("$title",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30))),),
           SizedBox(width: SizeUtil.getAppWidth(20),),

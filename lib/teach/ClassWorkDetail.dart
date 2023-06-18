@@ -412,7 +412,7 @@ class ClassWorkDetailState extends BaseViewPagerState<Works,ClassWorkDetail>{
                 BackButtonWidget(cb: (){
                   //点击返回
                   Navigator.pop(context);
-                }, title: data.author,word: '上传时间${data.createtime}',grade: data.grade,),
+                }, title: data.author,word: '${data.createtime}',grade: data.grade,),
                 /*CollectButton(margin_right:40,from: Constant.COLLECT_WORK,fromid: data.id,url: data.url,
                   name: data.name,width: data.width,height: data.height,),*/
               ],
@@ -490,7 +490,7 @@ class ClassWorkDetailState extends BaseViewPagerState<Works,ClassWorkDetail>{
                       loadover == false ? LineLoad(loadingProgress, 5.0) : SizedBox(),
                     ],
                   ),
-                  Padding(
+                  /*Padding(
                     padding: EdgeInsets.only(
                       bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
                       top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),
@@ -502,15 +502,15 @@ class ClassWorkDetailState extends BaseViewPagerState<Works,ClassWorkDetail>{
                         Text("小提示：左右滑动可以切换图片",style: Constant.smallTitleTextStyle,)
                       ],
                     ),
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(10)),),
+                  ),*/
+                  SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(40)),),
                   //score 打分与批改
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(30))),
                     child: scoreItem(data),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(40)),vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(30)),vertical: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
                     child: correctItem(data),
                   ),
                   //作品评价

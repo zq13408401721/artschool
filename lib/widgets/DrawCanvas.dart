@@ -62,7 +62,8 @@ class DrawCanvasState extends BaseState<DrawCanvas>{
                         onTap: (){
                           Navigator.pop(context);
                         },
-                        child: Image.asset("image/ic_arrow_left.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setHeight(40),),
+                        child: backArrowWidget(),
+                        //child: Image.asset("image/ic_arrow_left.png",width: ScreenUtil().setWidth(60),height: ScreenUtil().setHeight(40),),
                       ),
                       Expanded(
                         child: InkWell(

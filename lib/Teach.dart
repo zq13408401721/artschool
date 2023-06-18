@@ -39,7 +39,8 @@ class TeachState extends BaseDialogState{
 
   final List work_push = [{"id":1,"icon":"image/ic_tool_work.png"}];
   //图文课堂
-  final List push = [{"id":4,"icon":"image/ic_tool_photo.png"},{"id":5,"icon":"image/ic_tool_collect.png"},{"id":3,"icon":"image/ic_tool_plan.png"}];
+  //final List push = [{"id":4,"icon":"image/ic_tool_photo.png"},{"id":5,"icon":"image/ic_tool_collect.png"},{"id":3,"icon":"image/ic_tool_plan.png"}];
+  final List push = [{"id":4,"icon":"image/ic_tool_photo.png"},{"id":5,"icon":"image/ic_tool_collect.png"}];
 
   List currentTools = [];
 
@@ -52,7 +53,7 @@ class TeachState extends BaseDialogState{
   void changePage(CMD_MINE cmd){
     if(cmd == CMD_MINE.CMD_PAGE_MYWORK){
       setState(() {
-        tabIndex = 2;
+        tabIndex = 1;
         _teach = TEACH.WORK;
       });
     }
@@ -187,11 +188,11 @@ class TeachState extends BaseDialogState{
     if(_teach == TEACH.NET){
       _icon = "image/ic_btn_plan.png";
     }else if(_teach == TEACH.WORK){
-      _icon = "image/ic_btn_work.png";
+      _icon = "image/ic_btn_push.png";
     }else{
       _icon = "image/ic_btn_push.png";
     }
-    return Image.asset(_icon,width: ScreenUtil().setWidth(SizeUtil.getWidth(160)),height: ScreenUtil().setHeight(SizeUtil.getHeight(80)),);
+    return Image.asset(_icon,height: ScreenUtil().setHeight(SizeUtil.getHeight(80)),fit: BoxFit.contain,);
   }
 
   @override
@@ -205,36 +206,38 @@ class TeachState extends BaseDialogState{
               children: [
                 //顶部区域
                 Container(
-                  height: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.SIZE_TOP_BAR_HEIGHT)),
+                  //height: ScreenUtil().setHeight(SizeUtil.getHeight(Constant.SIZE_TOP_BAR_HEIGHT)),
+                  height: SizeUtil.getAppHeight(SizeUtil.getTabHeight()),
                   decoration: BoxDecoration(
                       color: Colors.white
                   ),
-                  padding: EdgeInsets.only(
-                    left: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
-                    right: ScreenUtil().setWidth(SizeUtil.getWidth(30)),
-                    /*top: ScreenUtil().setHeight(SizeUtil.getHeight(32)),
-                    bottom: ScreenUtil().setHeight(SizeUtil.getHeight(10)),*/
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Stack(
                     children: [
-                      Row(
-                        children: [
-                          InkWell(
-                            onTap: (){
-                              setState(() {
-                                this._teach = TEACH.CLASS;
-                                tabIndex = 0;
-                                _clearTools();
-                              });
-                            },
-                            child: Text("图文课堂",style: TextStyle(
+                      Positioned(
+                        top: 0,
+                        bottom: 0,
+                        right: 0,
+                        left: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                setState(() {
+                                  this._teach = TEACH.CLASS;
+                                  tabIndex = 0;
+                                  _clearTools();
+                                });
+                              },
+                              child: Image.asset(_teach == TEACH.CLASS ? "image/ic_work_publish_select.png" : "image/ic_work_publish_normal.png",fit: BoxFit.contain,
+                                height: SizeUtil.getAppHeight(80),),
+                              /*child: Text("发布作业",style: TextStyle(
                                 fontSize: _teach == TEACH.CLASS ? ScreenUtil().setSp(SizeUtil.getFontSize(40)) : ScreenUtil().setSp(SizeUtil.getFontSize(30)),
                                 color: _teach == TEACH.CLASS ? Colors.red : Colors.black87,
                                 fontWeight: _teach == TEACH.CLASS ? FontWeight.bold : FontWeight.normal
-                            ),),
-                          ),
-                          SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(30)),),
+                            ),),*/
+                            ),
+                            /*SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(30)),),
                           InkWell(
                             onTap: (){
                               setState(() {
@@ -243,63 +246,73 @@ class TeachState extends BaseDialogState{
                                 _clearTools();
                               });
                             },
-                            child: Text("视频课堂",style: TextStyle(
+                            child: Text("发布视频",style: TextStyle(
                                 fontSize: _teach == TEACH.NET ? ScreenUtil().setSp(SizeUtil.getFontSize(40)) : ScreenUtil().setSp(SizeUtil.getFontSize(30)),
                                 color: _teach == TEACH.NET ? Colors.red : Colors.black87,
                                 fontWeight: _teach == TEACH.NET ? FontWeight.bold : FontWeight.normal
                             ),),
-                          ),
-                          SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(30)),),
-                          InkWell(
-                            onTap: (){
-                              setState(() {
-                                this._teach = TEACH.WORK;
-                                tabIndex = 2;
-                                _clearTools();
-                              });
-                            },
-                            child: Text("课堂作业",style: TextStyle(
+                          ),*/
+                            SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(30)),),
+                            InkWell(
+                              onTap: (){
+                                setState(() {
+                                  this._teach = TEACH.WORK;
+                                  tabIndex = 1;
+                                  _clearTools();
+                                });
+                              },
+                              child: Image.asset(_teach == TEACH.WORK ? "image/ic_work_student_select.png" : "image/ic_work_student_normal.png",fit: BoxFit.contain,
+                                height: SizeUtil.getAppHeight(80),),
+                              //学生作业
+                              /*child: Text("学生作业",style: TextStyle(
                                 fontSize: _teach == TEACH.WORK ? ScreenUtil().setSp(SizeUtil.getFontSize(40)) : ScreenUtil().setSp(SizeUtil.getFontSize(30)),
                                 color: _teach == TEACH.WORK ? Colors.red : Colors.black87,
                                 fontWeight: _teach == TEACH.WORK ? FontWeight.bold : FontWeight.normal
-                            ),),
-                          )
-                        ],
+                            ),),*/
+                            )
+                          ],
+                        ),
                       ),
                       //学生账号发布作业
-                      (m_role == 1 && _teach == TEACH.WORK || m_role == 2 && _teach != TEACH.WORK) ? SizedBox() :
-                      InkWell(
-                        onTap: (){
-                          print("click");
-                          if(currentTools.length > 0){
-                            setState(() {
-                              currentTools.clear();
-                            });
-                          }else{
-                            setState(() {
-                              if(m_role == 2 && _teach == TEACH.WORK){
-                                //读取当前用户选择的班级
-                                int _cid = classWorkPageState.currentState.getCurrentSelectClass();
-                                if(classList.length == 0 || _cid == 0) return showToast("请先选班级");
-                                //发布作业
-                                openWorkGallery(context, <int>[_cid], (value){
-                                  print("作业上传返回");
-                                  //更新作业列表
-                                  classWorkPageState.currentState.getClassWork();
-                                });
-                              }else if(m_role == 1 && _teach == TEACH.CLASS){ //图文课堂
-                                currentTools.addAll(push);
-                              }else if(m_role == 1 && _teach == TEACH.NET){ //视频课堂
-                                //currentTools.addAll(plan);
-                                todayNetTeachState.currentState.planVideoClass();
-                              }
-                              print(currentTools);
-                            });
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(right: ScreenUtil().setWidth(SizeUtil.getWidth(20))),
-                          child: _pushBtn(),//Text(_teach == TEACH.NET ? "排课" : "+ 发布",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),color: Colors.purpleAccent),)
+                      Positioned(
+                        right: 0,
+                        child: (m_role == 1 && _teach == TEACH.WORK || m_role == 2 && _teach != TEACH.WORK) ? SizedBox() :
+                        InkWell(
+                          onTap: (){
+                            print("click");
+                            if(currentTools.length > 0){
+                              setState(() {
+                                currentTools.clear();
+                              });
+                            }else{
+                              setState(() {
+                                if(m_role == 2 && _teach == TEACH.WORK){
+                                  //读取当前用户选择的班级
+                                  int _cid = classWorkPageState.currentState.getCurrentSelectClass();
+                                  if(classList.length == 0 || _cid == 0) return showToast("请先选班级");
+                                  //发布作业
+                                  openWorkGallery(context, <int>[_cid], (value){
+                                    print("作业上传返回");
+                                    //更新作业列表
+                                    classWorkPageState.currentState.getClassWork();
+                                  });
+                                }else if(m_role == 1 && _teach == TEACH.CLASS){ //图文课堂
+                                  currentTools.addAll(push);
+                                }else if(m_role == 1 && _teach == TEACH.NET){ //视频课堂
+                                  //currentTools.addAll(plan);
+                                  todayNetTeachState.currentState.planVideoClass();
+                                }
+                                print(currentTools);
+                              });
+                            }
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              right: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+                              top: SizeUtil.getAppHeight(20),
+                            ),
+                            child: _pushBtn(),//Text(_teach == TEACH.NET ? "排课" : "+ 发布",style: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(40)),color: Colors.purpleAccent),)
+                          ),
                         ),
                       )
                     ],
@@ -311,7 +324,7 @@ class TeachState extends BaseDialogState{
                     index: tabIndex,
                     children: [
                       TodayTeach(key:todayTeachState,callBack: (widget as Teach).callBack,),
-                      TodayNetTeach(key: todayNetTeachState,),
+                      /*TodayNetTeach(key: todayNetTeachState,),*/
                       ClassWorkPage(key: classWorkPageState,)
                     ],
                   ),
@@ -321,7 +334,7 @@ class TeachState extends BaseDialogState{
             //工具操作栏
             Positioned(
               top: ScreenUtil().setHeight(SizeUtil.getHeight(100)),
-              right: ScreenUtil().setWidth(SizeUtil.getWidth(34)),
+              right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
               child: currentTools.length > 0 ? Container(
                 width: SizeUtil.getWidth(100),
                 height: ScreenUtil().setHeight(SizeUtil.getHeight(500)),
@@ -340,9 +353,10 @@ class TeachState extends BaseDialogState{
                 onTap: (){
                   if(tabIndex == 0){
                     todayTeachState.currentState.refresh();
-                  }else if(tabIndex == 1){
+                  }
+                  /*else if(tabIndex == 1){
                     todayNetTeachState.currentState.refresh();
-                  }else{
+                  }*/else{
                     classWorkPageState.currentState.refresh();
                   }
                 },

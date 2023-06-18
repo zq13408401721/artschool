@@ -117,7 +117,7 @@ class TeachTileState extends BaseState<TeachTile>{
   Widget build(BuildContext context) {
 
     double _height = ScreenUtil().setHeight(SizeUtil.getHeight(Constant.getScaleH(gallery.width != null ? gallery.width.toDouble() : 300, gallery.height != null ? gallery.height.toDouble() : 500)));
-    return Padding(padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20))),
+    return Padding(padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(0))),
       child: Card(
         color: Colors.white,
         elevation: 0.0,
@@ -226,7 +226,7 @@ class TeachTileState extends BaseState<TeachTile>{
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20),vertical: ScreenUtil().setHeight(10)),
-                            child: Image.asset("image/ic_fork.png",color: Colors.black12,width: ScreenUtil().setWidth(20),height: ScreenUtil().setWidth(20),),
+                            child: Image.asset("image/ic_pan_delete.png",color: Colors.black12,width: ScreenUtil().setWidth(30),height: ScreenUtil().setWidth(30),),
                           )
                         )
                       ],

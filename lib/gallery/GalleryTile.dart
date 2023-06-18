@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yhschool/bean/entity_gallery_classify.dart';
 import 'package:yhschool/bean/entity_gallery_list.dart';
 import 'package:yhschool/utils/Constant.dart';
+import 'package:yhschool/utils/ImageType.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 
 class GalleryTile extends StatelessWidget{
@@ -14,9 +15,14 @@ class GalleryTile extends StatelessWidget{
   dynamic data;
   String smallurl = "";
   bool hideWord;
-  GalleryTile({Key key,@required this.data,@required this.hideWord = false}):super(key: key){
+  GalleryTile({Key key,@required this.data,@required this.hideWord = false,tileType = BigImageType.gallery}):super(key: key){
     if(this.data != null && this.data.url != null){
-      smallurl = Constant.parseNewGallerySmallString(this.data.url,this.data.width,this.data.height);
+      if(tileType == BigImageType.gallery) {
+        //smallurl = Constant.parseNewGallerySmallString(this.data.url,this.data.width,this.data.height);
+        smallurl = Constant.parseGallerySmallString(this.data.url);
+      }else{
+        smallurl = Constant.parseBookSmallString(this.data.url);
+      }
     }
   }
 
@@ -46,7 +52,11 @@ class GalleryTile extends StatelessWidget{
               ) : SizedBox()
           ),
           Padding(
-            padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(40)),left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
+            padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+                left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+                right: ScreenUtil().setWidth(SizeUtil.getWidth(40)),
+                bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20))
+            ),
             child: Text(
               '${data.name}',
               maxLines: 1,
@@ -56,7 +66,7 @@ class GalleryTile extends StatelessWidget{
             ),
           ),
           !hideWord ? Padding(
-            padding: EdgeInsets.only(top: ScreenUtil().setHeight(SizeUtil.getHeight(10)),bottom: ScreenUtil().setHeight(SizeUtil.getHeight(30)),left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
+            padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(SizeUtil.getHeight(30)),left: ScreenUtil().setWidth(SizeUtil.getWidth(40)),right: ScreenUtil().setWidth(SizeUtil.getWidth(40))),
             child: Text(
               '${data.word}',
               maxLines: 1,

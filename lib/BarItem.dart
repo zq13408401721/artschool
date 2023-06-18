@@ -29,13 +29,14 @@ class BarItem extends StatelessWidget{
         return SizedBox();
       }
       return Text(label,style: labelStyle_normal,);
-    }else if(label == "视频"){
+    }
+    /*else if(label == "视频"){
       if(select){
         label = "示范课";
       }
     }else if(label == "示范课"){
       if(!select) label = "视频";
-    }
+    }*/
     return Text(label,style: select ? labelStyle_select : labelStyle_normal,);
   }
 

@@ -130,7 +130,7 @@ class WorkTile extends StatelessWidget{
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20),vertical: ScreenUtil().setHeight(10)),
-                          child: Image.asset("image/ic_fork.png",color: Colors.black12,width: ScreenUtil().setWidth(20),height: ScreenUtil().setWidth(20),),
+                          child: Image.asset("image/ic_pan_delete.png",color: Colors.black12,width: ScreenUtil().setWidth(20),height: ScreenUtil().setWidth(20),),
                         )
                       ),
                     )
