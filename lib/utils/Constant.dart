@@ -1,11 +1,14 @@
-import 'dart:ffi';
 import 'dart:math';
 import 'dart:ui';
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sqflite/utils/utils.dart';
 import 'package:yhschool/bean/class_room_datelist_bean.dart';
 import 'package:yhschool/utils/EnumType.dart';
 import 'dart:math';
@@ -151,6 +154,11 @@ class Constant{
 
   //低版本ipad资源地址
   static final String LOW_IOS_RESURL = "http://res.yimios.com:9070/";
+
+  static final String GEET_AAPID = "e13f819adad8f580497e17486369db62";
+  static final String GEET_APPKEY = "d2c9f105e828f358706dfbde84bae72a";
+  static bool SDCARD_DALOG = false;
+
 
   static String logn_bg(bool isandroid){
     if(isandroid){
@@ -443,5 +451,16 @@ class Constant{
     print("parseRole $role");
     if(role == null || role == 0) return "";
     return role == 1 || role == 3 ? "老师" : "学生";
+  }
+
+  /**
+   * geet sign签名
+   */
+  static String getSha256(String param){
+    var bytes = utf8.encode(param);
+    var key = utf8.encode(GEET_APPKEY);
+    var hmac = new Hmac(sha256, key);
+    var digest = hmac.convert(bytes);
+    return hex(digest.bytes);
   }
 }

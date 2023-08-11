@@ -42,6 +42,8 @@ class LoginState extends BaseState<Login>{
 
   var loading = false;
 
+  var ischecked = false;
+
   @override
   void initState() {
     permissionCheck = false;
@@ -153,7 +155,9 @@ class LoginState extends BaseState<Login>{
         print("policy:${value}");
         if(value == null || value == 0){
           isShowDialog = true;
-          Future.delayed(Duration(milliseconds: 300)).then((value) => showPolicyDialog(context));
+          Future.delayed(Duration(milliseconds: 300)).then((value) => showPolicyDialog(context,callback: (){
+
+          }));
         }
       });
     }
@@ -294,6 +298,9 @@ class LoginState extends BaseState<Login>{
                       children: [
                         InkWell(
                           onTap: (){
+                            if(!this.ischecked){
+                              return showToast("请勾选用户协议");
+                            }
                             if(this._username == null || this._password == null || this._username.length == 0 || this._password.length == 0){
                               return showToast("请输入账号或密码");
                             }
@@ -331,6 +338,9 @@ class LoginState extends BaseState<Login>{
                           children: [
                             InkWell(
                                 onTap: (){
+                                  if(!this.ischecked){
+                                    return showToast("请勾选用户协议");
+                                  }
                                   Constant.isLogin = false;
                                   //激活账号
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>ActiveCodePage())).then((value){
@@ -346,6 +356,9 @@ class LoginState extends BaseState<Login>{
                             SizedBox(width: SizeUtil.getAppWidth(20),),
                             InkWell(
                                 onTap: (){
+                                  if(!this.ischecked){
+                                    return showToast("请勾选用户协议");
+                                  }
                                   Constant.isLogin = false;
                                   //激活账号
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=> AccountStage(url: 'http://res.yimios.com:9070/app/%E9%A2%86%E5%8F%96%E8%B4%A6%E5%8F%B7%E4%BA%8C%E7%BB%B4%E7%A0%81.png',title: "免费获取体验帐号",)));
@@ -367,29 +380,39 @@ class LoginState extends BaseState<Login>{
                 child: Container(
                     alignment: Alignment(0,0),
                     margin: EdgeInsets.only(bottom: 50),
-                    child: RichText(
-                      text: TextSpan(
-                          text: "登录代表同意",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25))
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Checkbox(value: this.ischecked, onChanged: (value){
+                          setState(() {
+                            this.ischecked = value;
+                          });
+                        },),
+                        RichText(
+                          text: TextSpan(
+                              text: "登录代表同意",
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25))
+                              ),
+                              children:[
+                                TextSpan(
+                                    text: "《艺画美术APP用户协议》",
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25))
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                            WebStage(url: 'files/treaty.html', title: "艺画美术app用户协议")
+                                        ));
+                                      }
+                                )
+                              ]
                           ),
-                          children:[
-                            TextSpan(
-                                text: "《艺画美术APP用户协议》",
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(25))
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                        WebStage(url: 'files/treaty.html', title: "艺画美术app用户协议")
-                                    ));
-                                  }
-                            )
-                          ]
-                      ),
+                        )
+                      ],
                     )
                 ),
               ),

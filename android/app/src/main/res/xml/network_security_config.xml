@@ -5,4 +5,10 @@
             <certificates src="system" />
         </trust-anchors>
     </base-config>
+    <!-- Android 9.0 上 http 请求域名白名单配置  -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">cmpassport.com</domain>
+        <domain includeSubdomains="true">10010.com</domain>
+        <domain includeSubdomains="true">id6.me</domain>
+    </domain-config>
 </network-security-config>

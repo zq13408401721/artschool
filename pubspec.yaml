@@ -50,7 +50,7 @@ dependencies:
   flutter_html: ^2.2.1
   #webview_flutter_plus: ^0.2.2
   flutter_webview_plugin: ^0.4.0
-  multi_image_picker: ^4.8.1 # 多张图选择
+  multi_image_picker: ^4.8.1 # 多张图选择flutter_absolute_path
   http_parser: ^4.0.0
   #loading_indicator_view: ^1.1.0 # loading动画
   flutter_image_compress: ^1.1.0  #图片压缩
@@ -79,7 +79,9 @@ dependencies:
   barcode_scan2: ^4.1.4 #二维码
   event_bus: ^2.0.0
   flutter_swiper: ^1.1.6 #轮播图
-  umeng_common_sdk: ^1.2.3 #友盟
+  #umeng_common_sdk: ^1.2.3 #友盟
+  gt_onelogin_flutter_plugin: ^0.0.3 #极验登录
+  crypto: ^3.0.2
 
 dev_dependencies:
   flutter_test:

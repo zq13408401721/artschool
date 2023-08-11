@@ -12,6 +12,7 @@ class DataUtils{
   static const String api_tab = "home/officialTab"; //主页tab接口
   static const String api_categorybytabid = "home/queryCategoryByTab"; //获取视频分类对应的分组数据
   static const String api_login = "user/login"; //登录接口 username password
+  static const String api_phonelogin = "login/loginPhone"; //手机号登录
   static const String api_updateuserinfo = "user/updateUserInfo"; //更新用户信息 nickname
   static const String api_videolist_category = "home/videoListCategory"; //主页根据章节获取视频列表
   static const String api_gallery = "home/galleryTabs"; //图库的tab数据
@@ -84,7 +85,7 @@ class DataUtils{
 
   static const String api_booktab = "book/queryBookTab";  //书籍分类
   static const String api_booklist = "book/queryBookList"; //书籍列表
-  static const String api_bookimagelist = "book/【"; //书籍图片列表
+  static const String api_bookimagelist = "book/queryBookImageList"; //书籍图片列表
 
 
   static const String api_getschoolteacher = "shared/getSchoolTeacher"; //获取学校老师
@@ -198,6 +199,13 @@ class DataUtils{
   static const String api_ccliverecordlist = "v2/record/info"; //cc直播回放
   static const String api_ccliveroominfo = "room/search"; //直播房间信息
   static const String api_ccliveroomstate = "rooms/publishing"; //直播间状态
+
+
+  /*************geetest*****************/
+  static const String api_geetcheckgateway = "check_gateway"; //本机校验
+  static const String api_registerphone = "login/registerPhone"; //手机号注册
+  static const String api_phone_code = "login/requestPhoneCode"; //获取验证码
+  static const String api_phone_active = "login/phoneActive"; //手机号激活
 
 
 }

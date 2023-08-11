@@ -264,7 +264,7 @@ class VideoPageState extends VersionState<VideoPage>{
   /**
    * 检查是否弹出广告
    */
-  void checkAdvert(){
+  void checkAdvet(){
     Navigator.push(context, MaterialPageRoute(builder: (_context)=>AdvertVideoPage()));
   }
 
@@ -1006,7 +1006,7 @@ class VideoPageState extends VersionState<VideoPage>{
                                 height: SizeUtil.getAppHeight(80),fit: BoxFit.contain,),
                             ),
                           ),
-                          SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
+                          /*SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
                           InkWell(
                             onTap: (){
                               //云视频
@@ -1027,7 +1027,7 @@ class VideoPageState extends VersionState<VideoPage>{
                               child: Image.asset(tabIndex == 0 ? "image/ic_video_alltab_select.png" : "image/ic_video_alltab_normal.png",
                                 height: SizeUtil.getAppHeight(80),fit: BoxFit.contain,),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),

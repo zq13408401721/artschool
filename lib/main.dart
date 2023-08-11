@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:umeng_common_sdk/umeng_common_sdk.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/FlutterPlugins.dart';
 import 'package:yhschool/Login.dart';
@@ -58,7 +57,7 @@ class StartPageState extends BaseState{
   @override
   void initState() {
     permissionCheck = false;
-    UmengCommonSdk.initCommon("64807122a1a164591b2cefbf", "6480686aa1a164591b2ceab5", "art");
+    //UmengCommonSdk.initCommon("64807122a1a164591b2cefbf", "6480686aa1a164591b2ceab5", "art");
 
     //查看本地是否有app服务器地址
     DBUtils.dbUtils.then((db){
@@ -90,7 +89,7 @@ class StartPageState extends BaseState{
       if(bean.errno == 0){
         registerNet(bean.data.apiUrl, bean.data.uploadUrl);
         //registerNet("http://res.yimios.com:9060/api/", bean.data.uploadUrl);
-        //registerNet("http://192.168.0.195:12005/api/", bean.data.uploadUrl);
+        //registerNet("http://192.168.0.195:12000/api/", bean.data.uploadUrl);
         // 1为测试服 2正式服
         if(bean.data.state == 2){
           DBUtils.dbUtils.then((db){
@@ -122,7 +121,7 @@ class StartPageState extends BaseState{
                 }else{
                   if(!Constant.isLogin){
                     Constant.isLogin = true;
-                    Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>Login())).then((value){
+                    Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>LoginApp())).then((value){
                       exit(0);
                     });
                   }
@@ -130,7 +129,7 @@ class StartPageState extends BaseState{
               }else{
                 if(!Constant.isLogin){
                   Constant.isLogin = true;
-                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>Login())).then((value){
+                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>LoginApp())).then((value){
                     exit(0);
                   });
                 }
@@ -142,7 +141,7 @@ class StartPageState extends BaseState{
         }else{
           if(!Constant.isLogin){
             Constant.isLogin = true;
-            Navigator.push(context,MaterialPageRoute(builder: (context)=>Login())).then((value){
+            Navigator.push(context,MaterialPageRoute(builder: (context)=>LoginApp())).then((value){
               exit(0);
             });
           }

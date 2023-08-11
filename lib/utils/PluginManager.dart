@@ -9,4 +9,5 @@ class PluginManager {
     String result = await _channel.invokeMethod('openVideoDetail',param);
     return result;
   }
+
 }

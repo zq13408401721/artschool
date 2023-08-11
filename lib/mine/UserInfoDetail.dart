@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yhschool/BaseState.dart';
+import 'package:yhschool/login/LoginApp.dart';
 import 'package:yhschool/mine/CustomTile.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DBUtils.dart';
@@ -63,8 +64,12 @@ class UserInfoDetailState extends BaseDialogState{
     if(policy != null){
       prefs.setInt("policy", policy);
     }
-    prefs.setString("username", username);
-    prefs.setString("password", pw);
+    if(username != null){
+      prefs.setString("username", username);
+    }
+    if(pw != null){
+      prefs.setString("password", pw);
+    }
     return 1;
   }
 
@@ -182,7 +187,7 @@ class UserInfoDetailState extends BaseDialogState{
                         onTap: (){
                           //退出登录
                           loginOut().then((value){
-                            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>Login())).then((value) => {
+                            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>LoginApp())).then((value) => {
 
                             });
                           });

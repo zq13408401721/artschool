@@ -1,6 +1,9 @@
 package com.yhschool
 
+import android.Manifest
 import android.app.Application
+import android.os.Build
+import java.security.Permission
 
 class MyApp:Application() {
 
@@ -11,6 +14,10 @@ class MyApp:Application() {
     override fun onCreate() {
         super.onCreate()
         app = this
+        init()
+    }
+
+    fun init(){
     }
 
 }

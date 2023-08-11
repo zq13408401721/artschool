@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:yhschool/FlutterPlugins.dart';
 import 'package:yhschool/bean/eg_word_bean.dart';
 import 'package:yhschool/bean/login_bean.dart';
 import 'package:yhschool/main.dart';
@@ -28,6 +29,7 @@ import 'Home.dart';
 import 'Login.dart';
 import 'WebStage.dart';
 import 'bean/BaseBean.dart';
+import 'login/PhoneActiveCodePage.dart';
 
 // 标题点击返回操作
 typedef CallbackFun = void Function();
@@ -53,19 +55,23 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   String welcome="",schoolname="";
   int m_role;
   bool isShowDialog = false;
+
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String,dynamic> deviceData = <String,dynamic>{};
   //当前用户所在的班级ID
   List<String> selfclassids = List.empty();
   bool permissionCheck = true;
 
-
   @override
   void initState() async{
     super.initState();
     if(Platform.isAndroid){
       if(permissionCheck){
-        await permission_android();
+        //await permission_android();
+        var result = await FlutterPlugins.requestAndroidPermission();
+        if(result == 1000) {
+          await permission_android();
+        }
       }
       this.isAndroid = true;
     }else{
@@ -124,7 +130,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   String checkLoginExpire(String result){
     if(result == null || result.isEmpty || !mounted) return "";
     BaseBean _baseBean = BaseBean.fromJson(json.decode(result));
-    if(_baseBean.errno == 99999 || _baseBean.errno == 99997){
+    if(_baseBean.errno == 99999 || _baseBean.errno == ReqCode.Code_NoActive || _baseBean.errno == ReqCode.Code_PhoneNoActive){
       if(_baseBean.errno == 99999){
         Fluttertoast.showToast(msg: "账号在其他地方登录",
             toastLength: Toast.LENGTH_SHORT,
@@ -133,7 +139,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
             textColor: Colors.white,
             fontSize: 16.0);
         clearCache();
-      }else if(_baseBean.errno == 99997){
+      }else if(_baseBean.errno == ReqCode.Code_NoActive){
         Fluttertoast.showToast(msg: "账号已到期或未激活",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
@@ -144,6 +150,13 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
         Timer(Duration(seconds: 2), (){
           exit(0);
         });
+      }else if(_baseBean.errno == ReqCode.Code_PhoneNoActive){
+        Fluttertoast.showToast(msg: "账号已到期或未激活",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.deepOrangeAccent,
+            textColor: Colors.white,
+            fontSize: 24.0);
       }
       return "";
     }else if(_baseBean.errno == 602){
@@ -404,6 +417,16 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     prefs.setInt(date, dateId);
   }
 
+  void savePhoneDialogState() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("phonedialog", true);
+  }
+
+  Future<bool> getPhoneDialogState() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool("phonedialog");
+  }
+
   /**
    * 判断当前用户是否在此班级中
    */
@@ -560,6 +583,24 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   }
 
   /**
+   * android手机号权限
+   */
+  permission_phone_android() async{
+    List<Permission> permissions = [];
+    if(!await Permission.phone.isGranted){
+      permissions.add(Permission.phone);
+    }
+    if(permissions.length > 0){
+      Map<Permission,PermissionStatus> status = await permissions.request();
+      if(!await Permission.phone.isGranted){
+        exit(0);
+      }
+    }else{
+      print("存储相机相册权限已经申请");
+    }
+  }
+
+  /**
    * android
    */
   permission_android() async{
@@ -568,14 +609,23 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     if(!await Permission.storage.isGranted){
       permissions.add(Permission.storage);
     }
+
     if(!await Permission.photos.isGranted){
       permissions.add(Permission.photos);
     }
     if(!await Permission.camera.isGranted){
       permissions.add(Permission.camera);
     }
+    if(!await Permission.phone.isGranted){
+      permissions.add(Permission.phone);
+    }
     if(permissions.length > 0){
-      Map<Permission,PermissionStatus> status = await permissions.request();
+      if(!Constant.SDCARD_DALOG){
+        Constant.SDCARD_DALOG = true;
+        await showSdCardPermissionDialog(context,callback: () async{
+          Map<Permission,PermissionStatus> status = await permissions.request();
+        });
+      }
     }else{
       print("存储相机相册权限已经申请");
     }
@@ -808,7 +858,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     return word;
   }
 
-  void showPolicyDialog(BuildContext context) async{
+  void showPolicyDialog(BuildContext context,{callback:Function}) async{
     isShowDialog = true;
     await showDialog(context: context,barrierDismissible: false, builder: (BuildContext _context){
       return StatefulBuilder(
@@ -890,12 +940,206 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
                isShowDialog = false;
                savePolicy().then((value) {
                  print("savePolicy: $value");
+                 if(callback != null){
+                   callback();
+                 }
                  Navigator.pop(context);
                });
              },child: Text("同意"),)
            ],
          );
         }
+      );
+    });
+  }
+
+  /**
+   * 读取设备手机号
+   */
+  void showPhonePermissionDialog(BuildContext context,{callback:Function}) async{
+    isShowDialog = true;
+    await showDialog(context: context,barrierDismissible: false, builder: (BuildContext _context){
+      return StatefulBuilder(
+          builder: (_context,_state){
+            return AlertDialog(
+              contentPadding: EdgeInsets.all(0),
+              content: SingleChildScrollView(
+                child: Container(
+                    width: ScreenUtil().setWidth(300),
+                    height:ScreenUtil().setHeight(300),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(10)))
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: ScreenUtil().setHeight(40),
+                              bottom:ScreenUtil().setHeight(40)
+                          ),
+                          child: Text("艺画美术将会用到您的电话权限",style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Colors.black54),),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: ScreenUtil().setWidth(40),
+                              right:ScreenUtil().setWidth(40)
+                          ),
+                          child: RichText(
+                              text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                        text:"用于读取设备硬件信息，判断账户与设备的关联关系，通过技术与风控规则提高登录与交易安全性。",
+                                        style:TextStyle(color: Colors.black54,fontSize: ScreenUtil().setSp(30),wordSpacing: 20,letterSpacing: 2)
+                                    ),
+                                    /*TextSpan(
+                                        text: "《服务协议》",
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                                WebStage(url: 'http://res.yimios.com:9050/html/privacy.html', title: "艺画美术app隐私协议")
+                                            ));
+                                          },
+                                        style: TextStyle(color:Colors.blueAccent,fontSize: ScreenUtil().setSp(30))
+                                    ),
+                                    TextSpan(
+                                        text:",",
+                                        style: TextStyle(color:Colors.black54,fontSize: ScreenUtil().setSp(30))
+                                    ),
+                                    TextSpan(
+                                        text: "《隐私协议》",
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                                WebStage(url: 'http://res.yimios.com:9050/html/policy.html', title: "艺画美术app隐私协议")
+                                            ));
+                                          },
+                                        style: TextStyle(color:Colors.blueAccent,fontSize: ScreenUtil().setSp(30))
+                                    ),
+                                    TextSpan(
+                                        text: "了解详细信息，如你同意，请点击\"同意\"开始接受我们的服务。",
+                                        style: TextStyle(color:Colors.black54,fontSize: ScreenUtil().setSp(30))
+                                    )*/
+                                  ]
+                              )),
+                        ),
+
+                      ],
+                    )
+                ),
+              ),
+              actions: [
+                /*TextButton(onPressed: (){
+                  isShowDialog = false;
+                  exit(0);
+                }, child: Text("暂不同意")),*/
+                TextButton(onPressed: (){
+                  isShowDialog = false;
+                  savePolicy().then((value) {
+                    print("savePolicy: $value");
+                    if(callback != null){
+                      callback();
+                    }
+                    Navigator.pop(context);
+                  });
+                },child: Text("我知道了"),)
+              ],
+            );
+          }
+      );
+    });
+  }
+
+  /**
+   * 存储权限说明
+   */
+  void showSdCardPermissionDialog(BuildContext context,{callback:Function}) async{
+    isShowDialog = true;
+    await showDialog(context: context,barrierDismissible: false, builder: (BuildContext _context){
+      return StatefulBuilder(
+          builder: (_context,_state){
+            return AlertDialog(
+              contentPadding: EdgeInsets.all(0),
+              content: SingleChildScrollView(
+                child: Container(
+                    width: ScreenUtil().setWidth(300),
+                    height:ScreenUtil().setHeight(300),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(10)))
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: ScreenUtil().setHeight(40),
+                              bottom:ScreenUtil().setHeight(40)
+                          ),
+                          child: Text("设备权限使用说明",style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Colors.black54),),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: ScreenUtil().setWidth(40),
+                              right:ScreenUtil().setWidth(40)
+                          ),
+                          child: RichText(
+                              text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                        text:"需要访问设备的存储权限进行图片保存等读取行为，请点允许。",
+                                        style:TextStyle(color: Colors.black54,fontSize: ScreenUtil().setSp(30),wordSpacing: 20,letterSpacing: 2)
+                                    ),
+                                    /*TextSpan(
+                                        text: "《服务协议》",
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                                WebStage(url: 'http://res.yimios.com:9050/html/privacy.html', title: "艺画美术app隐私协议")
+                                            ));
+                                          },
+                                        style: TextStyle(color:Colors.blueAccent,fontSize: ScreenUtil().setSp(30))
+                                    ),
+                                    TextSpan(
+                                        text:",",
+                                        style: TextStyle(color:Colors.black54,fontSize: ScreenUtil().setSp(30))
+                                    ),
+                                    TextSpan(
+                                        text: "《隐私协议》",
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                                WebStage(url: 'http://res.yimios.com:9050/html/policy.html', title: "艺画美术app隐私协议")
+                                            ));
+                                          },
+                                        style: TextStyle(color:Colors.blueAccent,fontSize: ScreenUtil().setSp(30))
+                                    ),
+                                    TextSpan(
+                                        text: "了解详细信息，如你同意，请点击\"同意\"开始接受我们的服务。",
+                                        style: TextStyle(color:Colors.black54,fontSize: ScreenUtil().setSp(30))
+                                    )*/
+                                  ]
+                              )),
+                        ),
+
+                      ],
+                    )
+                ),
+              ),
+              actions: [
+                /*TextButton(onPressed: (){
+                  isShowDialog = false;
+                  exit(0);
+                }, child: Text("暂不同意")),*/
+                TextButton(onPressed: (){
+                  isShowDialog = false;
+                  if(callback != null){
+                    callback();
+                  }
+                  Navigator.pop(context);
+                },child: Text("允许"),)
+              ],
+            );
+          }
       );
     });
   }

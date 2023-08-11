@@ -16,6 +16,8 @@ import 'package:yhschool/Home.dart';
 import 'package:yhschool/Login.dart';
 import 'package:yhschool/bean/BaseBean.dart';
 import 'package:yhschool/bean/class_room_datelist_bean.dart';
+import 'package:yhschool/login/PhoneActiveCodePage.dart';
+import 'package:yhschool/other/ActiveCodePage.dart';
 import 'package:yhschool/utils/BaseParam.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DBUtils.dart';
@@ -24,6 +26,11 @@ import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 
+
+class ReqCode{
+  static final Code_NoActive = 99997;
+  static final Code_PhoneNoActive = 99993;
+}
 
 class _ResultErr{
   int _errno;
@@ -56,6 +63,14 @@ var ccUtil = HttpUtil(
   baseUrl:"https://api.csslcloud.net/api/",
 );
 
+/**
+ * 一键登录
+ */
+HttpUtil geekUtil = HttpUtil(
+  baseUrl: "https://onepass.geetest.com/v2.0/",
+  header: headers
+);
+
 /*var httpUtil = HttpUtil(
     //baseUrl:"http://server.yimios.com/api/",
     //baseUrl: "http://res.yimios.com:9060/api/", //test
@@ -65,6 +80,7 @@ var ccUtil = HttpUtil(
 
 HttpUtil httpUtil;
 HttpUtil httpIssueUpload;
+HttpUtil geetUtil;
 
 var httpUtilJson = HttpUtil(
     baseUrl:"http://server.yimios.com/api/",
@@ -280,6 +296,13 @@ class HttpUtil {
       //检查返回的类型 99999 账号在其他地方登录  99997 账号有效期到期
       //BaseBean _baseBean = BaseBean.fromJson(json.decode(response.data));
       print("$url result:${response.data.toString()}");
+      var map = json.decode(response.data);
+      //密码账号过期
+      if(map["errno"] == ReqCode.Code_NoActive){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ActiveCodePage()));
+      }else if(map["errno"] == ReqCode.Code_PhoneNoActive){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>PhoneActiveCodePage(map["phone"])));
+      }
       return response.data.toString();
     } on DioError catch (e) {
       print("response DioError $url :${response} ${e.error} ${e.message}");

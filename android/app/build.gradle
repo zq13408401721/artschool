@@ -37,7 +37,7 @@ android {
 
     defaultConfig {
         applicationId "com.yhschool"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -45,6 +45,12 @@ android {
     }
 
     signingConfigs {
+        debug {
+            keyAlias 'key0'
+            keyPassword 'art523'
+            storeFile file('../art.jks')
+            storePassword 'art523'
+        }
         release {
             keyAlias 'key0'
             keyPassword 'art523'
@@ -106,17 +112,19 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.android.support:multidex:1.0.1'
 
-    implementation 'com.umeng.umsdk:common:9.5.6'
+    /*implementation 'com.umeng.umsdk:common:9.5.6'
     implementation 'com.umeng.umsdk:asms:1.6.3'
     implementation 'com.umeng.umsdk:link:1.2.0'
 
     implementation 'com.umeng.umsdk:share-core:7.3.2'
     //微信
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
-    implementation 'com.umeng.umsdk:share-wx:7.3.2'
+    implementation 'com.umeng.umsdk:share-wx:7.3.2'*/
 
     //极验
-    implementation(name:'geetest_onelogin_android_v2.8.4_20230510',ext:'aar')
+    //implementation(name:'geetest_onelogin_android_v2.8.4_20230510',ext:'aar')
+    //极验登录验证
+    //implementation 'com.geetest.android:onelogin:2.8.4'
 
     //anko库
     //implementation "org.jetbrains.anko:anko:0.10.8"

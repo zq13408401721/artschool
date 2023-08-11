@@ -15,4 +15,10 @@ class FlutterPlugins{
   static Future<void> setIosVideoPlay(String url) async {
     await channel_plugins.invokeMethod('setVideoPlay',url);
   }
+
+  //主要针对android13 特殊权限(相册 视频 音频)
+  static Future<int> requestAndroidPermission() async {
+    var result = await channel_plugins.invokeMethod('permission');
+    return result;
+  }
 }
