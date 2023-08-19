@@ -66,6 +66,7 @@ class MainActivity: FlutterActivity() {
         resultCall = result
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             result.success(1000)
+            resultCall = null
         } else {
             var permissions = arrayListOf<String>()
             for(item in arrayOf(Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_IMAGES,
@@ -75,10 +76,11 @@ class MainActivity: FlutterActivity() {
                 }
             }
             if(permissions.size > 0){
-                requestPermissions(permissions.toTypedArray(),100);
+                requestPermissions(permissions.toTypedArray(),100)
             }else{
                 if(resultCall != null){
                     resultCall!!.success(0)
+                    resultCall = null
                 }
             }
         }
@@ -97,7 +99,7 @@ class MainActivity: FlutterActivity() {
                 break
             }
         }
-
+        Log.d("tag", "onRequestPermissionsResult " + resultCall)
         if(resultCall != null) {
             Log.d("tag","resultCall is not null")
             if(result){

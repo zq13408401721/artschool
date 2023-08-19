@@ -19,8 +19,10 @@ import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/EnumType.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
+import 'package:yhschool/utils/PluginManager.dart';
 import 'package:yhschool/widgets/CropImageRoute.dart';
 
+import 'FlutterPlugins.dart';
 import 'UploadDialog.dart';
 import 'bean/LocalFile.dart';
 
@@ -102,6 +104,29 @@ abstract class BasePhotoState<T extends StatefulWidget> extends BaseState<T>{
    * 打开本地相机相册图片选取功能
    */
   void _openGallery(BuildContext context,Function cb,int max) async {
+    //先进行相机相册权限判断
+    //如果是android14以上单独处理
+    if(this.isAndroid){
+      var result = await FlutterPlugins.requestAndroidPermission();
+      if(result == 1000) {
+        await permissionPhoto((result){
+          if(!result){
+            print("没有打开对应的权限");
+            showToast("没有相机相册权限无法使用该功能");
+            return;
+          }
+          print("打开相册");
+          photos(cb,max);
+        });
+      }else{
+        photos(cb,max);
+      }
+    }else{
+      photos(cb,max);
+    }
+  }
+
+  void photos(Function cb,int max){
     MultiImagePicker.pickImages(
         maxImages: max,
         enableCamera: true,
@@ -114,7 +139,8 @@ abstract class BasePhotoState<T extends StatefulWidget> extends BaseState<T>{
             selectionLimitReachedText: '最多选择${max}张照片'
         )
     ).then((value) async {
-      if(!mounted || value.length == 0) return;
+      print("value :$value");
+      if(!mounted || value == null || value.length == 0) return;
       //_imgs = [];
       int sort = 0;
       int time = DateTime.now().millisecondsSinceEpoch;
@@ -135,20 +161,20 @@ abstract class BasePhotoState<T extends StatefulWidget> extends BaseState<T>{
         _files.add(localFile);
 
         /*print("图片"+item.name+"size:"+_data.lengthInBytes.toString() + "图片上限："+Constant.MAX_IMAGE.toString());
-        if(_data.lengthInBytes < Constant.MAX_IMAGE){
-          String path = await getFilePath(item);
-          LocalFile localfile = new LocalFile(filename: item.name, path: path,sort: time+sort,date: date);
-          //_imgs.add(item);
-          _files.add(localfile);
-        }else{
-          //showToast(item.name+"超出限制大小");
-          //压缩图片
-          String path = await compressImage(item);
-          //ByteData byteData = await rootBundle.load(path);
-          //print("压缩以后的图片大小："+byteData.lengthInBytes.toString());
-          LocalFile localFile = new LocalFile(filename: item.name, path: path,sort: time+sort,date: date);
-          _files.add(localFile);
-        }*/
+              if(_data.lengthInBytes < Constant.MAX_IMAGE){
+                String path = await getFilePath(item);
+                LocalFile localfile = new LocalFile(filename: item.name, path: path,sort: time+sort,date: date);
+                //_imgs.add(item);
+                _files.add(localfile);
+              }else{
+                //showToast(item.name+"超出限制大小");
+                //压缩图片
+                String path = await compressImage(item);
+                //ByteData byteData = await rootBundle.load(path);
+                //print("压缩以后的图片大小："+byteData.lengthInBytes.toString());
+                LocalFile localFile = new LocalFile(filename: item.name, path: path,sort: time+sort,date: date);
+                _files.add(localFile);
+              }*/
       }
       //上传图片文件
       if(_files.length > 0){

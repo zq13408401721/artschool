@@ -67,11 +67,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     super.initState();
     if(Platform.isAndroid){
       if(permissionCheck){
-        //await permission_android();
-        var result = await FlutterPlugins.requestAndroidPermission();
-        if(result == 1000) {
-          await permission_android();
-        }
+        await permission_android();
       }
       this.isAndroid = true;
     }else{
@@ -606,7 +602,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   permission_android() async{
     //检查存储权限
     List<Permission> permissions = [];
-    if(!await Permission.storage.isGranted){
+   /* if(!await Permission.storage.isGranted){
       permissions.add(Permission.storage);
     }
 
@@ -615,7 +611,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     }
     if(!await Permission.camera.isGranted){
       permissions.add(Permission.camera);
-    }
+    }*/
     if(!await Permission.phone.isGranted){
       permissions.add(Permission.phone);
     }
@@ -629,7 +625,43 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     }else{
       print("存储相机相册权限已经申请");
     }
+  }
 
+  /**
+   * 相机相册权限申请
+   */
+   Future<bool> permissionPhoto(Function callback) async{
+    List<Permission> permissions = [];
+    if(!await Permission.storage.isGranted){
+      permissions.add(Permission.storage);
+    }
+    if(!await Permission.photos.isGranted){
+      permissions.add(Permission.photos);
+    }
+    if(!await Permission.camera.isGranted){
+      permissions.add(Permission.camera);
+    }
+    if(permissions.length > 0){
+      if(!Constant.SDCARD_DALOG){
+        Constant.SDCARD_DALOG = true;
+        bool _bool = true;
+        await showSdCardPermissionDialog(context,callback: () async{
+          Map<Permission,PermissionStatus> status = await permissions.request();
+          for(Permission key in status.keys){
+            if(!await key.isGranted){
+              _bool = false;
+              break;
+            }
+          }
+          callback(_bool);
+        });
+      }else{
+        callback(false);
+      }
+    }else{
+      print("存储相机相册权限已经申请");
+      callback(true);
+    }
   }
 
   /*********************UI相关*****************/

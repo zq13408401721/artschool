@@ -1034,14 +1034,14 @@ class VideoPageState extends VersionState<VideoPage>{
                   ),
                   //超级直播
                   //扫码
-                  Positioned(
+                  /*Positioned(
                     right: 0,
                     top:0,
                     bottom: 0,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        /*InkWell(
+                        *//*InkWell(
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context) =>
                                   WebStage(url: 'https://support.qq.com/products/326279/faqs/121944', title: "")
@@ -1049,7 +1049,7 @@ class VideoPageState extends VersionState<VideoPage>{
                             },
                             child:Image.asset("image/ic_tips.png",width: ScreenUtil().setWidth(48),height: ScreenUtil().setWidth(48),)
                         ),
-                        SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(30)),),*/
+                        SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(30)),),*//*
                         InkWell(
                             onTap: (){
                               _openQr();
@@ -1064,7 +1064,7 @@ class VideoPageState extends VersionState<VideoPage>{
                         )
                       ],
                     ),
-                  )
+                  )*/
                 ],
               ),
             ),
