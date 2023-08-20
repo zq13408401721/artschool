@@ -452,4 +452,47 @@ class DialogManager{
     return _bool;
   }
 
+  /**
+   * 第一次进入会员提示弹框
+   */
+  Future<bool> showVipMemberDialog(BuildContext context) async{
+    bool _bool;
+    _bool = await showDialog(context: context, builder: (context){
+      return StatefulBuilder(builder: (_ct,_state){
+        return UnconstrainedBox(
+          child: SizedBox(
+            width: SizeUtil.getAppWidth(600),
+            height: SizeUtil.getAppHeight(700),
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset("image/ic_advert_member.png",
+                    width: SizeUtil.getAppWidth(500),
+                    height: SizeUtil.getAppHeight(500),
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(height: SizeUtil.getAppHeight(50),),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context,true);
+                    },
+                    child: Container(
+                      child: Image.asset("image/ic_fork.png",
+                        width: SizeUtil.getAppWidth(60),
+                        height: SizeUtil.getAppWidth(60),
+                        color: Colors.grey,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      });
+    });
+    return _bool;
+  }
+
 }

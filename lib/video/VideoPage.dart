@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
@@ -9,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:yhschool/ImagePage.dart';
 import 'package:yhschool/VersionState.dart';
 import 'package:yhschool/VideoMore.dart';
 import 'package:yhschool/bean/advert_video_bean.dart';
@@ -21,13 +23,17 @@ import 'package:yhschool/bean/school_video_tab_bean.dart' as Tab;
 import 'package:yhschool/bean/video_a_i_bean.dart';
 import 'package:yhschool/bean/video_tab.dart' as V;
 import 'package:yhschool/live/LivePage.dart';
+import 'package:yhschool/login/PhoneActiveCodePage.dart';
+import 'package:yhschool/other/AboutYH.dart';
 import 'package:yhschool/other/AdvertVideoPage.dart';
 import 'package:yhschool/other/QRViewPage.dart';
+import 'package:yhschool/popwin/DialogManager.dart';
 import 'package:yhschool/utils/Banner.dart';
 import 'package:yhschool/utils/BaseParam.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DataUtils.dart';
 import 'package:yhschool/utils/HttpUtils.dart';
+import 'package:yhschool/utils/ImagePageType.dart';
 import 'package:yhschool/utils/SizeUtil.dart';
 import 'package:yhschool/video/SchoolVideoChoiceTile.dart';
 import 'package:yhschool/video/SchoolVideoListPage.dart';
@@ -148,6 +154,10 @@ class VideoPageState extends VersionState<VideoPage>{
   int videoGroupPage = 1;
   int videoGroupSize = 20;
 
+  int viptime = 0;
+  String viptimeword = "";
+  final StreamController<String> _vipStream = StreamController<String>();
+  Timer _timer;
 
   LiveRoomBean _liveRoomBean;
   //视频广告
@@ -159,6 +169,8 @@ class VideoPageState extends VersionState<VideoPage>{
 
   //分类对应的页码
   Map<int,_VideoGroupParam> pageMap = new HashMap();
+  List banners = List.of(<String>["image/banner1.jpg","image/banner2.jpg","image/banner3.jpg",
+    "image/banner4.jpg","image/banner5.jpg"]);
 
   @override
   void initState() {
@@ -170,6 +182,11 @@ class VideoPageState extends VersionState<VideoPage>{
     _tabNormalStyle = TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(30)),color: Colors.black87);
     marqueeStyle = TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(36)),color: Colors.black54);
     getUserInfo().then((value){
+      //value["endtime"] = DateTime.now().millisecondsSinceEpoch + 3600 * 24 * 10;
+      print("showtime value:${value['endtime']} $value");
+      if(value["endtime"] != null){
+        showVipTime(Constant.parseTimetoInt(value["endtime"]));
+      }
       setState(() {
         schoolname = value["schoolname"];
       });
@@ -190,9 +207,44 @@ class VideoPageState extends VersionState<VideoPage>{
     //getAIVideo();
     getSchoolBrochure();
     getUserGroup();
-    getLiveRoom();
+    //getLiveRoom();
 
     //checkAdvert();
+
+    showVipDialog();
+  }
+
+  void showVipDialog() async{
+    bool _bool = await getVipDialog();
+    if(_bool == null || !_bool){
+      DialogManager().showVipMemberDialog(context).then((value){
+        saveVipDialog();
+      });
+    }
+  }
+
+  void showVipTime(int endtime){
+    int now = (DateTime.now().millisecondsSinceEpoch/1000).toInt();
+    print("showTime: now:$now endtime:$endtime");
+    if(endtime > now){
+      viptime = endtime - now;
+      _timer = Timer.periodic(Duration(seconds:1), (timer) {
+        viptime--;
+        if(viptime < 0){
+          closeTime();
+        }
+        viptimeword = Constant.parseVipTimeFormat(viptime);
+        print("showVipTime:$viptimeword $viptime");
+        _vipStream.sink.add(viptimeword);
+      });
+    }
+  }
+
+  void closeTime(){
+    if(_timer != null && _timer.isActive){
+      _timer.cancel();
+    }
+    _vipStream.close();
   }
 
   /**
@@ -326,16 +378,18 @@ class VideoPageState extends VersionState<VideoPage>{
     };
     httpUtil.post(DataUtils.api_school_video_tab,data:param,context: context).then((value){
       print("school video tab ${value}");
-      Tab.SchoolVideoTabBean tabBean = Tab.SchoolVideoTabBean.fromJson(json.decode(value));
-      if(tabBean.errno == 0){
-        tabsList2.add(Tab.Data(id: TAB_HOME,name: "首页"));
-        tabsList2.addAll(tabBean.data);
-        tabItemId = tabsList2[0].id;
-        tabItemName = tabsList2[0].name;
-        hasData = false;
-        setState(() {
-        });
-        getSchoolVideoChildTabs(tabItemId);
+      if(value != null){
+        Tab.SchoolVideoTabBean tabBean = Tab.SchoolVideoTabBean.fromJson(json.decode(value));
+        if(tabBean.errno == 0){
+          tabsList2.add(Tab.Data(id: TAB_HOME,name: "首页"));
+          tabsList2.addAll(tabBean.data);
+          tabItemId = tabsList2[0].id;
+          tabItemName = tabsList2[0].name;
+          hasData = false;
+          setState(() {
+          });
+          getSchoolVideoChildTabs(tabItemId);
+        }
       }
     });
   }
@@ -398,10 +452,13 @@ class VideoPageState extends VersionState<VideoPage>{
       Group.SchoolVideoGroupBean bean = Group.SchoolVideoGroupBean.fromJson(json.decode(value));
       if(bean.errno == 0){
         if(bean.data != null && bean.data.length > 0){
+          hasData = true;
           videoGroupPage ++;
           videoGroup.page = videoGroupPage;
           videoGroupList.addAll(bean.data);
           videoGroup.data.addAll(bean.data);
+        }else{
+          hasData = false;
         }
       }
       setState(() {
@@ -548,6 +605,7 @@ class VideoPageState extends VersionState<VideoPage>{
   Widget getTabWidget(TabBeanData _data){
     return InkWell(
       onTap: (){
+        hasData = true;
         setState(() {
           tabItemId = _data.id;
           tabItemName = _data.name;
@@ -637,6 +695,7 @@ class VideoPageState extends VersionState<VideoPage>{
   Widget getSchoolVideoTab2(Tab.Data item){
     return InkWell(
       onTap: (){
+        hasData = true;
         //获取分类的视频group
         tabItemId2 = item.id;
         selectTab2Name = item.name;
@@ -666,7 +725,19 @@ class VideoPageState extends VersionState<VideoPage>{
     return InkWell(
       onTap: (){
         print("click icon:${_data.url}");
-        showSchoolBrochure(_data.url);
+        if(_data.url != null){
+          if(_data.url.startsWith("image")){
+            if("关于艺画" == _data.label){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>AboutYH()));
+            }else if("激活VIP" == _data.label){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>PhoneActiveCodePage("")));
+            }else{
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>ImagePage(imgpath: _data.url, title: _data.label)));
+            }
+          }else{
+            showSchoolBrochure(_data.url);
+          }
+        }
         //Navigator.push(context, MaterialPageRoute(builder: (context)=>WebStage(url: _data.url, title: _data.label)));
       },
       child: Container(
@@ -955,6 +1026,13 @@ class VideoPageState extends VersionState<VideoPage>{
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    closeTime();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -1002,8 +1080,8 @@ class VideoPageState extends VersionState<VideoPage>{
                             },
                             child: Container(
                               //child: Text("视频仓库",style: tabIndex == 1 ? this._tabSelectStyle : this._tabNormalStyle),
-                              child: Image.asset(tabIndex == 1 ? "image/ic_video_tab_select.png" : "image/ic_video_tab_normal.png",
-                                height: SizeUtil.getAppHeight(80),fit: BoxFit.contain,),
+                              child: Image.asset(tabIndex == 1 ? "image/ic_video_toptitle.png" : "image/ic_video_toptitle.png",
+                                height: SizeUtil.getAppHeight(120),fit: BoxFit.contain,),
                             ),
                           ),
                           /*SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(20)),),
@@ -1330,10 +1408,161 @@ class VideoPageState extends VersionState<VideoPage>{
                         //child: videoInit ? VideoPlayer(_videoPlayerController) : SizedBox(),
                       ),
                     ),*/
-                    //滚动广告
-                    //SizedBox(height: SizeUtil.getAppHeight(20),),
-                    //推荐视频
+                    //vip
                     Offstage(
+                      offstage: (tabItemId == TAB_HOME && tabIndex == 1) ? false : true,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.white
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal:ScreenUtil().setWidth(20),vertical: ScreenUtil().setHeight(20)),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: SizeUtil.getAppHeight(200),
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: Image.asset("image/ic_vip_bg.png",width:double.infinity,height: SizeUtil.getAppHeight(200),fit: BoxFit.fill,).image,//Image.asset("image/ic_vip_bg.png",width: double.infinity,height: SizeUtil.getAppHeight(200),fit:BoxFit.fill)
+                                        )
+                                    ),
+                                    padding: EdgeInsets.only(
+                                        top: SizeUtil.getAppHeight(40)),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Text("您的有效期还剩下",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),),
+                                        SizedBox(height: SizeUtil.getAppHeight(20),),
+                                        StreamBuilder<String>(stream:_vipStream.stream,builder: (BuildContext context,snapshot){
+                                          return Text("$viptimeword",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.red),);
+                                        })
+                                      ],
+                                    ),
+                                  ),
+                                  flex: 1,
+                                ),
+                                SizedBox(width: SizeUtil.getAppWidth(20),),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                                        return ImagePage(imgpath: Constant.getPagePath(ImagePageType.TypeBuyActive), title: Constant.getPageTitle(ImagePageType.TypeBuyActive));
+                                      }));
+                                    },
+                                    child: Container(
+                                      height: SizeUtil.getAppHeight(200),
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: Image.asset("image/ic_vip_advert.png",width:double.infinity,height: SizeUtil.getAppHeight(200),fit: BoxFit.fill,).image,
+                                        ),
+                                      )
+                                    ),
+                                  ),
+                                  flex: 1,
+                                )
+                              ],
+                            ),
+                            SizedBox(height: SizeUtil.getAppHeight(20),),
+                            InkWell(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return ImagePage(imgpath: Constant.getPagePath(ImagePageType.TypeFriends), title: Constant.getPageTitle(ImagePageType.TypeFriends));
+                                }));
+                              },
+                              child: Image.asset("image/ic_invite_friends.png",fit: BoxFit.cover,width: double.infinity,),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    //滚动广告
+                    SizedBox(height: SizeUtil.getAppHeight(20),),
+                    Offstage(
+                      offstage: (tabItemId == TAB_HOME && tabIndex == 1) ? false : true,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            color: Colors.white,
+                            padding: EdgeInsets.only(
+                                left: SizeUtil.getAppWidth(40),
+                                right: SizeUtil.getAppWidth(40),
+                                top: SizeUtil.getAppHeight(40),
+                                bottom: SizeUtil.getAppHeight(20)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10)),
+                              child: Image.asset(banners[0],width: double.infinity,fit: BoxFit.cover,),
+                            ),
+                          ),
+                          Container(
+                            color:Colors.white,
+                            padding: EdgeInsets.only(
+                                left: SizeUtil.getAppWidth(40),
+                                right: SizeUtil.getAppWidth(40),
+                                top: SizeUtil.getAppHeight(20),
+                                bottom: SizeUtil.getAppHeight(20)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10)),
+                              child: Image.asset(banners[1],width: double.infinity,fit: BoxFit.cover,),
+                            ),
+                          ),
+                          Container(
+                            color:Colors.white,
+                            padding: EdgeInsets.only(
+                                left: SizeUtil.getAppWidth(40),
+                                right: SizeUtil.getAppWidth(40),
+                                top: SizeUtil.getAppHeight(20),
+                                bottom: SizeUtil.getAppHeight(20)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10)),
+                              child: Image.asset(banners[2],width: double.infinity,fit: BoxFit.cover,),
+                            ),
+                          ),
+                          Container(
+                            color:Colors.white,
+                            padding: EdgeInsets.only(
+                                left: SizeUtil.getAppWidth(40),
+                                right: SizeUtil.getAppWidth(40),
+                                top: SizeUtil.getAppHeight(20),
+                                bottom: SizeUtil.getAppHeight(20)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10)),
+                              child: Image.asset(banners[3],width: double.infinity,fit: BoxFit.cover,),
+                            ),
+                          ),
+                          Container(
+                            color:Colors.white,
+                            padding: EdgeInsets.only(
+                                left: SizeUtil.getAppWidth(40),
+                                right: SizeUtil.getAppWidth(40),
+                                top: SizeUtil.getAppHeight(20),
+                                bottom: SizeUtil.getAppHeight(40)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10)),
+                              child: Image.asset(banners[4],width: double.infinity,fit: BoxFit.cover,),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: SizeUtil.getAppHeight(20),),
+                    //banner
+                    /*Offstage(
+                      //offstage: (tabItemId == TAB_HOME && tabIndex == 1) ? false : true,
+                      child: ListView.builder(itemBuilder: (context,index){
+                        print("banner");
+                        return Container(
+                          padding: EdgeInsets.symmetric(horizontal:ScreenUtil().setWidth(20),vertical: ScreenUtil().setHeight(20)),
+                          child: Image.asset(banners[index],),
+                        );
+                      },itemCount: banners.length,scrollDirection: Axis.vertical,),
+                    ),*/
+                    //推荐视频
+                    /*Offstage(
                       offstage: (tabItemId == TAB_HOME && tabIndex == 1) ? false : true,
                       child: Column(
                         children: [
@@ -1427,6 +1656,93 @@ class VideoPageState extends VersionState<VideoPage>{
                           SizedBox(height: SizeUtil.getAppHeight(100),)
                         ],
                       )
+                    ),*/
+                    //首页广告
+                    Offstage(
+                        offstage: (tabItemId == TAB_HOME && tabIndex == 1) ? false : true,
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(Radius.circular(SizeUtil.getWidth(ScreenUtil().setWidth(5))))
+                              ),
+                              margin: EdgeInsets.only(
+                                  //left: ScreenUtil().setWidth(20),right: ScreenUtil().setWidth(20),
+                                  //top: ScreenUtil().setHeight(0),bottom: ScreenUtil().setHeight(40)
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal:ScreenUtil().setWidth(20),vertical: ScreenUtil().setHeight(20)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  /*Container(
+                                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+                                      child: Text("最新视频课程",style: Constant.titleTextStyle,)
+                                  ),*/
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10)),
+                                    child: Image.asset("image/ic_video_class.jpg",width: double.infinity,fit: BoxFit.cover,),
+                                  ),
+                                  /*Container(
+                                    *//*decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10))
+                                    ),*//*
+                                    child: Image.asset("image/ic_video_class.jpg",width: double.infinity,fit: BoxFit.cover,),
+                                  ),*/
+                                  SizedBox(height: SizeUtil.getAppHeight(20),),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                                ImagePage(imgpath: Constant.getPagePath(ImagePageType.TypeCoustomer),title:Constant.getPageTitle(ImagePageType.TypeCoustomer))
+                                            ));
+                                          },
+                                          child: Image.asset("image/ic_click_detail.png",width: double.infinity,fit: BoxFit.cover,),
+                                        ),
+                                        flex: 1,
+                                      ),
+                                      SizedBox(width: SizeUtil.getAppWidth(20),),
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                                PhoneActiveCodePage("")
+                                            ));
+                                          },
+                                          child: Image.asset("image/ic_click_active.png",width:double.infinity,fit:BoxFit.cover),
+                                        ),
+                                        flex: 1,
+                                      ),
+
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            //更多
+                            /*InkWell(
+                              onTap: (){
+                                showVideoTips("image/ic_image_video_tips.png");
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: SizeUtil.getAppWidth(20)
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(10))
+                                  ),
+                                  child: Image.asset("image/ic_button_more.png",height: SizeUtil.getAppHeight(100),fit: BoxFit.contain,),
+                                ),
+                              ),
+                            ),*/
+                            SizedBox(height: SizeUtil.getAppHeight(100),)
+                          ],
+                        )
                     ),
                     //正常的分类显示
                     Offstage(
@@ -1471,16 +1787,22 @@ class VideoPageState extends VersionState<VideoPage>{
                               right:ScreenUtil().setWidth(SizeUtil.getWidth(20)),
                               bottom:ScreenUtil().setWidth(SizeUtil.getWidth(40)),
                             ),
-                            child: GridView.builder(
+                            child: ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: videoGroupList.length,
-                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                /*gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
                                     mainAxisSpacing: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-                                    crossAxisCount: 2,
+                                    crossAxisCount: 1,
                                     childAspectRatio: Constant.isPad ? 2.1 : 1.2
-                                ),
+                                ),*/
+                                separatorBuilder: (BuildContext context, int index){
+                                  return Divider(
+                                    height: SizeUtil.getAppHeight(40),
+                                    color: Color(0x00ffffff),
+                                  );
+                                },
                                 itemBuilder: (context,index){
                                   var _data = new C.Data(
                                       id: videoGroupList[index].id,

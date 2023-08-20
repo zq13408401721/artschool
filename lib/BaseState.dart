@@ -67,7 +67,11 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     super.initState();
     if(Platform.isAndroid){
       if(permissionCheck){
-        await permission_android();
+        //await permission_android();
+        var result = await FlutterPlugins.requestAndroidPermission();
+        if(result == 1000) {
+          await permission_android();
+        }
       }
       this.isAndroid = true;
     }else{
@@ -347,7 +351,9 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
       "classes":prefs.getString("classes"),
       "schoolname":prefs.getString("schoolname"),
       "phoneno":prefs.getString("phoneno"),
-      "classids":prefs.getString("classids")
+      "classids":prefs.getString("classids"),
+      "starttime":prefs.getString("starttime"),
+      "endtime":prefs.getString("endtime")
     };
     return option;
   }
@@ -392,6 +398,12 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     }
     if(info.phone != null){
       prefs.setString("phoneno", info.phone);
+    }
+    if(info.starttime != null){
+      prefs.setString("starttime", info.starttime);
+    }
+    if(info.endtime != null){
+      prefs.setString("endtime", info.endtime);
     }
   }
 
@@ -564,6 +576,24 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _welcome = await prefs.getString("welcome");
     return _welcome;
+  }
+
+  /**
+   * 是否现实vip弹框
+   */
+  Future<bool> getVipDialog() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _vipdialog = await prefs.getBool("vipdialog");
+    return _vipdialog;
+  }
+
+  /**
+   * 保存VipDialog状态
+   */
+  Future<bool> saveVipDialog() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _vipdialog = await prefs.setBool("vipdialog", true);
+    return _vipdialog;
   }
 
   /**

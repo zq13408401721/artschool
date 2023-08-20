@@ -261,9 +261,42 @@ flutter:
     - image/ic_banner_mine.jpg
     - image/ic_button_more.png
     - image/ic_image_video_tips.png
-    - videos/login_page.mp4
-    - videos/x2/login_page_x2.mp4
-    - videos/x2/login_page_android_x2.mp4
+    - image/ic_advert_member.png
+    - image/ic_login_phone.png
+    - image/ic_invite_friends.png
+    - image/ic_vip_advert.png
+    - image/ic_vip_bg.png
+    - image/ic_buyactive.jpg
+    - image/ic_friends.jpg
+    - image/ic_coustomer.jpg
+    - image/ic_click_detail.png
+    - image/ic_click_active.png
+    - image/ic_video_toptitle.png
+    - image/ic_image_toptitle.png
+    - image/ic_video_class.jpg
+    - image/banner1.jpg
+    - image/banner2.jpg
+    - image/banner3.jpg
+    - image/banner4.jpg
+    - image/banner5.jpg
+    - image/P1.jpg
+    - image/P2.jpg
+    - image/P3.jpg
+    - image/P4.jpg
+    - image/P5.jpg
+    - image/P6.jpg
+    - image/P7.jpg
+    - image/P8.jpg
+    - image/P9.jpg
+    - image/P10.jpg
+    - image/P11.jpg
+    - image/P12.jpg
+    - image/P13.jpg
+    - image/P14.jpg
+    - image/P15.jpg
+    - image/P16.jpg
+    - image/P17.jpg
+    - image/P18.jpg
     - files/player_ios.html
     - files/about.html
     - files/treaty.html
@@ -271,3 +304,4 @@ flutter:
     - data/help.json
     - files/audio/audio_player.html
     - files/videoplayer.html
+

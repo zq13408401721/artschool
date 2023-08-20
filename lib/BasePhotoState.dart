@@ -9,9 +9,11 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:yhschool/BaseRefreshState.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/PanUploadDialog.dart';
+import 'package:yhschool/bean/BookListBean.dart';
 import 'package:yhschool/column/ColumnUploadDialog.dart';
 import 'package:yhschool/popwin/PopWinUploadShortVideo.dart';
 import 'package:yhschool/popwin/PopWinUploadWork.dart';
@@ -107,8 +109,10 @@ abstract class BasePhotoState<T extends StatefulWidget> extends BaseState<T>{
     //先进行相机相册权限判断
     //如果是android14以上单独处理
     if(this.isAndroid){
-      var result = await FlutterPlugins.requestAndroidPermission();
-      if(result == 1000) {
+      //检查android13是否有相机相册权限
+      var _res = await FlutterPlugins.hasAndroidPermission();
+      //当前sdk小于android13
+      if(_res == 1000){
         await permissionPhoto((result){
           if(!result){
             print("没有打开对应的权限");
@@ -117,6 +121,16 @@ abstract class BasePhotoState<T extends StatefulWidget> extends BaseState<T>{
           }
           print("打开相册");
           photos(cb,max);
+        });
+      }else if(_res == -1){ //android13 但是权限没有申请下来
+        //先提示权限用途
+        await showSdCardPermissionDialog(context,callback: () async{
+          var result = await FlutterPlugins.requestAndroidPermission();
+          if(result == 1) {
+            photos(cb,max);
+          }else{
+            showToast("没有相机相册权限无法使用该功能");
+          }
         });
       }else{
         photos(cb,max);

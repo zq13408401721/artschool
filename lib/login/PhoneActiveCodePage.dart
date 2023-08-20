@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +18,8 @@ import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 
 import '../Home.dart';
+import '../ImagePage.dart';
+import '../utils/ImagePageType.dart';
 
 /**
  * 手机号激活验证
@@ -176,13 +179,61 @@ class PhoneActiveCodePageState extends BaseState<PhoneActiveCodePage>{
                 BackButtonWidget(cb: (){
                   Navigator.pop(context);
                 }, title: "激活账号",),
-                Padding(
+                /*Padding(
                   padding: EdgeInsets.only(
                       left: 0,
                       right: 0,
                       top:ScreenUtil().setHeight(SizeUtil.getHeight(200))
                   ),
                   child: Image.asset("image/ic_active.png",width: ScreenUtil().setWidth(SizeUtil.getWidth(300)),height: ScreenUtil().setHeight(100),),
+                ),
+                SizedBox(height:ScreenUtil().setHeight(SizeUtil.getHeight(50))),*/
+                SizedBox(height:ScreenUtil().setHeight(SizeUtil.getHeight(50))),
+                //激活码
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(100))
+                  ),
+                  child: TextField(
+                    keyboardType: TextInputType.text,
+                    maxLines: 1,
+                    maxLength: 10,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    decoration: InputDecoration(
+                      hintText: "请输入激活码",
+                      counterText: "",
+                      hintStyle: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(36)),color: Colors.black26),
+                      fillColor:Colors.white,
+                      isCollapsed: true,
+                      filled: true,
+                      contentPadding: EdgeInsets.only(
+                        left: ScreenUtil().setWidth(SizeUtil.getWidth(50)),
+                        top: ScreenUtil().setWidth(SizeUtil.getHeight(30)),
+                        bottom: ScreenUtil().setWidth(SizeUtil.getHeight(30)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        /*边角*/
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(SizeUtil.getWidth(10)), //边角为30
+                        ),
+                        borderSide: BorderSide(
+                          color: Colors.white, //边线颜色为黄色
+                          width: 1, //边线宽度为2
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        /*边角*/
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(SizeUtil.getWidth(10)), //边角为30
+                        ),
+                        borderSide: BorderSide(
+                          color: Colors.white, //边线颜色为黄色
+                          width: 1, //边线宽度为2
+                        ),
+                      ),
+                    ),
+                    onChanged: _textFileActivationCode,
+                  ),
                 ),
                 SizedBox(height:ScreenUtil().setHeight(SizeUtil.getHeight(50))),
                 //手机号
@@ -233,53 +284,7 @@ class PhoneActiveCodePageState extends BaseState<PhoneActiveCodePage>{
                   ),
                 ),
                 SizedBox(height:ScreenUtil().setHeight(SizeUtil.getHeight(50))),
-                //激活码
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(100))
-                  ),
-                  child: TextField(
-                    keyboardType: TextInputType.text,
-                    maxLines: 1,
-                    maxLength: 10,
-                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                    decoration: InputDecoration(
-                      hintText: "请输入激活码",
-                      counterText: "",
-                      hintStyle: TextStyle(fontSize: ScreenUtil().setSp(SizeUtil.getFontSize(36)),color: Colors.black26),
-                      fillColor:Colors.white,
-                      isCollapsed: true,
-                      filled: true,
-                      contentPadding: EdgeInsets.only(
-                        left: ScreenUtil().setWidth(SizeUtil.getWidth(50)),
-                        top: ScreenUtil().setWidth(SizeUtil.getHeight(30)),
-                        bottom: ScreenUtil().setWidth(SizeUtil.getHeight(30)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        /*边角*/
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(SizeUtil.getWidth(10)), //边角为30
-                        ),
-                        borderSide: BorderSide(
-                          color: Colors.white, //边线颜色为黄色
-                          width: 1, //边线宽度为2
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        /*边角*/
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(SizeUtil.getWidth(10)), //边角为30
-                        ),
-                        borderSide: BorderSide(
-                          color: Colors.white, //边线颜色为黄色
-                          width: 1, //边线宽度为2
-                        ),
-                      ),
-                    ),
-                    onChanged: _textFileActivationCode,
-                  ),
-                ),
-                SizedBox(height:ScreenUtil().setHeight(SizeUtil.getHeight(100))),
+
                 //验证码
                 Container(
                   padding: EdgeInsets.symmetric(
@@ -365,7 +370,7 @@ class PhoneActiveCodePageState extends BaseState<PhoneActiveCodePage>{
                     ],
                   ),
                 ),
-                SizedBox(height:ScreenUtil().setHeight(SizeUtil.getHeight(150))),
+                SizedBox(height:ScreenUtil().setHeight(SizeUtil.getHeight(50))),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(100))
@@ -388,9 +393,40 @@ class PhoneActiveCodePageState extends BaseState<PhoneActiveCodePage>{
                           vertical: ScreenUtil().setHeight(SizeUtil.getHeight(30)),
                           horizontal: ScreenUtil().setWidth(SizeUtil.getWidth(150))
                       ),
-                      child: Text("确 定",style: TextStyle(fontSize:ScreenUtil().setSp(SizeUtil.getFontSize(40)),fontWeight: FontWeight.bold,color:Colors.white),),
+                      child: Text("激活VIP",style: TextStyle(fontSize:ScreenUtil().setSp(SizeUtil.getFontSize(40)),fontWeight: FontWeight.bold,color:Colors.white),),
                     ),
                   ),
+                ),
+                SizedBox(height: SizeUtil.getAppHeight(40),),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: SizeUtil.getAppWidth(100)
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RichText(
+                        textAlign: TextAlign.start,
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "如您没有激活码，请",
+                                style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.grey),
+                              ),
+                              TextSpan(
+                                text: "点击这里购买",
+                                recognizer: TapGestureRecognizer()..onTap = (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                      ImagePage(imgpath: Constant.getPagePath(ImagePageType.TypeBuyActive), title: Constant.getPageTitle(ImagePageType.TypeBuyActive))
+                                  ));
+                                },
+                                style: TextStyle(fontSize: SizeUtil.getAppFontSize(30),color: Colors.blue),
+                              ),
+                            ]
+                        ),
+                      ),
+                    ],
+                  )
                 )
               ],
             ),

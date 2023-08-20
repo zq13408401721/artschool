@@ -43,6 +43,24 @@ class MainActivity: FlutterActivity() {
                         result.success(1);
                     } else if ("permission".equals(call.method)) {
                         requestPermission(result)
+                    } else if ("haspermission".equals(call.method)){
+                        //当前sdk小于android 13
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                            result.success(1000)
+                        }else{
+                            var permissions = arrayListOf<String>()
+                            for(item in arrayOf(Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_IMAGES,
+                                    Manifest.permission.READ_MEDIA_VIDEO)){
+                                if(checkSelfPermission(item) != PackageManager.PERMISSION_GRANTED){
+                                    permissions.add(item)
+                                }
+                            }
+                            if(permissions.size > 0){
+                                result!!.success(-1)
+                            }else{
+                                result!!.success(0)
+                            }
+                        }
                     }
                 } else {
                     result.notImplemented()

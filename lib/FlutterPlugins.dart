@@ -21,4 +21,10 @@ class FlutterPlugins{
     var result = await channel_plugins.invokeMethod('permission');
     return result;
   }
+
+  //检查android13是否有相机相册权限
+  static Future<int> hasAndroidPermission() async{
+    var result = await channel_plugins.invokeMethod('haspermission');
+    return result;
+  }
 }

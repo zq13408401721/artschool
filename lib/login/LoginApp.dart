@@ -173,20 +173,16 @@ class LoginAppState extends BaseState<LoginApp>{
    * 设置geet UI
    */
   void setGeetUIStyle(OLUIConfiguration config){
-    config.logoImage = Platform.isAndroid ? "ic_about" : "ic_about.png";
+    config.logoImage = Platform.isAndroid ? "ic_login_phone" : "ic_login_phone.png";
     config.isDialogStyle = !Platform.isAndroid;
     //config.logoImageRect = OLRect(width: 80,height: 80,x: 0,y: 0);
     config.logoImageHidden = false;
     config.numberSize = 18;
     //config.switchButtonText = "激活账号";
     if(Platform.isAndroid){
-      config.switchButtonRect = OLRect(width: 80,height: 30,x: 0,y: SizeUtil.getAppHeight(500));
-      config.numberRect = new OLRect(width: 0,height: 0, x:0, y:SizeUtil.getAppWidth(550));
-    }
-    //config.auxiliaryPrivacyWords = ["注册登录即表示同意艺画用户协议"];
-    //config.termsClauseColor = Colors.blue;
-    var list = <OLTermsPrivacyItem>[];
-    if(this.isAndroid){
+      config.logoImageRect = new OLRect(width: SizeUtil.getAppWidth(384),height: SizeUtil.getAppWidth(417),);
+      config.switchButtonRect = OLRect(width: 80,height: 30,x: 0,y: SizeUtil.getAppHeight(1200));
+      config.numberRect = new OLRect(width: 0,height: 0, x:0, y:SizeUtil.getAppHeight(800));
       config.terms = [
         OLTermsPrivacyItem(" 和 ", " "),
         OLTermsPrivacyItem("注册登录即表示同意艺画用户协议", "http://res.yimios.com:9070/html/treaty.html")
@@ -195,8 +191,13 @@ class LoginAppState extends BaseState<LoginApp>{
       config.termsBookTitleMarkHidden = true;
       config.termsUncheckedToastText = "";
     }else{
+      var list = <OLTermsPrivacyItem>[];
       list.add(new OLTermsPrivacyItem("注册登录即表示同意",""));
       list.add(new OLTermsPrivacyItem("艺画用户协议","http://res.yimios.com:9070/html/treaty.html"));
+      config.terms = list;
+      config.logoImageRect = new OLRect(width: SizeUtil.getAppWidth(192),height: SizeUtil.getAppWidth(209),);
+      config.dialogRect = OLRect(width:SizeUtil.getAppWidth(0),height: SizeUtil.getAppHeight(0),x: 0,y:0);
+      config.numberRect = new OLRect(width: 0,height: 0, x:0, y:SizeUtil.getAppHeight(250));
     }
     config.authBtnText = "本机号码一键登录";
     config.authBtnColor = Colors.white;

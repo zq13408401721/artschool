@@ -38,10 +38,10 @@ class VideoChoiceTile extends StatelessWidget{
             child: Stack(
               children: [
                 Container(
-                  width: double.infinity,
+                  height: double.infinity,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(ScreenUtil().setWidth(5)),
-                    child: CachedNetworkImage(imageUrl:data.cover,fit: BoxFit.cover,),
+                    child: CachedNetworkImage(imageUrl:data.cover,fit: BoxFit.fitWidth,width: double.infinity,),
                   ),
                 ),
                 Positioned(

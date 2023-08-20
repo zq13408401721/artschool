@@ -15,6 +15,8 @@ import 'dart:math';
 
 import 'package:yhschool/utils/SizeUtil.dart';
 
+import 'ImagePageType.dart';
+
 class Constant{
 
   static final PlatformType platformType = PlatformType.iphone; //当前是手机
@@ -160,13 +162,13 @@ class Constant{
   static bool SDCARD_DALOG = false;
 
 
-  static String logn_bg(bool isandroid){
+  /*static String logn_bg(bool isandroid){
     if(isandroid){
       return Constant.isPad ? "videos/login_page.mp4" : "videos/x2/login_page_android_x2.mp4";
     }else{
       return Constant.isPad ? "videos/login_page.mp4" : "videos/x2/login_page_x2.mp4";
     }
-  }
+  }*/
 
   /**
    * 像素单位换算
@@ -463,4 +465,55 @@ class Constant{
     var digest = hmac.convert(bytes);
     return hex(digest.bytes);
   }
+
+  /**
+   * vip 时间格式
+   * time 对应的时间秒
+   */
+  static String parseVipTimeFormat(int time){
+    if(time <= 0){
+      return "0天00小时00分钟00秒";
+    }
+    int day,hour,minute,second;
+    day = (time / (3600 * 24)).toInt();
+    hour = ((time % (3600 * 24)) / 3600).toInt();
+    hour = hour < 10 ? "0$hour" : hour;
+    minute = (((time % (3600 * 24)) % 3600) / 60).toInt();
+    minute = minute < 10 ? "0${minute}" : minute;
+    second = ((time % (3600 * 24)) % 60).toInt();
+    second = second < 10 ? "0${second}" : second;
+    return "$day天$hour小时$minute分钟$second秒";
+  }
+
+
+  static String getPageTitle(ImagePageType type){
+    switch(type){
+      case ImagePageType.TypeFriends:
+        return "邀请好友";
+      case ImagePageType.TypeCoustomer:
+        return "艺画客户服务";
+      case ImagePageType.TypeBuyActive:
+        return "购买激活码";
+      case ImagePageType.TypeAbout:
+        return "关于艺画";
+    }
+  }
+
+  static String getPagePath(ImagePageType type){
+    switch(type){
+      case ImagePageType.TypeFriends:
+        return "image/ic_friends.jpg";
+      case ImagePageType.TypeCoustomer:
+        return "image/ic_coustomer.jpg";
+      case ImagePageType.TypeBuyActive:
+        return "image/ic_buyactive.jpg";
+      case ImagePageType.TypeAbout:
+        return "关于艺画";
+    }
+  }
+
+  static int parseTimetoInt(String time){
+    return (DateTime.parse(time).millisecondsSinceEpoch/1000).toInt();
+  }
+
 }

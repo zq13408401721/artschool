@@ -124,7 +124,7 @@ class GalleryState extends BaseState<Gallery> with SingleTickerProviderStateMixi
                       },
                       child: Container(
                         //child: Text("图书馆",style: tabIndex == 0 ? tabSelect : tabNormal,),
-                        child: Image.asset("image/ic_book.png",height:SizeUtil.getAppHeight(80),fit: BoxFit.contain,),
+                        child: Image.asset("image/ic_image_toptitle.png",height:SizeUtil.getAppHeight(120),fit: BoxFit.contain,),
                       ),
                     ),
                     /*SizedBox(width: ScreenUtil().setWidth(SizeUtil.getWidth(SizeUtil.getWidth(30))),),
