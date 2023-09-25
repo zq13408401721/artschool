@@ -130,16 +130,18 @@ class AppState extends VersionState<MyApp> with TickerProviderStateMixin{
     pages = [
       //Video(key: videoStateKey),
       VideoPage(key: videoStateKey,callback: (){
-        _selectBar(3);
-        columnPageStateKey.currentState.initColumn();
+        /*_selectBar(3);
+        columnPageStateKey.currentState.initColumn();*/
       },),
       Gallery(key:galleryStateKey),
       //Issue(key: issueStateKey,),
       //Shared(key:sharedStateKey),
+      //课堂
       Teach(key: teachStateKey,callBack: (CMD_MINE _cmd,bool _bool,dynamic data){
         _parseMineCMD(cmd: _cmd, data: data, isbool: _bool);
       },),
       //ColumnPage(key: columnPageStateKey,),
+      //相册
       PanPage(key:panPageStateKey),
       Mine(key:mineStateKey,callBack:(CMD_MINE _cmd,bool _bool,dynamic data){
         _parseMineCMD(cmd: _cmd, data: data, isbool: _bool);
@@ -155,7 +157,7 @@ class AppState extends VersionState<MyApp> with TickerProviderStateMixin{
       }*/
     });
 
-    tabController = new TabController(length: 5, vsync: this);
+    tabController = new TabController(length: 3, vsync: this);
     // 跨页面数据传递 更新专栏订阅状态
     EventBusUtils.instance.getEventBus().on<int>().listen((event) {
       columnPageStateKey.currentState.columnListPageKey.currentState.updateColumnSubscrible(event);
@@ -171,7 +173,7 @@ class AppState extends VersionState<MyApp> with TickerProviderStateMixin{
         videoStateKey.currentState.updataState();
         galleryStateKey.currentState.updataState();
         //切换登录以后更新登录状态
-        teachStateKey.currentState.updateLoginState();
+        //teachStateKey.currentState.updateLoginState();
         //minePageStateKey.currentState.updataState();
         //新版本老师和学生界面显示同步
         //sharedStateKey.currentState.updataState();
@@ -213,9 +215,9 @@ class AppState extends VersionState<MyApp> with TickerProviderStateMixin{
     setState(() {
       barIndex = _index;
       index = _index;
-      if(_index == 3){
+      /*if(_index == 3){
         panPageStateKey.currentState.queryPanNum();
-      }
+      }*/
     });
   }
 

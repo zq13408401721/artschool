@@ -62,6 +62,8 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
   List<String> selfclassids = List.empty();
   bool permissionCheck = true;
 
+  final String wordNoUser = "我们需要收集使用如下信息：\n 使用产品的过程中需要联网，可能会产生数据流量，流量费用详情咨询当地运营商，我们会读取并传递您的手机号信息，用于实现基于账号安全的验证。";
+
   @override
   void initState() async{
     super.initState();
@@ -303,6 +305,12 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     return light;
   }
 
+  Future<bool> loginout() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    return true;
+  }
+
   /**
    * 设置软件常亮显示
    */
@@ -378,7 +386,6 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     if(info.nickname != null){
       prefs.setString("nickname", info.nickname);
     }
-
     prefs.setString("username", info.username);
     prefs.setString("schoolid", info.schoolid);
     prefs.setString("uid", info.uid);
@@ -613,9 +620,9 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
    */
   permission_phone_android() async{
     List<Permission> permissions = [];
-    if(!await Permission.phone.isGranted){
+    /*if(!await Permission.phone.isGranted){
       permissions.add(Permission.phone);
-    }
+    }*/
     if(permissions.length > 0){
       Map<Permission,PermissionStatus> status = await permissions.request();
       if(!await Permission.phone.isGranted){
@@ -642,9 +649,9 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
     if(!await Permission.camera.isGranted){
       permissions.add(Permission.camera);
     }*/
-    if(!await Permission.phone.isGranted){
+    /*if(!await Permission.phone.isGranted){
       permissions.add(Permission.phone);
-    }
+    }*/
     if(permissions.length > 0){
       if(!Constant.SDCARD_DALOG){
         Constant.SDCARD_DALOG = true;
@@ -957,12 +964,12 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
                                          "\"我的\"中查看本隐私条款。你可以阅读",
                                      style:TextStyle(color: Colors.black54,fontSize: ScreenUtil().setSp(30),wordSpacing: 20,letterSpacing: 2)
                                  ),
-                                 TextSpan(
+                                 /*TextSpan(
                                      text: "《服务协议》",
                                      recognizer: TapGestureRecognizer()
                                        ..onTap = (){
                                          Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                             WebStage(url: 'http://res.yimios.com:9050/html/privacy.html', title: "艺画美术app隐私协议")
+                                             WebStage(url: 'http://res.yimios.com:9050/html/policy.html', title: "艺画美术app服务协议")
                                          ));
                                        },
                                      style: TextStyle(color:Colors.blueAccent,fontSize: ScreenUtil().setSp(30))
@@ -970,13 +977,13 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
                                  TextSpan(
                                      text:",",
                                      style: TextStyle(color:Colors.black54,fontSize: ScreenUtil().setSp(30))
-                                 ),
+                                 ),*/
                                  TextSpan(
                                      text: "《隐私协议》",
                                      recognizer: TapGestureRecognizer()
                                        ..onTap = (){
                                          Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                             WebStage(url: 'http://res.yimios.com:9050/html/policy.html', title: "艺画美术app隐私协议")
+                                             WebStage(url: 'http://res.yimios.com:9070/html/treaty-1.html', title: "视频教程隐私协议")
                                          ));
                                        },
                                      style: TextStyle(color:Colors.blueAccent,fontSize: ScreenUtil().setSp(30))
@@ -996,7 +1003,9 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
            actions: [
              TextButton(onPressed: (){
                isShowDialog = false;
-               exit(0);
+               Navigator.pop(context);
+               showNouserDialog(context,callback:callback);
+               //exit(0);
              }, child: Text("暂不同意")),
              TextButton(onPressed: (){
                isShowDialog = false;
@@ -1200,6 +1209,86 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>{
                   Navigator.pop(context);
                 },child: Text("允许"),)
               ],
+            );
+          }
+      );
+    });
+  }
+
+  /**
+   *显示游客模式提示
+   */
+  void showNouserDialog(BuildContext context,{callback:Function}) async{
+    isShowDialog = true;
+    await showDialog(context: context,barrierDismissible: false, builder: (BuildContext _context){
+      return StatefulBuilder(
+          builder: (_context,_state){
+            return AlertDialog(
+              contentPadding: EdgeInsets.all(0),
+              content: SingleChildScrollView(
+                child: Container(
+                    width: ScreenUtil().setWidth(300),
+                    height:ScreenUtil().setHeight(600),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(10)))
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: ScreenUtil().setHeight(40),
+                              bottom:ScreenUtil().setHeight(40)
+                          ),
+                          child: Text("温馨提示",style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Colors.black54,fontWeight: FontWeight.bold),),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: ScreenUtil().setWidth(40),
+                              right:ScreenUtil().setWidth(40)
+                          ),
+                          child: Text(wordNoUser,style: TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.black54,fontWeight: FontWeight.bold),),
+                        ),
+                        SizedBox(height: SizeUtil.getAppHeight(50),),
+                        InkWell(
+                          onTap: (){
+                            //Navigator.pop(context);
+                            exit(0);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(20)),
+                              border: Border.all(color: Colors.red,width: 1),
+                              color: Colors.white
+                            ),
+                            width: SizeUtil.getAppWidth(300),
+                            height: SizeUtil.getAppHeight(80),
+                            alignment: Alignment(0,0),
+                            child: Text("暂不使用",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                          ),
+                        ),
+                        SizedBox(height: SizeUtil.getAppHeight(20),),
+                        InkWell(
+                          onTap: (){
+                            Navigator.pop(context);
+                            showPolicyDialog(context,callback: callback);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(20)),
+                                border: Border.all(color: Colors.red,width: 1),
+                                color: Colors.white
+                            ),
+                            width: SizeUtil.getAppWidth(300),
+                            height: SizeUtil.getAppHeight(80),
+                            alignment: Alignment(0,0),
+                            child: Text("返回",style: TextStyle(fontSize: SizeUtil.getAppFontSize(30)),),
+                          ),
+                        ),
+                      ],
+                    )
+                ),
+              )
             );
           }
       );

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yhschool/BaseState.dart';
 import 'package:yhschool/login/LoginApp.dart';
 import 'package:yhschool/mine/CustomTile.dart';
+import 'package:yhschool/mine/LogoutPage.dart';
 import 'package:yhschool/utils/Constant.dart';
 import 'package:yhschool/utils/DBUtils.dart';
 import 'package:yhschool/utils/EnumType.dart';
@@ -95,16 +96,16 @@ class UserInfoDetailState extends BaseDialogState{
                     children: <Widget>[
                       //头像
                       CustomTile(tileType: TileType.IMAGE,label: "ID：$m_username", leading_w: ScreenUtil().setWidth(100),
-                          leading_h: ScreenUtil().setHeight(100), startString: avater, endString: "修改头像",divider: 1, cb:(){
+                          leading_h: ScreenUtil().setHeight(100), startString: avater, endString: "",divider: 1, cb:(){
                             print("修改头像");
-                            openAvaterGallery(context,m_uid, (value){
+                            /*openAvaterGallery(context,m_uid, (value){
                               print("头像上传");
                               if(value != null){
                                 setState(() {
                                   avater = value.avater;
                                 });
                               }
-                            });
+                            });*/
                           }),
                       //修改密码
                       CustomTile(tileType: TileType.WORD, leading_w: 0, leading_h: 0, startString: "修改密码", endString: "请输入新密码",
@@ -122,16 +123,16 @@ class UserInfoDetailState extends BaseDialogState{
                               }
                             });
                           }),
-                      CustomTile(tileType: TileType.WORD, leading_w: 0, leading_h: 0, startString: "服务协议",endString: "",
+                      /*CustomTile(tileType: TileType.WORD, leading_w: 0, leading_h: 0, startString: "服务协议",endString: "",
                           verticalpadding:ScreenUtil().setHeight(40),divider: 1, cb:(){
                             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                WebStage(url: 'http://res.yimios.com:9050/html/privacy.html', title: "艺画美术app隐私协议")
+                                WebStage(url: 'http://res.yimios.com:9050/html/policy.html', title: "艺画美术app服务协议")
                             ));
-                          }),
+                          }),*/
                       CustomTile(tileType: TileType.WORD, leading_w: 0, leading_h: 0, startString: "隐私协议",endString: "",
                           verticalpadding:ScreenUtil().setHeight(40),divider: 1, cb:(){
                             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                WebStage(url: 'http://res.yimios.com:9050/html/policy.html', title: "艺画美术app隐私协议")
+                                WebStage(url: 'http://res.yimios.com:9070/html/treaty-1.html', title: "视频教程隐私协议")
                             ));
                           }),
                       //清理缓存
@@ -142,6 +143,13 @@ class UserInfoDetailState extends BaseDialogState{
                             if(_bool){
                               showToast("已清除缓存数据");
                             }
+                          }),
+                      //注销艺画美术账号
+                      CustomTile(tileType: TileType.WORD, leading_w: 0, leading_h: 0, startString: "注销艺画美术账号",endString: "",
+                          verticalpadding:ScreenUtil().setHeight(40),divider: 1, cb:() async{
+                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                LogoutPage()
+                            ));
                           }),
                       Padding(padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),top: ScreenUtil().setWidth(20)),
                         child: Row(
@@ -167,7 +175,7 @@ class UserInfoDetailState extends BaseDialogState{
                           ],
                         ),),
 
-                      SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(200)),),
+                      SizedBox(height: ScreenUtil().setHeight(SizeUtil.getHeight(100)),),
                       InkWell(
                         child: Container(
                           width: double.infinity,
@@ -192,11 +200,13 @@ class UserInfoDetailState extends BaseDialogState{
                             });
                           });
                         },
-                      ),
+                      )
                     ],
                   ),
+
                 ),
               ),
+              SizedBox(height: SizeUtil.getAppHeight(50),)
             ],
           ),
         ),

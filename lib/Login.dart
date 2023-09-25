@@ -405,7 +405,7 @@ class LoginState extends BaseState<Login>{
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = (){
                                         Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                            WebStage(url: 'files/treaty.html', title: "艺画美术app用户协议")
+                                            WebStage(url: 'http://res.yimios.com:9070/html/treaty-1.html', title: "视频教程用户协议")
                                         ));
                                       }
                                 )

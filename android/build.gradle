@@ -6,6 +6,8 @@ buildscript {
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
+        //maven { url "https://download.flutter.io" }
+        maven { url 'https://storage.flutter-io.cn/download.flutter.io' }
     }
 
     dependencies {
@@ -21,6 +23,9 @@ allprojects {
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
+        //maven { url 'https://download.flutter.io' }
+        maven { url 'https://storage.flutter-io.cn/download.flutter.io' }
+
     }
 }
 

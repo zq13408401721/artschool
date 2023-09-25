@@ -71,6 +71,7 @@ class SchoolVideoListPageState extends BaseCoustRefreshState<SchoolVideoListPage
     var param = {
       "groupid":widget.data.id
     };
+    print("video groupid:${widget.data.id}");
     httpUtil.post(DataUtils.api_school_video_group_total,data:param,context: context).then((value){
       print("videogrouptotal $value");
       if(value != null){

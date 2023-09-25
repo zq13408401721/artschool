@@ -32,6 +32,7 @@ class PhoneLoginState extends BaseState<PhoneLogin>{
   int _time = 60;
   String _codeword="获取验证码";
   Timer _timer;
+  bool _isloading = false;
 
   //手机号正则表达式
   RegExp exp = RegExp(r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
@@ -73,11 +74,24 @@ class PhoneLoginState extends BaseState<PhoneLogin>{
    * 获取验证码
    */
   void _queryPhoneCode(){
-
+    this._isloading = true;
     var param = {"phone":_phone};
     //验证码
     httpUtil.post(DataUtils.api_phone_code,data: param).then((value){
       print("code:$value");
+      this._isloading = false;
+      if(value != null){
+        dynamic result = json.decode(value);
+        if(result["data"] != null && result["data"].runtimeType == int){
+          if (result["data"] == 99992){
+            showToast("手机号已经注销");
+          } else if(result["data"] != 0){
+            showToast(result["errmsg"]);
+          }
+        }else if(result["errno"] == 0){
+          _startTime();
+        }
+      }
     });
   }
 
@@ -97,6 +111,10 @@ class PhoneLoginState extends BaseState<PhoneLogin>{
         print("login: $value");
         LoginBean loginBean = new LoginBean.fromJson(json.decode(value));
         if(loginBean.errno == 0){
+          if(loginBean.data == null){
+            showToast(loginBean.errmsg);
+            return;
+          }
           setData("username",loginBean.data.userinfo.username);
           closeTime();
           Constant.isLogin = false;
@@ -114,9 +132,11 @@ class PhoneLoginState extends BaseState<PhoneLogin>{
           }
           await saveUser(loginBean.data.userinfo,classes,classids);
           Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
-        }else{
+        }else if(loginBean.errno == 99993){
           showToast(loginBean.errmsg);
           Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneActiveCodePage(_phone)));
+        }else{
+          showToast(loginBean.errmsg);
         }
       });
     }
@@ -254,9 +274,8 @@ class PhoneLoginState extends BaseState<PhoneLogin>{
                               return showToast("请输入正确的手机号");
                             }
                           }
-                          if(_timer == null || !_timer.isActive){
+                          if((_timer == null || !_timer.isActive) && !this._isloading){
                             _queryPhoneCode();
-                            _startTime();
                           }
                         },
                         child: Container(
@@ -334,7 +353,7 @@ class PhoneLoginState extends BaseState<PhoneLogin>{
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = (){
                                     Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                        WebStage(url: 'files/treaty.html', title: "艺画美术app用户协议")
+                                        WebStage(url: 'http://res.yimios.com:9070/html/treaty-1.html', title: "视频教程用户协议")
                                     ));
                                   }
                             )
@@ -345,7 +364,7 @@ class PhoneLoginState extends BaseState<PhoneLogin>{
                 )
             ),
           ),
-          /*Positioned(
+          Positioned(
             left: 0,
             right: 0,
             bottom: SizeUtil.getAppHeight(200),
@@ -359,7 +378,7 @@ class PhoneLoginState extends BaseState<PhoneLogin>{
                 child: Text("切换到账号登录",style: TextStyle(color: Colors.black54,fontSize: SizeUtil.getAppFontSize(30)),),
               ),
             ),
-          ),*/
+          ),
         ],
       ),
     );

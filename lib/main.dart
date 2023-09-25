@@ -39,6 +39,7 @@ void main(){
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     navigatorKey: Constant.navigatorKey,
+    title: "视频教程",
     home: StartPage(),
   ));
 }

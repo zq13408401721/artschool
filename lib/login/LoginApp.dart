@@ -61,11 +61,12 @@ class LoginAppState extends BaseState<LoginApp>{
   }
 
   void init() {
+    checkPhonePermission();
     if (!isShowDialog) {
-      showPhonePermissionDialog(context,callback: (){
+      /*showPhonePermissionDialog(context,callback: (){
         savePhoneDialogState();
-        showDialog();
-      });
+
+      });*/
     }
   }
 
@@ -185,7 +186,7 @@ class LoginAppState extends BaseState<LoginApp>{
       config.numberRect = new OLRect(width: 0,height: 0, x:0, y:SizeUtil.getAppHeight(800));
       config.terms = [
         OLTermsPrivacyItem(" 和 ", " "),
-        OLTermsPrivacyItem("注册登录即表示同意艺画用户协议", "http://res.yimios.com:9070/html/treaty.html")
+        OLTermsPrivacyItem("注册登录即表示同意视频教程用户隐私协议", "http://res.yimios.com:9070/html/treaty-1.html")
       ];
       config.termsClauseColor = Colors.black54;
       config.termsBookTitleMarkHidden = true;
@@ -193,7 +194,7 @@ class LoginAppState extends BaseState<LoginApp>{
     }else{
       var list = <OLTermsPrivacyItem>[];
       list.add(new OLTermsPrivacyItem("注册登录即表示同意",""));
-      list.add(new OLTermsPrivacyItem("艺画用户协议","http://res.yimios.com:9070/html/treaty.html"));
+      list.add(new OLTermsPrivacyItem("视频教程用户隐私协议","http://res.yimios.com:9070/html/treaty-1.html"));
       config.terms = list;
       config.logoImageRect = new OLRect(width: SizeUtil.getAppWidth(192),height: SizeUtil.getAppWidth(209),);
       config.dialogRect = OLRect(width:SizeUtil.getAppWidth(0),height: SizeUtil.getAppHeight(0),x: 0,y:0);
@@ -288,7 +289,10 @@ class LoginAppState extends BaseState<LoginApp>{
         if(value == null || value == 0){
           isShowDialog = true;
           Future.delayed(Duration(milliseconds: 300)).then((value) => showPolicyDialog(context,callback: (){
-            getPhoneDialogState().then((value) => {
+            Future.delayed(Duration(milliseconds: 500),(){
+              init();
+            });
+            /*getPhoneDialogState().then((value) => {
               if(value == null || !value){
                 Future.delayed(Duration(milliseconds: 500),(){
                   init();
@@ -296,11 +300,12 @@ class LoginAppState extends BaseState<LoginApp>{
               }else{
                 checkPhonePermission()
               }
-            });
+            });*/
           }));
         }else{
           Future.delayed(Duration(milliseconds: 300)).then((value) {
-            getPhoneDialogState().then((value) => {
+            init();
+            /*getPhoneDialogState().then((value) => {
               if(value == null || !value){
                 Future.delayed(Duration(milliseconds: 500),(){
                   init();
@@ -308,7 +313,7 @@ class LoginAppState extends BaseState<LoginApp>{
               }else{
                 checkPhonePermission()
               }
-            });
+            });*/
           });
         }
       });
@@ -337,7 +342,7 @@ class LoginAppState extends BaseState<LoginApp>{
           ),
           child: Stack(
             children: [
-              /*Positioned(
+              Positioned(
                 left: 0,
                 right: 0,
                 bottom: SizeUtil.getAppHeight(120),
@@ -374,7 +379,7 @@ class LoginAppState extends BaseState<LoginApp>{
                     ),
                   ],
                 ),
-              )*/
+              )
             ],
           ),
         )

@@ -477,12 +477,9 @@ class Constant{
     int day,hour,minute,second;
     day = (time / (3600 * 24)).toInt();
     hour = ((time % (3600 * 24)) / 3600).toInt();
-    hour = hour < 10 ? "0$hour" : hour;
     minute = (((time % (3600 * 24)) % 3600) / 60).toInt();
-    minute = minute < 10 ? "0${minute}" : minute;
     second = ((time % (3600 * 24)) % 60).toInt();
-    second = second < 10 ? "0${second}" : second;
-    return "$day天$hour小时$minute分钟$second秒";
+    return "$day天${hour < 10 ? "0$hour" : hour}小时${minute < 10 ? "0$minute" : minute}分钟${second < 10 ? "0$second" : second}秒";
   }
 
 

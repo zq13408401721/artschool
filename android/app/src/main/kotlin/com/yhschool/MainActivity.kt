@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.pm.PermissionInfo
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -26,10 +27,19 @@ class MainActivity: FlutterActivity() {
     val CHANNEL:String = "toNativeChannel"
     var resultCall: MethodChannel.Result? = null
 
+    var description:ActivityManager.TaskDescription? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //开启手机缓存
+        /*//华为图标显示
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            description = ActivityManager.TaskDescription("艺画美术",R.drawable.ic_about)
+        } else {
+            description = ActivityManager.TaskDescription("艺画美术",BitmapFactory.decodeResource(resources, R.drawable.ic_about))
+        }
+        setTaskDescription(description)*/
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

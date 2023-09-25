@@ -88,30 +88,30 @@ class MineState extends BaseDialogState{
   // 学生身份工具栏
   List<dynamic> _studentToolsData = [
     //{"id":1,"name":"我的老师","icon":"image/ic_myteacher.png"},
-    {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
-    {"id":4,"name":"我的相册","icon":"image/ic_column.png"},
+   /* {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
+    {"id":4,"name":"我的相册","icon":"image/ic_column.png"},*/
     /*{"id":11,"name":"收藏的网盘","icon":"image/ic_column.png"},*/
-    {"id":5,"name":"我的作业","icon":"image/ic_mywork.png"},
+   /* {"id":5,"name":"我的作业","icon":"image/ic_mywork.png"},*/
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
     {"id":9,"name":"听歌","icon":"image/ic_music.png"},
     {"id":12,"name":"关于艺画","icon":"image/ic_about_yihua.png"},
-    {"id":13,"name":"帮助中心","icon":"image/ic_advise.png"}
+    //{"id":13,"name":"帮助中心","icon":"image/ic_advise.png"}
 
     //{"id":6,"name":"看MV","icon":"image/ic_mv.png"}
   ];
 
   List<dynamic> _teacherToolsData = [
-    {"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},
+    /*{"id":2,"name":"我的收藏","icon":"image/ic_mycollect.png"},*/
     {"id":14,"name":"图片排课","icon":"image/ic_work_plan.png"},
     {"id":3,"name":"我的课件","icon":"image/ic_mycourse.png"},
-    {"id":4,"name":"我的相册","icon":"image/ic_column.png"},
+    /*{"id":4,"name":"我的相册","icon":"image/ic_column.png"},*/
     /*{"id":11,"name":"收藏的网盘","icon":"image/ic_column.png"},*/
     {"id":7,"name":"学单词","icon":"image/ic_word.png"},
     {"id":8,"name":"学词组","icon":"image/ic_wordgroup.png"},
     {"id":9,"name":"听歌","icon":"image/ic_music.png"},
     {"id":12,"name":"关于艺画","icon":"image/ic_about_yihua.png"},
-    {"id":13,"name":"帮助中心","icon":"image/ic_advise.png"}
+    //{"id":13,"name":"帮助中心","icon":"image/ic_advise.png"}
     //{"id":6,"name":"看MV","icon":"image/ic_mv.png"},
   ];
 
@@ -276,7 +276,7 @@ class MineState extends BaseDialogState{
     return InkWell(
       onTap: (){
         //关注列表进入个人详情
-        var param = new S.Result(
+        /*var param = new S.Result(
           uid: m_uid,
           username:m_username,
           nickname:m_nickname,
@@ -285,7 +285,7 @@ class MineState extends BaseDialogState{
         );
         param.panid = "";
         //进入用户详情页
-        Navigator.of(context).push(MaterialPageRoute(builder: (_cxt) => PanUserDetail(data: param)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_cxt) => PanUserDetail(data: param)));*/
       },
       child: Container(
         decoration: BoxDecoration(
@@ -1167,11 +1167,11 @@ class MineState extends BaseDialogState{
               //role == 1 ? _classCard() : Container(),
               _tools(),
               //_teachers(),
-              _noticeImage(),
+              //_noticeImage(),
               //_workWidget(),
               //_talkMessage(),
               //留言框
-              relationid == 0 ? SizedBox() : MessagePage(relationid: relationid,),
+              //relationid == 0 ? SizedBox() : MessagePage(relationid: relationid,),
               //娱乐放松
               //_recreation(),
               //学习文化课

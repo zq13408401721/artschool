@@ -107,8 +107,8 @@ class SchoolVideoChoiceTileState extends BaseState<SchoolVideoChoiceTile>{
                   padding: EdgeInsets.only(
                       left: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
                       right: ScreenUtil().setWidth(SizeUtil.getWidth(20)),
-                      top: ScreenUtil().setHeight(SizeUtil.getHeight(40)),
-                      bottom: ScreenUtil().setHeight(SizeUtil.getHeight(40))
+                      top: ScreenUtil().setHeight(SizeUtil.getHeight(20)),
+                      bottom: ScreenUtil().setHeight(SizeUtil.getHeight(20))
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
