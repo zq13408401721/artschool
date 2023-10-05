@@ -220,6 +220,31 @@ class BookImageDetailViewPagerState extends BaseRefreshViewPagerState<Data,BookI
                             width:Constant.SCREEN_W,
                             fit: BoxFit.cover,
                           ),
+                          //下载
+                          Positioned(
+                            right: SizeUtil.getAppWidth(150),
+                            bottom: SizeUtil.getAppHeight(50),
+                            child: InkWell(
+                              onTap: () async{
+                                print("下载图片：${data.url}");
+                                var name = await saveNetWorkImage(data.url);
+                                print("下载图片：$name");
+                                showToast("下载图片$name完成");
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey,width: 1.0),
+                                  borderRadius: BorderRadius.circular(SizeUtil.getAppWidth(40)),
+                                  color: Colors.grey[300],
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: SizeUtil.getAppWidth(20),
+                                  vertical: SizeUtil.getAppWidth(20)
+                                ),
+                                child: Text("下载图片"),
+                              ),
+                            ),
+                          ),
                           Positioned(
                             right: 0,
                             top: 0,

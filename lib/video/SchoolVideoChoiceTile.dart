@@ -52,6 +52,7 @@ class SchoolVideoChoiceTileState extends BaseState<SchoolVideoChoiceTile>{
     var param = {
       "groupid":widget.data.id
     };
+    print("videogroup:${widget.data.id} ${widget.data.title} ${widget.showTitle}");
     httpUtil.post(DataUtils.api_school_video_group_total,data:param,context: context).then((value){
       print("videogrouptotal $value");
       if(value != null){

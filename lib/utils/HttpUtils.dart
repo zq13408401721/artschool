@@ -154,6 +154,7 @@ Future<String> saveImage(String url) async {
     bool _bool = await _file.exists();
     if(_bool) return savePath;
     var result = await Dio().download(url, savePath,onReceiveProgress: (received,total){
+      print("saveImage progress:$received / $total");
       if(total > 0){
         if(received == total){
           //下载完毕
@@ -161,11 +162,22 @@ Future<String> saveImage(String url) async {
         }
       }
     });
-    print("图片下载返回：${result}");
+    print("图片下载返回：${result} $savePath");
     //await ImageGallerySaver.saveFile(savePath);
     //ImageGallerySaver.saveImage(imageBytes)
     return savePath;
   }
+}
+
+Future<String> saveNetWorkImage(String url) async{
+  String name = url.substring(url.lastIndexOf("/")+1,url.length);
+  var response = await Dio().get(url,options: Options(responseType: ResponseType.bytes));
+  final result = await ImageGallerySaver.saveImage(
+    Uint8List.fromList(response.data),
+    quality: 80,
+    name:name
+  );
+  return name;
 }
 
 class HttpUtil {

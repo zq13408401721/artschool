@@ -207,6 +207,7 @@ class DataUtils{
   static const String api_phone_code = "login/requestPhoneCode"; //获取验证码
   static const String api_phone_active = "login/phoneActive"; //手机号激活
   static const String api_phone_logout = "login/logoutUser"; //注销账号
+  static const String api_user_viptime = "login/userVipEndTime"; //会员有效期
 
 
 }

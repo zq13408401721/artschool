@@ -52,6 +52,7 @@ import 'package:yhschool/widgets/RListView.dart';
 import '../VideoWeb.dart';
 import '../WebStage.dart';
 import '../bean/column_list_bean.dart' as COLUMN;
+import '../bean/login_bean.dart';
 import '../column/ColumnDetail.dart';
 import '../widgets/ClickCallback.dart';
 import 'VideoAITile.dart';
@@ -184,9 +185,9 @@ class VideoPageState extends VersionState<VideoPage>{
     getUserInfo().then((value){
       //value["endtime"] = DateTime.now().millisecondsSinceEpoch + 3600 * 24 * 10;
       print("showtime value:${value['endtime']} $value");
-      if(value["endtime"] != null){
+      /*if(value["endtime"] != null){
         showVipTime(Constant.parseTimetoInt(value["endtime"]));
-      }
+      }*/
       setState(() {
         schoolname = value["schoolname"];
       });
@@ -212,6 +213,22 @@ class VideoPageState extends VersionState<VideoPage>{
     //checkAdvert();
 
     showVipDialog();
+    userVipTime();
+  }
+
+  void userVipTime() {
+    httpUtil.post(DataUtils.api_user_viptime,data:{}).then((value){
+      print("userVipTime"+value.toString());
+      if(value != null){
+        dynamic result = json.decode(value);
+        if(result['errno'] == 0){
+          String time = result['data']['endtime'];
+          if(time != null){
+            showVipTime(Constant.parseTimetoInt(time));
+          }
+        }
+      }
+    });
   }
 
   void showVipDialog() async{
@@ -225,7 +242,7 @@ class VideoPageState extends VersionState<VideoPage>{
 
   void showVipTime(int endtime){
     int now = (DateTime.now().millisecondsSinceEpoch/1000).toInt();
-    print("showTime: now:$now endtime:$endtime");
+    //print("showTime: now:$now endtime:$endtime");
     if(endtime > now){
       viptime = endtime - now;
       _timer = Timer.periodic(Duration(seconds:1), (timer) {
@@ -234,7 +251,7 @@ class VideoPageState extends VersionState<VideoPage>{
           closeTime();
         }
         viptimeword = Constant.parseVipTimeFormat(viptime);
-        print("showVipTime:$viptimeword $viptime");
+        //print("showVipTime:$viptimeword $viptime");
         _vipStream.sink.add(viptimeword);
       });
     }
